@@ -20,6 +20,12 @@
 * ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *****************************************************************************"""
+supportedDevices = ["SAME51","SAME53","SAME54","SAMD51"]
+notSupportedVariants = []
 
 def loadModule():
     print("Load Module: Harmony Class B")
+    for x in supportedDevices:
+        if x in Variables.get("__PROCESSOR"):
+            if Variables.get("__PROCESSOR") not in notSupportedVariants:
+                classBComponent = Module.CreateComponent("lib_classb", "Class B Library", "/ClassB/", "config/classb.py")
