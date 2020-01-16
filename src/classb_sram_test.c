@@ -102,7 +102,7 @@ void _CLASSB_MemCopy(uint32_t* dest, uint32_t* src, uint32_t size_in_bytes)
 }
 
 /*============================================================================
-void _CLASSB_RAMMarchC(uint32_t * start_addr, uint32_t test_size_bytes)
+bool _CLASSB_RAMMarchC(uint32_t * start_addr, uint32_t test_size_bytes)
 ------------------------------------------------------------------------------
 Purpose: Runs March C algorithm on the given SRAM area
 Input  : Start address and size
@@ -234,7 +234,7 @@ bool _CLASSB_RAMMarchC(uint32_t * start_addr, uint32_t test_size_bytes)
 }
 
 /*============================================================================
-void _CLASSB_RAMMarchC(uint32_t * start_addr, uint32_t test_size_bytes)
+bool _CLASSB_RAMMarchCMinus(uint32_t * start_addr, uint32_t test_size_bytes)
 ------------------------------------------------------------------------------
 Purpose: Runs March C algorithm on the given SRAM area
 Input  : Start address and size
@@ -352,7 +352,7 @@ bool _CLASSB_RAMMarchCMinus(uint32_t * start_addr, uint32_t test_size_bytes)
 }
 
 /*============================================================================
-void _CLASSB_RAMMarchC(uint32_t * start_addr, uint32_t test_size_bytes)
+bool _CLASSB_RAMMarchB(uint32_t * start_addr, uint32_t test_size_bytes)
 ------------------------------------------------------------------------------
 Purpose: Runs March C algorithm on the given SRAM area
 Input  : Start address and size
@@ -503,7 +503,8 @@ Output : Test status.
 Notes  : None.
 ============================================================================*/
 CLASSB_TEST_STATUS CLASSB_SRAM_MarchTestInit(uint32_t * start_addr,
-    uint32_t test_size_bytes, CLASSB_SRAM_MARCH_ALGO march_algo)
+    uint32_t test_size_bytes, CLASSB_SRAM_MARCH_ALGO march_algo,
+    bool running_context)
 {
     /* Find the last word address in the tested area */
     register uint32_t march_test_end_address asm("r4") = (uint32_t)start_addr + test_size_bytes - 4;
@@ -523,10 +524,10 @@ CLASSB_TEST_STATUS CLASSB_SRAM_MarchTestInit(uint32_t * start_addr,
     }
     else
     {
-        // Move stack pointer to the resereved area before any SRAM test
+        // Move stack pointer to the reserved area before any SRAM test
         stack_address = _CLASSB_GetStackPointer();
         _CLASSB_SetStackPointer(CLASSB_SRAM_TEMP_STACK_ADDRESS);
-        sram_init_retval = CLASSB_SRAM_MarchTest(start_addr, test_size_bytes, march_algo);
+        sram_init_retval = CLASSB_SRAM_MarchTest(start_addr, test_size_bytes, march_algo, running_context);
         _CLASSB_SetStackPointer(stack_address);
     }
       
@@ -534,7 +535,8 @@ CLASSB_TEST_STATUS CLASSB_SRAM_MarchTestInit(uint32_t * start_addr,
 }        
 
 CLASSB_TEST_STATUS CLASSB_SRAM_MarchTest(uint32_t * start_addr,
-    uint32_t test_size_bytes, CLASSB_SRAM_MARCH_ALGO march_algo)
+    uint32_t test_size_bytes, CLASSB_SRAM_MARCH_ALGO march_algo,
+    bool running_context)
 {
     CLASSB_TEST_STATUS classb_sram_status = CLASSB_TEST_NOT_EXECUTED;
     bool march_c_test_retval = false;
@@ -573,15 +575,14 @@ CLASSB_TEST_STATUS CLASSB_SRAM_MarchTest(uint32_t * start_addr,
             }
             else if (CLASSB_SRAM_MARCH_C_MINUS == march_algo)
             {
-                march_c_test_retval = _CLASSB_RAMMarchC((uint32_t *)(mem_start_address + (i * CLASSB_SRAM_TEST_BUFFER_SIZE)),
+                march_c_test_retval = _CLASSB_RAMMarchCMinus((uint32_t *)(mem_start_address + (i * CLASSB_SRAM_TEST_BUFFER_SIZE)),
                     CLASSB_SRAM_TEST_BUFFER_SIZE); 
             }
             else if (CLASSB_SRAM_MARCH_B == march_algo)
             {
-                march_c_test_retval = _CLASSB_RAMMarchC((uint32_t *)(mem_start_address + (i * CLASSB_SRAM_TEST_BUFFER_SIZE)),
+                march_c_test_retval = _CLASSB_RAMMarchB((uint32_t *)(mem_start_address + (i * CLASSB_SRAM_TEST_BUFFER_SIZE)),
                     CLASSB_SRAM_TEST_BUFFER_SIZE); 
             }
-            
             if (false == march_c_test_retval)
             {
                 /* If March test fails, exit the loop */
@@ -603,7 +604,22 @@ CLASSB_TEST_STATUS CLASSB_SRAM_MarchTest(uint32_t * start_addr,
             _CLASSB_MemCopy((uint32_t *)CLASSB_SRAM_BUFF_START_ADDRESS,
                     (uint32_t *)(mem_start_address + (i * CLASSB_SRAM_TEST_BUFFER_SIZE)),
                     march_c_short_itr);
-            march_c_test_retval = _CLASSB_RAMMarchC((uint32_t *)(mem_start_address + (i * CLASSB_SRAM_TEST_BUFFER_SIZE)), march_c_short_itr);
+            // Run the selected RAM March algorithm
+            if (CLASSB_SRAM_MARCH_C == march_algo)
+            {
+                march_c_test_retval = _CLASSB_RAMMarchC((uint32_t *)(mem_start_address + (i * CLASSB_SRAM_TEST_BUFFER_SIZE)),
+                    CLASSB_SRAM_TEST_BUFFER_SIZE); 
+            }
+            else if (CLASSB_SRAM_MARCH_C_MINUS == march_algo)
+            {
+                march_c_test_retval = _CLASSB_RAMMarchCMinus((uint32_t *)(mem_start_address + (i * CLASSB_SRAM_TEST_BUFFER_SIZE)),
+                    CLASSB_SRAM_TEST_BUFFER_SIZE); 
+            }
+            else if (CLASSB_SRAM_MARCH_B == march_algo)
+            {
+                march_c_test_retval = _CLASSB_RAMMarchB((uint32_t *)(mem_start_address + (i * CLASSB_SRAM_TEST_BUFFER_SIZE)),
+                    CLASSB_SRAM_TEST_BUFFER_SIZE); 
+            }
             if (false == march_c_test_retval)
             {
                 classb_sram_status = CLASSB_TEST_FAILED;
@@ -625,7 +641,22 @@ CLASSB_TEST_STATUS CLASSB_SRAM_MarchTest(uint32_t * start_addr,
         // If the tested area is not used by the application, run destructive test
         for (i = 0; i < (test_size_bytes / CLASSB_SRAM_TEST_BUFFER_SIZE); i++)
         {
-            march_c_test_retval = _CLASSB_RAMMarchC((uint32_t *)(mem_start_address + (i * CLASSB_SRAM_TEST_BUFFER_SIZE)), CLASSB_SRAM_TEST_BUFFER_SIZE);
+            // Run the selected RAM March algorithm
+            if (CLASSB_SRAM_MARCH_C == march_algo)
+            {
+                march_c_test_retval = _CLASSB_RAMMarchC((uint32_t *)(mem_start_address + (i * CLASSB_SRAM_TEST_BUFFER_SIZE)),
+                    CLASSB_SRAM_TEST_BUFFER_SIZE); 
+            }
+            else if (CLASSB_SRAM_MARCH_C_MINUS == march_algo)
+            {
+                march_c_test_retval = _CLASSB_RAMMarchCMinus((uint32_t *)(mem_start_address + (i * CLASSB_SRAM_TEST_BUFFER_SIZE)),
+                    CLASSB_SRAM_TEST_BUFFER_SIZE); 
+            }
+            else if (CLASSB_SRAM_MARCH_B == march_algo)
+            {
+                march_c_test_retval = _CLASSB_RAMMarchB((uint32_t *)(mem_start_address + (i * CLASSB_SRAM_TEST_BUFFER_SIZE)),
+                    CLASSB_SRAM_TEST_BUFFER_SIZE); 
+            }
             if (false == march_c_test_retval)
             {
                 classb_sram_status = CLASSB_TEST_FAILED;
@@ -636,7 +667,22 @@ CLASSB_TEST_STATUS CLASSB_SRAM_MarchTest(uint32_t * start_addr,
         /* If the tested area is not a multiple of 512 bytes */
         if (march_c_short_itr > 0)
         {
-            march_c_test_retval = _CLASSB_RAMMarchC((uint32_t *)(mem_start_address + (i * CLASSB_SRAM_TEST_BUFFER_SIZE)), march_c_short_itr);
+            // Run the selected RAM March algorithm
+            if (CLASSB_SRAM_MARCH_C == march_algo)
+            {
+                march_c_test_retval = _CLASSB_RAMMarchC((uint32_t *)(mem_start_address + (i * CLASSB_SRAM_TEST_BUFFER_SIZE)),
+                    CLASSB_SRAM_TEST_BUFFER_SIZE); 
+            }
+            else if (CLASSB_SRAM_MARCH_C_MINUS == march_algo)
+            {
+                march_c_test_retval = _CLASSB_RAMMarchCMinus((uint32_t *)(mem_start_address + (i * CLASSB_SRAM_TEST_BUFFER_SIZE)),
+                    CLASSB_SRAM_TEST_BUFFER_SIZE); 
+            }
+            else if (CLASSB_SRAM_MARCH_B == march_algo)
+            {
+                march_c_test_retval = _CLASSB_RAMMarchB((uint32_t *)(mem_start_address + (i * CLASSB_SRAM_TEST_BUFFER_SIZE)),
+                    CLASSB_SRAM_TEST_BUFFER_SIZE); 
+            }
             if (false == march_c_test_retval)
             {
                 classb_sram_status = CLASSB_TEST_FAILED;
@@ -650,13 +696,29 @@ CLASSB_TEST_STATUS CLASSB_SRAM_MarchTest(uint32_t * start_addr,
 
     if (CLASSB_TEST_PASSED == classb_sram_status)
     {
-        _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_RAM,
-            CLASSB_TEST_PASSED);
+        if (true == running_context)
+        {
+            _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_RAM,
+                CLASSB_TEST_PASSED);
+        }
+        else
+        {
+            _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_RAM,
+                CLASSB_TEST_PASSED);
+        }
     }
     else if (CLASSB_TEST_FAILED == classb_sram_status)
     {
-        _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_RAM,
-            CLASSB_TEST_FAILED);
+        if (true == running_context)
+        {
+            _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_RAM,
+                CLASSB_TEST_FAILED);
+        }
+        else
+        {
+            _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_RAM,
+                CLASSB_TEST_FAILED);
+        }
         CLASSB_SelfTest_FailSafe(CLASSB_TEST_RAM);
     }
     

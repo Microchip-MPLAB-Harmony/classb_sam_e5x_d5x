@@ -228,8 +228,10 @@ CLASSB_INIT_STATUS CLASSB_Init(void)
             bool result_area_test_ok = false;
             bool ram_buffer_test_ok = false;
             // Test the reserved SRAM
-            result_area_test_ok = _CLASSB_RAMMarchC((uint32_t *)CLASSB_SRAM_START_ADDRESS, CLASSB_SRAM_TEST_BUFFER_SIZE);
-            ram_buffer_test_ok = _CLASSB_RAMMarchC((uint32_t *)CLASSB_SRAM_START_ADDRESS + CLASSB_SRAM_TEST_BUFFER_SIZE, CLASSB_SRAM_TEST_BUFFER_SIZE);
+            result_area_test_ok = _CLASSB_RAMMarchC((uint32_t *)CLASSB_SRAM_START_ADDRESS,
+                CLASSB_SRAM_TEST_BUFFER_SIZE);
+            ram_buffer_test_ok = _CLASSB_RAMMarchC((uint32_t *)CLASSB_SRAM_BUFF_START_ADDRESS,
+                CLASSB_SRAM_TEST_BUFFER_SIZE);
             if ((true == result_area_test_ok) && (true == ram_buffer_test_ok))
             {
                 // Initialize all Class B variables
@@ -253,8 +255,10 @@ CLASSB_INIT_STATUS CLASSB_Init(void)
         bool result_area_test_ok = false;
         bool ram_buffer_test_ok = false;
         // Test the reserved SRAM
-        result_area_test_ok = _CLASSB_RAMMarchC((uint32_t *)CLASSB_SRAM_START_ADDRESS, CLASSB_SRAM_TEST_BUFFER_SIZE);
-        ram_buffer_test_ok = _CLASSB_RAMMarchC((uint32_t *)CLASSB_SRAM_START_ADDRESS + CLASSB_SRAM_TEST_BUFFER_SIZE, CLASSB_SRAM_TEST_BUFFER_SIZE);
+        result_area_test_ok = _CLASSB_RAMMarchC((uint32_t *)CLASSB_SRAM_START_ADDRESS,
+            CLASSB_SRAM_TEST_BUFFER_SIZE);
+        ram_buffer_test_ok = _CLASSB_RAMMarchC((uint32_t *)CLASSB_SRAM_BUFF_START_ADDRESS,
+            CLASSB_SRAM_TEST_BUFFER_SIZE);
         if ((true == result_area_test_ok) && (true == ram_buffer_test_ok))
         {
             // Initialize all Class B variables
@@ -297,10 +301,10 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
             <#lt>    __DSB();
             <#lt>    __ISB();
             <#lt>    /* Test processor core registers and FPU registers */
-            <#lt>    cb_test_status = CLASSB_CPU_RegistersTest(CLASSB_FPU_TEST_ENABLE);
+            <#lt>    cb_test_status = CLASSB_CPU_RegistersTest(CLASSB_FPU_TEST_ENABLE, false);
         <#else>
             <#lt>    /* Test processor core registers */
-            <#lt>    cb_test_status = CLASSB_CPU_RegistersTest(CLASSB_FPU_TEST_DISABLE);
+            <#lt>    cb_test_status = CLASSB_CPU_RegistersTest(CLASSB_FPU_TEST_DISABLE, false);
         </#if>
     </#if>
     
@@ -342,9 +346,11 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
     
     /* SRAM test */
     <#if CLASSB_SRAM_MARCH_ALGORITHM?has_content>
-    cb_test_status = CLASSB_SRAM_MarchTestInit((uint32_t *)CLASSB_SRAM_RESERVE_AREA_END, 261120, ${CLASSB_SRAM_MARCH_ALGORITHM});
+    cb_test_status = CLASSB_SRAM_MarchTestInit((uint32_t *)CLASSB_SRAM_RESERVE_AREA_END,
+        261120, ${CLASSB_SRAM_MARCH_ALGORITHM}, false);
     <#else>
-    cb_test_status = CLASSB_SRAM_MarchTestInit((uint32_t *)CLASSB_SRAM_RESERVE_AREA_END, 261120, CLASSB_SRAM_MARCH_C);
+    cb_test_status = CLASSB_SRAM_MarchTestInit((uint32_t *)CLASSB_SRAM_RESERVE_AREA_END,
+        261120, CLASSB_SRAM_MARCH_C, false);
     </#if>
     if (CLASSB_TEST_PASSED == cb_test_status)
     {

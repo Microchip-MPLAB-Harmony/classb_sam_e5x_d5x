@@ -91,7 +91,7 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
  *     Functions
  *----------------------------------------------------------------------------*/
 
-CLASSB_TEST_STATUS CLASSB_CPU_RegistersTest(CLASSB_FPU_CONFIG test_fpu);
+CLASSB_TEST_STATUS CLASSB_CPU_RegistersTest(CLASSB_FPU_CONFIG test_fpu, bool running_context);
 
 CLASSB_TEST_STATUS __attribute__((optimize("-O0"))) CLASSB_CPU_PCTest(bool running_context);
 /*Internal functions for PC test*/

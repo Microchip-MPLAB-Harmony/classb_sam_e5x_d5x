@@ -34,7 +34,7 @@
 * INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND
 * WHATSOEVER RELATED TO THE SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS
 * BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE. TO THE
-* FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN
+* FULLEST EXTENT ALLOWED BY LAW, MICROCHIPS TOTAL LIABILITY ON ALL CLAIMS IN
 * ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *******************************************************************************/
@@ -81,19 +81,24 @@
 ; /* CLASSB_TEST_STATUS defined in classb_common.h */
 .equ CLASSB_TEST_PASSED, 0x1
 .equ CLASSB_TEST_INPROGRESS, 0x3
-    
+
+; /* CLASSB_TEST_STATUS CLASSB_CPU_RegistersTest(
+;       CLASSB_FPU_CONFIG test_fpu, bool running_context) */    
 CLASSB_CPU_RegistersTest:
     push    {r14}
     push    {r2-r7}
-    ; /* Copy input argument */
+    ; /* Copy input arguments */
     mov	    r7, r0
+    mov	    r6, r1
     ; /* _CLASSB_UpdateTestResult after loading arguments into registers */
     ldr	    r0, =CLASSB_TEST_TYPE_SST
+    cbz     r6, progress_test_type_sst
+    ldr	    r0, =CLASSB_TEST_TYPE_RST
+progress_test_type_sst:    
     ldr	    r1, =CLASSB_TEST_CPU
     ldr	    r2, =CLASSB_TEST_INPROGRESS
     bl	    _CLASSB_UpdateTestResult
     bl	    CLASSB_CPU_GPR_Test
-    ; /* bl	    CLASSB_CPU_SPR_Test */
     ; /*If R7 is 1, then test FPU regs */
     cbz     r7, update_result_return
     bl	    CLASSB_CPU_FPU_Test
@@ -157,6 +162,9 @@ cpu_test_r0:
 cpu_test_passed:
     push    {lr}
     ldr	    r0, =CLASSB_TEST_TYPE_SST
+    cbz     r6, pass_test_type_sst
+    ldr	    r0, =CLASSB_TEST_TYPE_RST
+pass_test_type_sst:
     ldr	    r1, =CLASSB_TEST_CPU
     ldr	    r2, =CLASSB_TEST_PASSED
     bl	    _CLASSB_UpdateTestResult
