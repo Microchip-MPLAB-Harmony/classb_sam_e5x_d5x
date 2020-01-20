@@ -1,5 +1,5 @@
 /*******************************************************************************
-  Classb Library result management
+  Class B Library result management
 
   Company:
     Microchip Technology Inc.
@@ -112,7 +112,7 @@ UpdateResTestTypeSST:
     lsl	    r7, r7, r1
     orr	    r5, r5, r7
     str	    r5, [r4]
-    ; /* Load the one's complement of the result */
+    ; /* Load the 1s complement of the result */
     ; /* For SSTs, this address is 0x20000004 */
     ; /* For RSTs, this address is 0x20000006 */
     ldrh    r5, [r4, #4]
@@ -139,7 +139,7 @@ ClearResTestTypeSST:
     strh    r5, [r4]
     ; /* Store 1s complement of the result */
     mvn	    r5, r5
-    ; /* Add 4 to get the address of 1's complement result */
+    ; /* Add 4 to get the address of 1s complement result */
     add	    r4, #4
     strh    r5, [r4]
     pop     {r4-r7}

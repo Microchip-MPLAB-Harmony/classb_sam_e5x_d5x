@@ -1,5 +1,5 @@
 /*******************************************************************************
-  Classb Library ${REL_VER} Release
+  Class B Library ${REL_VER} Release
 
   Company:
     Microchip Technology Inc.
@@ -66,11 +66,11 @@
 #define CLASSB_ONGOING_TEST_VAR_ADDR        0x20000008
 #define CLASSB_TEST_IN_PROG_VAR_ADDR        0x2000000c
 #define CLASSB_WDT_TEST_IN_PROG_VAR_ADDR    0x20000010
-#define CLASSB_GEN_TEST_VAR_ADDR            0x20000014
-#define CLASSB_FLASH_TEST_VAR_ADDR          0x20000018
-
 #define CLASSB_TEST_IN_PROG_PATTERN         0xCB
+#define CLASSB_FLASH_TEST_VAR_ADDR          0x20000018
 #define CLASSB_FLASH_CRC32_ADDR             ${CLASSB_FLASHCRC_ADDR}
+
+#define CLASSB_SRAM_STARTUP_TEST_SIZE       (HSRAM_SIZE - CLASSB_SRAM_RESERVE_AREA_SIZE)
 
 /*----------------------------------------------------------------------------
  *     Data types

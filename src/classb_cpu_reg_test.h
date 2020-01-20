@@ -1,5 +1,5 @@
 /*******************************************************************************
-  Classb Library CPU test
+  Class B Library CPU test
 
   Company:
     Microchip Technology Inc.
@@ -92,8 +92,8 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
  *----------------------------------------------------------------------------*/
 
 CLASSB_TEST_STATUS CLASSB_CPU_RegistersTest(CLASSB_FPU_CONFIG test_fpu, bool running_context);
-
 CLASSB_TEST_STATUS __attribute__((optimize("-O0"))) CLASSB_CPU_PCTest(bool running_context);
+
 /*Internal functions for PC test*/
 uint8_t __attribute__((optimize("-O0"))) _CLASSB_CPU_PCTestRoutineA(uint8_t);
 uint8_t __attribute__((optimize("-O0"))) _CLASSB_CPU_PCTestRoutineB(uint8_t);

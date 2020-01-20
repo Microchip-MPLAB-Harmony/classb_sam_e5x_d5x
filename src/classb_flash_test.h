@@ -1,5 +1,5 @@
 /*******************************************************************************
-  Classb Library Internal Flash test
+  Class B Library Internal Flash test
 
   Company:
     Microchip Technology Inc.
@@ -8,11 +8,11 @@
     classb_flash_test.h
 
   Summary:
-    Header file for CPU self-tests
+    Header file for Internal Flash self-tests
 
   Description:
     This file provides function prototypes, macros and datatypes for the
-    Internal Flash.
+    Internal Flash test.
     
 *******************************************************************************/
 

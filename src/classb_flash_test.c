@@ -54,9 +54,9 @@
 /*============================================================================
 uint32_t CLASSB_FlashCRCGenerate(uint32_t start_addr, uint32_t test_size)
 ------------------------------------------------------------------------------
-Purpose: Perform CRC32 check on the internal flash memory.
-Input  : None
-Output : Test status.
+Purpose: Generate CRC-32 checksum for the given area of the flash memory.
+Input  : Start address, size of the area in bytes
+Output : Generated checksum.
 Notes  : None.
 ============================================================================*/
 uint32_t CLASSB_FlashCRCGenerate(uint32_t start_addr, uint32_t size)
@@ -66,6 +66,7 @@ uint32_t CLASSB_FlashCRCGenerate(uint32_t start_addr, uint32_t size)
     uint32_t   crc = 0xffffffff;
     uint8_t    data;
 
+    /* Generate table for CRC-32 calculation */
     for (i = 0; i < 256; i++)
     {
         value = i;
@@ -84,6 +85,7 @@ uint32_t CLASSB_FlashCRCGenerate(uint32_t start_addr, uint32_t size)
         crc32_table[i] = value;
     }
     
+    /* Generate checksum */
     for (i = 0; i < size; i++)
     {
         data = *(uint8_t *) (start_addr + i);
@@ -98,8 +100,9 @@ uint32_t CLASSB_FlashCRCGenerate(uint32_t start_addr, uint32_t size)
 CLASSB_TEST_STATUS CLASSB_FlashCRCTest(uint32_t * start_addr,
     uint32_t test_size, uint32_t crc_val, bool running_context)
 ------------------------------------------------------------------------------
-Purpose: Perform CRC32 check on the internal flash memory.
-Input  : None
+Purpose: Perform CRC-32 check on the internal flash memory.
+Input  : Start address, size of the tested area, expected checksum
+         and context (startup or run-time)
 Output : Test status.
 Notes  : None.
 ============================================================================*/
@@ -110,8 +113,12 @@ CLASSB_TEST_STATUS CLASSB_FlashCRCTest(uint32_t start_addr,
     uint32_t calculated_crc = 0;
     uint32_t final_addr_tested = (start_addr + test_size) - 1;
     
+    /* Size must be less than the total flash size
+     * Tested address must not exceed the available flash memory address
+     */
     if ((test_size <= FLASH_SIZE) && (final_addr_tested < FLASH_SIZE))
     {
+        /* Update test status to 'In Progress' */
         if (running_context)
         {
             _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_FLASH,

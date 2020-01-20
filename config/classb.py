@@ -27,14 +27,6 @@
 #Update Symbol Visibility
 def setClassB_SymbolVisibility(MySymbol, event):
     MySymbol.setVisible(event["value"])
-
-#Update CRC write option visibility
-def setClassB_CRCwriteVisibility(MySymbol, event):
-    symObj = event["symbol"]
-    if symObj.getValue() == True:
-        MySymbol.setVisible(False)
-    else:
-        MySymbol.setVisible(True)
         
 ################################################################################
 #### Component ####
@@ -80,6 +72,7 @@ def instantiateComponent(classBComponent):
     classB_FlashCRC_Option.setDefaultValue(False)
     classB_FlashCRC_Option.setDescription("Enable this option if the CRC-32 checksum of the application image is stored at a spefic address in the Flash")
     
+    # Address at which CRC-32 of the application image is stored
     classB_CRC_address = classBComponent.createIntegerSymbol("CLASSB_FLASHCRC_ADDR", classB_FlashCRC_Option)
     classB_CRC_address.setLabel("Flash CRC location")
     classB_CRC_address.setMin(0)

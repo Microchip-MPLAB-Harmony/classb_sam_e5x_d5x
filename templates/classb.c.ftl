@@ -46,13 +46,9 @@
 /*----------------------------------------------------------------------------
  *     Global Variables
  *----------------------------------------------------------------------------*/
-__attribute__((persistent)) volatile uint16_t * classb_result;
-__attribute__((persistent)) volatile uint16_t * compl_stored_result;
 __attribute__((persistent)) volatile uint8_t * ongoing_sst_id; 
 __attribute__((persistent)) volatile uint8_t * classb_test_in_progress;
 __attribute__((persistent)) volatile uint8_t * wdt_test_in_progress;
-__attribute__((persistent)) volatile uint8_t * classb_gen_test_flag;
-__attribute__((persistent)) volatile uint8_t * classb_flash_crc_flag;
 
 /*----------------------------------------------------------------------------
  *     Functions
@@ -68,19 +64,13 @@ Notes  : This function is called before C startup code
 ============================================================================*/
 void CLASSB_GlobalsInit(void)
 {
-    classb_result = (volatile uint16_t *)CLASSB_RESULT_ADDR;
-    compl_stored_result = (volatile uint16_t *)CLASSB_COMPL_RESULT_ADDR;
     ongoing_sst_id = (volatile uint8_t *)CLASSB_ONGOING_TEST_VAR_ADDR; 
     classb_test_in_progress = (volatile uint8_t *)CLASSB_TEST_IN_PROG_VAR_ADDR;
     wdt_test_in_progress = (volatile uint8_t *)CLASSB_WDT_TEST_IN_PROG_VAR_ADDR;
-    classb_gen_test_flag = (volatile uint8_t *)CLASSB_GEN_TEST_VAR_ADDR;
-    classb_flash_crc_flag = (volatile uint8_t *)CLASSB_FLASH_TEST_VAR_ADDR;
 
     ongoing_sst_id[0] = 0xff;
     classb_test_in_progress[0] = 0;
     wdt_test_in_progress[0] = 0;
-    classb_gen_test_flag[0] = 0;
-    classb_flash_crc_flag[0] = 0;
 }
 
 /*============================================================================
@@ -207,7 +197,6 @@ CLASSB_INIT_STATUS CLASSB_Init(void)
         if (1 == wdt_test_in_progress[0])
         {
             wdt_test_in_progress[0] = 0;
-            classb_gen_test_flag[0] = 1;
         }
         else if (CLASSB_TEST_IN_PROG_PATTERN == classb_test_in_progress[0])
         {
@@ -224,7 +213,6 @@ CLASSB_INIT_STATUS CLASSB_Init(void)
         {
             classb_test_in_progress[0] = 0;
             ret_val = CLASSB_SST_DONE;
-            classb_gen_test_flag[0] = 1;
         }
         else
         {
@@ -319,14 +307,7 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
     {
         cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
     }
-    else
-    {
-        // Test is not executed because of invalid input arguments.
-        while (1)
-        {
-            
-        }
-    }
+
     // Program Counter test
     cb_test_status = CLASSB_CPU_PCTest(false);
     
@@ -338,22 +319,14 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
     {
         cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
     }
-    else
-    {
-        // Test is not executed because of invalid input arguments.
-        while (1)
-        {
-            
-        }
-    }
     
     // SRAM test
     <#if CLASSB_SRAM_MARCH_ALGORITHM?has_content>
     cb_test_status = CLASSB_SRAM_MarchTestInit((uint32_t *)CLASSB_SRAM_RESERVE_AREA_END,
-        261120, ${CLASSB_SRAM_MARCH_ALGORITHM}, false);
+        CLASSB_SRAM_STARTUP_TEST_SIZE, ${CLASSB_SRAM_MARCH_ALGORITHM}, false);
     <#else>
     cb_test_status = CLASSB_SRAM_MarchTestInit((uint32_t *)CLASSB_SRAM_RESERVE_AREA_END,
-        261120, CLASSB_SRAM_MARCH_C, false);
+        CLASSB_SRAM_STARTUP_TEST_SIZE, CLASSB_SRAM_MARCH_C, false);
     </#if>
     if (CLASSB_TEST_PASSED == cb_test_status)
     {

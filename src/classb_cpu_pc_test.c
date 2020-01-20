@@ -54,7 +54,7 @@
 /*============================================================================
 uint8_t _CLASSB_CPU_PCTestRoutineA(uint8_t pc_test_data)
 ------------------------------------------------------------------------------
-Purpose: Test routine A for PC self-test.
+Purpose: 'Test routine A' for PC self-test.
 Input  : Data to be modified and returned.
 Output : Modified data.
 Notes  : This function is called from 'CLASSB_CPU_PCTest' to check the Program
@@ -68,7 +68,7 @@ uint8_t _CLASSB_CPU_PCTestRoutineA(uint8_t pc_test_data)
 /*============================================================================
 uint8_t _CLASSB_CPU_PCTestRoutineB(uint8_t pc_test_data)
 ------------------------------------------------------------------------------
-Purpose: Test routine A for PC self-test.
+Purpose: 'Test routine B' for PC self-test.
 Input  : Data to be modified and returned.
 Output : Modified data.
 Notes  : This function is called from 'CLASSB_CPU_PCTest' to check the Program
@@ -82,7 +82,7 @@ uint8_t _CLASSB_CPU_PCTestRoutineB(uint8_t pc_test_data)
 /*============================================================================
 uint8_t _CLASSB_CPU_PCTestRoutineC(uint8_t pc_test_data)
 ------------------------------------------------------------------------------
-Purpose: Test routine A for PC self-test.
+Purpose: 'Test routine C' for PC self-test.
 Input  : Data to be modified and returned.
 Output : Modified data.
 Notes  : This function is called from 'CLASSB_CPU_PCTest' to check the Program
@@ -96,7 +96,7 @@ uint8_t _CLASSB_CPU_PCTestRoutineC(uint8_t pc_test_data)
 /*============================================================================
 CLASSB_TEST_STATUS CLASSB_CPU_PCTest(void)
 ------------------------------------------------------------------------------
-Purpose: Self-test function for Program Counter
+Purpose: Self-test function for the Program Counter
 Input  : None
 Output : Test status
 Notes  : None

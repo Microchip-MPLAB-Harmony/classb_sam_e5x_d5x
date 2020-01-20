@@ -1,5 +1,5 @@
 /*******************************************************************************
-  Classb Library common header file
+  Class B Library common header file
 
   Company:
     Microchip Technology Inc.
@@ -8,7 +8,7 @@
     classb_common.h
 
   Summary:
-    Classb Library
+    Class B Library
 
   Description:
     Common type definitions for class b functions
@@ -109,13 +109,13 @@ typedef enum classb_test_status
 } CLASSB_TEST_STATUS;
 
 // *****************************************************************************
-/* Class B library intilization status
+/* Class B library initialization status
 
   Summary:
-    Identifies Class B intilization status
+    Identifies Class B initialization status
 
   Description:
-    This is return type for the function which initlializes the Class B
+    This is return type for the function which initializes the Class B
     library during startup. This indicates whether the SSTs are executed or not.
 
   Remarks:

@@ -82,8 +82,13 @@
 .equ CLASSB_TEST_PASSED, 0x1
 .equ CLASSB_TEST_INPROGRESS, 0x3
 
-; /* CLASSB_TEST_STATUS CLASSB_CPU_RegistersTest(
-;       CLASSB_FPU_CONFIG test_fpu, bool running_context) */    
+
+;/* Refer AAPCS at https://developer.arm.com/docs/ihi0042/latest*/
+
+; /* Function Protoype
+; CLASSB_TEST_STATUS CLASSB_CPU_RegistersTest(
+;     CLASSB_FPU_CONFIG test_fpu, bool running_context) */
+
 CLASSB_CPU_RegistersTest:
     push    {r14}
     push    {r2-r7}

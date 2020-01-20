@@ -1,17 +1,17 @@
 /*******************************************************************************
-  Classb Library SRAM test
+  Class B Library SRAM test
 
   Company:
     Microchip Technology Inc.
 
   File Name:
-    classb_cpu_reg_test.h
+    classb_sram_test.h
 
   Summary:
-    Header file for CPU self-tests
+    Header file for SRAM self-tests
 
   Description:
-    This file provides function prototypes, macros and datatypes for the SRAM
+    This file provides function prototypes, macros and data types for the SRAM
     tests.
 
 *******************************************************************************/
