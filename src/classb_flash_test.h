@@ -1,19 +1,19 @@
 /*******************************************************************************
-  Classb Library SRAM test
+  Classb Library Internal Flash test
 
   Company:
     Microchip Technology Inc.
 
   File Name:
-    classb_cpu_reg_test.h
+    classb_flash_test.h
 
   Summary:
     Header file for CPU self-tests
 
   Description:
-    This file provides function prototypes, macros and datatypes for the SRAM
-    tests.
-
+    This file provides function prototypes, macros and datatypes for the
+    Internal Flash.
+    
 *******************************************************************************/
 
 /*******************************************************************************
@@ -39,8 +39,8 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
 (INCLUDING BUT NOT LIMITED TO ANY DEFENSE  THEREOF),  OR  OTHER  SIMILAR  COSTS.
 *******************************************************************************/
 
-#ifndef CLASSB_SRAM_TEST_H
-#define CLASSB_SRAM_TEST_H
+#ifndef CLASSB_FLASH_TEST_H
+#define CLASSB_FLASH_TEST_H
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -58,53 +58,17 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
 /*----------------------------------------------------------------------------
  *     Constants
  *----------------------------------------------------------------------------*/
-#define CLASSB_SRAM_START_ADDRESS         0x20000000
-#define CLASSB_SRAM_FINAL_WORD_ADDRESS    0x2003FFFC
-/* Linker option should contain -DRAM_ORIGIN=0x20000400 -DRAM_LENGTH=0x3FC00 */
-#define CLASSB_SRAM_BUFF_START_ADDRESS    0x20000200
-#define CLASSB_SRAM_RESERVE_AREA_SIZE     1024
-#define CLASSB_SRAM_RESERVE_AREA_END      (CLASSB_SRAM_START_ADDRESS + CLASSB_SRAM_RESERVE_AREA_SIZE)
-#define CLASSB_SRAM_TEST_BUFFER_SIZE      512
-#define CLASSB_SRAM_TEMP_STACK_ADDRESS    0x20000100
-#define CLASSB_STACK_GUARD_BYTES          64
         
 /*----------------------------------------------------------------------------
  *     Data types
  *----------------------------------------------------------------------------*/
-// *****************************************************************************
-/* Class B library SRAM test algorithm selection
-
-  Summary:
-    Select which of the March algorithms to run.
-
-  Description:
-    Select which of the March algorithms to run.
-
-  Remarks:
-    None.
-*/
-typedef enum classb_sram_march_algo
-{
-    CLASSB_SRAM_MARCH_C       = 0,
-    CLASSB_SRAM_MARCH_C_MINUS = 1,
-    CLASSB_SRAM_MARCH_B       = 2
-} CLASSB_SRAM_MARCH_ALGO;
 
 /*----------------------------------------------------------------------------
  *     Functions
  *----------------------------------------------------------------------------*/
-
-CLASSB_TEST_STATUS CLASSB_SRAM_MarchTestInit(uint32_t * start_addr,
-    uint32_t test_size, CLASSB_SRAM_MARCH_ALGO march_algo, bool running_context);
-CLASSB_TEST_STATUS CLASSB_SRAM_MarchTest(uint32_t * start_addr,
-    uint32_t test_size, CLASSB_SRAM_MARCH_ALGO march_algo, bool running_context);
-
-/* Internal functions for SRAM test
- * Optimization is set to zero, else the compiler optimizes these function away.
- */
-bool __attribute__((optimize("-O0"))) _CLASSB_RAMMarchC(uint32_t * start_addr, uint32_t test_size);
-bool __attribute__((optimize("-O0"))) _CLASSB_RAMMarchCMinus(uint32_t * start_addr, uint32_t test_size);
-bool __attribute__((optimize("-O0"))) _CLASSB_RAMMarchB(uint32_t * start_addr, uint32_t test_size);
+uint32_t CLASSB_FlashCRCGenerate(uint32_t start_addr, uint32_t test_size);
+CLASSB_TEST_STATUS CLASSB_FlashCRCTest(uint32_t start_addr,
+    uint32_t test_size, uint32_t crc_val, bool running_context);
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -113,4 +77,4 @@ bool __attribute__((optimize("-O0"))) _CLASSB_RAMMarchB(uint32_t * start_addr, u
 
 #endif
 // DOM-IGNORE-END
-#endif // CLASSB_SRAM_TEST_H
+#endif // CLASSB_FLASH_TEST_H

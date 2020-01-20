@@ -176,7 +176,7 @@ cpu_test_failed:
     
 cpu_test_r1_r11:
     push    {lr}
-    push    {r4-r8, r10, r11}
+    push    {r4-r11}
     
     ; /* Test r1 to r11 with 0xAAAAAAAA */
     ldr	    r0, =CPU_TEST_PATTERN_I
@@ -251,7 +251,7 @@ cpu_test_r1_r11:
     bne	    cpu_test_failed
     
     ; /* Code reaches here if none of the above tests are failed */
-    pop     {r4-r8, r10, r11}
+    pop     {r4-r11}
     pop	    {r15}
 
 cpu_test_special_regs:

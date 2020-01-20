@@ -527,6 +527,16 @@ CLASSB_TEST_STATUS CLASSB_SRAM_MarchTestInit(uint32_t * start_addr,
         // Move stack pointer to the reserved area before any SRAM test
         stack_address = _CLASSB_GetStackPointer();
         _CLASSB_SetStackPointer(CLASSB_SRAM_TEMP_STACK_ADDRESS);
+        if (running_context)
+        {
+            _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_RAM,
+                CLASSB_TEST_INPROGRESS); 
+        }
+        else
+        {
+            _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_RAM,
+                CLASSB_TEST_INPROGRESS); 
+        }
         sram_init_retval = CLASSB_SRAM_MarchTest(start_addr, test_size_bytes, march_algo, running_context);
         _CLASSB_SetStackPointer(stack_address);
     }

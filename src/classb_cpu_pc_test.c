@@ -108,6 +108,16 @@ CLASSB_TEST_STATUS CLASSB_CPU_PCTest(bool running_context)
     uint8_t pc_test_retval_b = 0;
     uint8_t pc_test_retval_c = 0;
 
+    if (running_context)
+    {
+        _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_PC,
+            CLASSB_TEST_INPROGRESS); 
+    }
+    else
+    {
+        _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_PC,
+            CLASSB_TEST_INPROGRESS); 
+    }
     /* The test routines left-shift the received data and returns it */
     pc_test_retval_a = _CLASSB_CPU_PCTestRoutineA(CLASSB_CPU_PC_TEST_ROUTINE_A_INPUT);
     pc_test_retval_b = _CLASSB_CPU_PCTestRoutineB(pc_test_retval_a);

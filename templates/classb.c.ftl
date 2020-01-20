@@ -52,6 +52,7 @@ __attribute__((persistent)) volatile uint8_t * ongoing_sst_id;
 __attribute__((persistent)) volatile uint8_t * classb_test_in_progress;
 __attribute__((persistent)) volatile uint8_t * wdt_test_in_progress;
 __attribute__((persistent)) volatile uint8_t * classb_gen_test_flag;
+__attribute__((persistent)) volatile uint8_t * classb_flash_crc_flag;
 
 /*----------------------------------------------------------------------------
  *     Functions
@@ -73,11 +74,13 @@ void CLASSB_GlobalsInit(void)
     classb_test_in_progress = (volatile uint8_t *)CLASSB_TEST_IN_PROG_VAR_ADDR;
     wdt_test_in_progress = (volatile uint8_t *)CLASSB_WDT_TEST_IN_PROG_VAR_ADDR;
     classb_gen_test_flag = (volatile uint8_t *)CLASSB_GEN_TEST_VAR_ADDR;
+    classb_flash_crc_flag = (volatile uint8_t *)CLASSB_FLASH_TEST_VAR_ADDR;
 
     ongoing_sst_id[0] = 0xff;
     classb_test_in_progress[0] = 0;
     wdt_test_in_progress[0] = 0;
     classb_gen_test_flag[0] = 0;
+    classb_flash_crc_flag[0] = 0;
 }
 
 /*============================================================================
@@ -95,7 +98,7 @@ void CLASSB_App_WDT_Recovery(void)
 #endif
     PORT_REGS->GROUP[2].PORT_DIRSET = (1 << 18);
     PORT_REGS->GROUP[2].PORT_OUTCLR = (1 << 18);
-    /* Infinite loop */
+    // Infinite loop
     while (1) {}
 }
 
@@ -115,7 +118,7 @@ void CLASSB_SST_WDT_Recovery(void)
     int i = 0x7ffff;
     PORT_REGS->GROUP[2].PORT_DIRSET = (1 << 18);
     PORT_REGS->GROUP[2].PORT_OUTCLR = (1 << 18);
-    /* Infinite loop */
+    // Infinite loop
     while (1) {
         while(i--);
         i = 0x7ffff;
@@ -139,7 +142,7 @@ void CLASSB_SelfTest_FailSafe(CLASSB_TEST_ID cb_test_id)
     int i = 0x7fffff;
     PORT_REGS->GROUP[2].PORT_DIRSET = (1 << 18);
     PORT_REGS->GROUP[2].PORT_OUTCLR = (1 << 18);
-    /* Infinite loop */
+    // Infinite loop
     while (1) {
         while(i--);
         i = 0x7fffff;
@@ -164,23 +167,23 @@ void CLASSB_TestWDT(void)
     /* If WDT ALWAYSON is set, wait till WDT resets the device */
     if (WDT_REGS->WDT_CTRLA & WDT_CTRLA_ALWAYSON_Msk)
     {
-        /* Infinite loop */
+        // Infinite loop
         while (1) {}
     }
     else
     {
-        /* If WDT is not enabled, enable WDT and wait */
+        // If WDT is not enabled, enable WDT and wait
         if (!(WDT_REGS->WDT_CTRLA & WDT_CTRLA_ENABLE_Msk))
         {
-            /* Configure timeout */
+            // Configure timeout
             WDT_REGS->WDT_CONFIG = WDT_CONFIG_PER_CYC2048;
             WDT_REGS->WDT_CTRLA |= WDT_CTRLA_ENABLE_Msk;
-            /* Infinite loop */
+            // Infinite loop
             while (1) {}
         }
         else
         {
-            /* Infinite loop */
+            // Infinite loop
             while (1) {}
         }
     }
@@ -238,7 +241,7 @@ CLASSB_INIT_STATUS CLASSB_Init(void)
                 CLASSB_GlobalsInit();
                 CLASSB_ClearTestResults(CLASSB_TEST_TYPE_SST);
                 CLASSB_ClearTestResults(CLASSB_TEST_TYPE_RST);
-                /* Perform WDT test */
+                // Perform WDT test
                 CLASSB_TestWDT(); 
             }
             else
@@ -265,7 +268,7 @@ CLASSB_INIT_STATUS CLASSB_Init(void)
             CLASSB_GlobalsInit();
             CLASSB_ClearTestResults(CLASSB_TEST_TYPE_SST);
             CLASSB_ClearTestResults(CLASSB_TEST_TYPE_RST);
-            /* Perform WDT test */
+            // Perform WDT test
             CLASSB_TestWDT(); 
         }
         else
@@ -296,14 +299,14 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
     
     <#if CLASSB_FPU_OPT??>
         <#if CLASSB_FPU_OPT == true>
-            <#lt>    /* Enable FPU */
+            <#lt>    // Enable FPU
             <#lt>    SCB->CPACR |= (0xFu << 20);
             <#lt>    __DSB();
             <#lt>    __ISB();
-            <#lt>    /* Test processor core registers and FPU registers */
+            <#lt>    // Test processor core registers and FPU registers
             <#lt>    cb_test_status = CLASSB_CPU_RegistersTest(CLASSB_FPU_TEST_ENABLE, false);
         <#else>
-            <#lt>    /* Test processor core registers */
+            <#lt>    // Test processor core registers
             <#lt>    cb_test_status = CLASSB_CPU_RegistersTest(CLASSB_FPU_TEST_DISABLE, false);
         </#if>
     </#if>
@@ -324,7 +327,7 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
             
         }
     }
-    /* Program Counter test */
+    // Program Counter test
     cb_test_status = CLASSB_CPU_PCTest(false);
     
     if (CLASSB_TEST_PASSED == cb_test_status)
@@ -344,7 +347,7 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
         }
     }
     
-    /* SRAM test */
+    // SRAM test
     <#if CLASSB_SRAM_MARCH_ALGORITHM?has_content>
     cb_test_status = CLASSB_SRAM_MarchTestInit((uint32_t *)CLASSB_SRAM_RESERVE_AREA_END,
         261120, ${CLASSB_SRAM_MARCH_ALGORITHM}, false);
@@ -368,6 +371,33 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
             
         }
     }
+    
+    // Kick WDT
+    WDT_REGS->WDT_CLEAR = WDT_CLEAR_CLEAR_KEY;
+    
+    <#if CLASSB_FLASH_CRC_CONF?has_content>
+        <#if CLASSB_FLASH_CRC_CONF == true>
+    // Flash test. Read CRC-32 and verify it
+    cb_test_status = CLASSB_FlashCRCTest(0, (CLASSB_FLASH_CRC32_ADDR - 1),
+        *(uint32_t *)CLASSB_FLASH_CRC32_ADDR, false);
+    if (CLASSB_TEST_PASSED == cb_test_status)
+    {
+        cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;
+    }
+    else if (CLASSB_TEST_FAILED == cb_test_status)
+    {
+        cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
+    }
+    else
+    {
+        // Test is not executed because of invalid input arguments.
+        while (1)
+        {
+            
+        }
+    }
+        </#if>
+    </#if>
     
     // TBD
     // Add all SSTs here
@@ -410,7 +440,7 @@ void _on_reset(void)
 #if (defined(__DEBUG) || defined(__DEBUG_D)) && defined(__XC32)
         __builtin_software_breakpoint();
 #endif
-        /* Infinite loop */
+        // Infinite loop
         while (1) {}
         }
     }

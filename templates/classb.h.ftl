@@ -56,6 +56,7 @@
 #include "classb/src/classb_common.h"
 #include "classb/src/classb_cpu_reg_test.h"
 #include "classb/src/classb_sram_test.h"
+#include "classb/src/classb_flash_test.h"
 
 /*----------------------------------------------------------------------------
  *     Constants
@@ -66,8 +67,10 @@
 #define CLASSB_TEST_IN_PROG_VAR_ADDR        0x2000000c
 #define CLASSB_WDT_TEST_IN_PROG_VAR_ADDR    0x20000010
 #define CLASSB_GEN_TEST_VAR_ADDR            0x20000014
+#define CLASSB_FLASH_TEST_VAR_ADDR          0x20000018
 
 #define CLASSB_TEST_IN_PROG_PATTERN         0xCB
+#define CLASSB_FLASH_CRC32_ADDR             ${CLASSB_FLASHCRC_ADDR}
 
 /*----------------------------------------------------------------------------
  *     Data types
