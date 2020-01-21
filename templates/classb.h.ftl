@@ -57,6 +57,7 @@
 #include "classb/src/classb_cpu_reg_test.h"
 #include "classb/src/classb_sram_test.h"
 #include "classb/src/classb_flash_test.h"
+#include "classb/src/classb_interrupt_test.h"
 
 /*----------------------------------------------------------------------------
  *     Constants
@@ -67,10 +68,10 @@
 #define CLASSB_TEST_IN_PROG_VAR_ADDR        0x2000000c
 #define CLASSB_WDT_TEST_IN_PROG_VAR_ADDR    0x20000010
 #define CLASSB_TEST_IN_PROG_PATTERN         0xCB
-#define CLASSB_FLASH_TEST_VAR_ADDR          0x20000018
+#define CLASSB_FLASH_TEST_VAR_ADDR          0x20000014
 #define CLASSB_FLASH_CRC32_ADDR             ${CLASSB_FLASHCRC_ADDR}
-
 #define CLASSB_SRAM_STARTUP_TEST_SIZE       (HSRAM_SIZE - CLASSB_SRAM_RESERVE_AREA_SIZE)
+#define CLASSB_INTERRUPT_TEST_VAR_ADDR      0x20000018
 
 /*----------------------------------------------------------------------------
  *     Data types
@@ -83,9 +84,12 @@ void CLASSB_ClearTestResults(CLASSB_TEST_TYPE test_type);
 CLASSB_TEST_STATUS CLASSB_GetTestResult(CLASSB_TEST_TYPE test_type,
     CLASSB_TEST_ID test_id);
 
-/* Functions called after WDT reset */
+// Functions called after WDT reset
 void CLASSB_SST_WDT_Recovery(void);
 void CLASSB_App_WDT_Recovery(void);
+
+// Function to be called if a non-critical self-test is failed.
+void CLASSB_SelfTest_FailSafe(CLASSB_TEST_ID cb_test_id);
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility

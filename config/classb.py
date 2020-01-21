@@ -82,6 +82,11 @@ def instantiateComponent(classBComponent):
     #This should be enabled based on the above configuration
     classB_CRC_address.setDependencies(setClassB_SymbolVisibility, ["CLASSB_FLASH_CRC_CONF"])
 
+    # Insert Interrupt test
+    classB_UseInterTest = classBComponent.createBooleanSymbol("CLASSB_INTERRUPT_TEST_OPT", classBMenu)
+    classB_UseInterTest.setLabel("Test Interrupts?")
+    classB_UseInterTest.setVisible(True)
+    classB_UseInterTest.setDefaultValue(False)
     
 ############################################################################
 #### Code Generation ####
@@ -96,7 +101,7 @@ def instantiateComponent(classBComponent):
     classBHeaderFile.setType("HEADER")
     classBHeaderFile.setMarkup(True)
     
-    # Main Soure File
+    # Main Source File
     classBSourceFile = classBComponent.createFileSymbol("CLASSB_SOURCE", None)
     classBSourceFile.setSourcePath("/templates/classb.c.ftl")
     classBSourceFile.setOutputName("classb.c")
@@ -114,7 +119,7 @@ def instantiateComponent(classBComponent):
     classBCommHeaderFile.setProjectPath("config/" + configName +"/classb/src/")
     classBCommHeaderFile.setType("HEADER")
     
-    # Soure File for result handling
+    # Source File for result handling
     classBSourceResultMgmt = classBComponent.createFileSymbol("CLASSB_SOURCE_RESULT_MGMT_S", None)
     classBSourceResultMgmt.setSourcePath("/src/classb_result_management.S")
     classBSourceResultMgmt.setOutputName("classb_result_management.S")
@@ -122,7 +127,7 @@ def instantiateComponent(classBComponent):
     classBSourceResultMgmt.setProjectPath("config/" + configName + "/classb/src/")
     classBSourceResultMgmt.setType("SOURCE")
 
-    # Soure File for CPU test
+    # Source File for CPU test
     classBSourceCpuTestAsm = classBComponent.createFileSymbol("CLASSB_SOURCE_CPUTEST_S", None)
     classBSourceCpuTestAsm.setSourcePath("/src/classb_cpu_reg_test.S")
     classBSourceCpuTestAsm.setOutputName("classb_cpu_reg_test.S")
@@ -131,23 +136,23 @@ def instantiateComponent(classBComponent):
     classBSourceCpuTestAsm.setType("SOURCE")
     
     # Header File for CPU test
-    classBHeaderCpuTestAsm = classBComponent.createFileSymbol("CLASSB_CPUTEST_HEADER", None)
+    classBHeaderCpuTestAsm = classBComponent.createFileSymbol("CLASSB_HEADER_CPU_TEST", None)
     classBHeaderCpuTestAsm.setSourcePath("/src/classb_cpu_reg_test.h")
     classBHeaderCpuTestAsm.setOutputName("classb_cpu_reg_test.h")
     classBHeaderCpuTestAsm.setDestPath("/classb/src")
     classBHeaderCpuTestAsm.setProjectPath("config/" + configName +"/classb/src/")
     classBHeaderCpuTestAsm.setType("HEADER")
     
-    # Soure File for CPU PC test
-    classBSourceCpuPCTest = classBComponent.createFileSymbol("CLASSB_SOURCE_CPUPCTEST", None)
+    # Source File for CPU PC test
+    classBSourceCpuPCTest = classBComponent.createFileSymbol("CLASSB_SOURCE_CPUPC_TEST", None)
     classBSourceCpuPCTest.setSourcePath("/src/classb_cpu_pc_test.c")
     classBSourceCpuPCTest.setOutputName("classb_cpu_pc_test.c")
     classBSourceCpuPCTest.setDestPath("/classb/src")
     classBSourceCpuPCTest.setProjectPath("config/" + configName + "/classb/src/")
     classBSourceCpuPCTest.setType("SOURCE")
     
-    # Soure File for SRAM test
-    classBSourceSRAMTest = classBComponent.createFileSymbol("CLASSB_SOURCE_SRAMTEST", None)
+    # Source File for SRAM test
+    classBSourceSRAMTest = classBComponent.createFileSymbol("CLASSB_SOURCE_SRAM_TEST", None)
     classBSourceSRAMTest.setSourcePath("/src/classb_sram_test.c")
     classBSourceSRAMTest.setOutputName("classb_sram_test.c")
     classBSourceSRAMTest.setDestPath("/classb/src")
@@ -155,15 +160,15 @@ def instantiateComponent(classBComponent):
     classBSourceSRAMTest.setType("SOURCE")
     
     # Header File for SRAM test
-    classBHeaderSRAMTest = classBComponent.createFileSymbol("CLASSB_SRAMTEST_HEADER", None)
+    classBHeaderSRAMTest = classBComponent.createFileSymbol("CLASSB_HEADER_SRAM_TEST", None)
     classBHeaderSRAMTest.setSourcePath("/src/classb_sram_test.h")
     classBHeaderSRAMTest.setOutputName("classb_sram_test.h")
     classBHeaderSRAMTest.setDestPath("/classb/src")
     classBHeaderSRAMTest.setProjectPath("config/" + configName +"/classb/src/")
     classBHeaderSRAMTest.setType("HEADER")
     
-    # Soure File for Flash test
-    classBSourceFLASHTest = classBComponent.createFileSymbol("CLASSB_SOURCE_FLASHTEST", None)
+    # Source File for Flash test
+    classBSourceFLASHTest = classBComponent.createFileSymbol("CLASSB_SOURCE_FLASH_TEST", None)
     classBSourceFLASHTest.setSourcePath("/src/classb_flash_test.c")
     classBSourceFLASHTest.setOutputName("classb_flash_test.c")
     classBSourceFLASHTest.setDestPath("/classb/src")
@@ -171,13 +176,28 @@ def instantiateComponent(classBComponent):
     classBSourceFLASHTest.setType("SOURCE")
     
     # Header File for Flash test
-    classBHeaderFLASHTest = classBComponent.createFileSymbol("CLASSB_FLASHTEST_HEADER", None)
+    classBHeaderFLASHTest = classBComponent.createFileSymbol("CLASSB_HEADER_FLASH_TEST", None)
     classBHeaderFLASHTest.setSourcePath("/src/classb_flash_test.h")
     classBHeaderFLASHTest.setOutputName("classb_flash_test.h")
     classBHeaderFLASHTest.setDestPath("/classb/src")
     classBHeaderFLASHTest.setProjectPath("config/" + configName +"/classb/src/")
     classBHeaderFLASHTest.setType("HEADER")
     
+    # Source File for Interrupt test
+    classBSourceInterruptTest = classBComponent.createFileSymbol("CLASSB_SOURCE_INTERRUPT_TEST", None)
+    classBSourceInterruptTest.setSourcePath("/src/classb_interrupt_test.c")
+    classBSourceInterruptTest.setOutputName("classb_interrupt_test.c")
+    classBSourceInterruptTest.setDestPath("/classb/src")
+    classBSourceInterruptTest.setProjectPath("config/" + configName + "/classb/src/")
+    classBSourceInterruptTest.setType("SOURCE")
+    
+    # Header File for Interrupt test
+    classBHeaderInterruptTest = classBComponent.createFileSymbol("CLASSB_HEADER_INTERRUPT_TEST", None)
+    classBHeaderInterruptTest.setSourcePath("/src/classb_interrupt_test.h")
+    classBHeaderInterruptTest.setOutputName("classb_interrupt_test.h")
+    classBHeaderInterruptTest.setDestPath("/classb/src")
+    classBHeaderInterruptTest.setProjectPath("config/" + configName +"/classb/src/")
+    classBHeaderInterruptTest.setType("HEADER")
     
     # System Definition
     classBSystemDefFile = classBComponent.createFileSymbol("CLASSB_SYS_DEF", None)

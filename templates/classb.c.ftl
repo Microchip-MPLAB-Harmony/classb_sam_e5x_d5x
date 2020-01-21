@@ -49,6 +49,7 @@
 __attribute__((persistent)) volatile uint8_t * ongoing_sst_id; 
 __attribute__((persistent)) volatile uint8_t * classb_test_in_progress;
 __attribute__((persistent)) volatile uint8_t * wdt_test_in_progress;
+__attribute__((persistent)) volatile uint16_t * interrupt_tests_status;
 
 /*----------------------------------------------------------------------------
  *     Functions
@@ -67,10 +68,13 @@ void CLASSB_GlobalsInit(void)
     ongoing_sst_id = (volatile uint8_t *)CLASSB_ONGOING_TEST_VAR_ADDR; 
     classb_test_in_progress = (volatile uint8_t *)CLASSB_TEST_IN_PROG_VAR_ADDR;
     wdt_test_in_progress = (volatile uint8_t *)CLASSB_WDT_TEST_IN_PROG_VAR_ADDR;
+    interrupt_tests_status = (volatile uint16_t *)CLASSB_INTERRUPT_TEST_VAR_ADDR;
 
     ongoing_sst_id[0] = 0xff;
     classb_test_in_progress[0] = 0;
     wdt_test_in_progress[0] = 0;
+    interrupt_tests_status[0] = 0;
+    interrupt_tests_status[1] = 0;
 }
 
 /*============================================================================
@@ -117,7 +121,7 @@ void CLASSB_SST_WDT_Recovery(void)
 }
 
 /*============================================================================
-void CLASSB_SelfTest_FailSafe(void)
+void CLASSB_SelfTest_FailSafe(CLASSB_TEST_ID cb_test_id)
 ------------------------------------------------------------------------------
 Purpose: Called if a non-critical self-test is failed.
 Input  : None
@@ -336,14 +340,6 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
     {
         cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
     }
-    else
-    {
-        // Test is not executed because of invalid input arguments.
-        while (1)
-        {
-            
-        }
-    }
     
     // Kick WDT
     WDT_REGS->WDT_CLEAR = WDT_CLEAR_CLEAR_KEY;
@@ -361,14 +357,20 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
     {
         cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
     }
-    else
-    {
-        // Test is not executed because of invalid input arguments.
-        while (1)
-        {
-            
-        }
-    }
+        </#if>
+    </#if>
+    
+    <#if CLASSB_INTERRUPT_TEST_OPT??>
+        <#if CLASSB_INTERRUPT_TEST_OPT == true>
+            <#lt>    cb_test_status = CLASSB_SST_InterruptTest();
+            <#lt>    if (CLASSB_TEST_PASSED == cb_test_status)
+            <#lt>    {
+            <#lt>        cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;
+            <#lt>    }
+            <#lt>    else if (CLASSB_TEST_FAILED == cb_test_status)
+            <#lt>    {
+            <#lt>        cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
+            <#lt>    }
         </#if>
     </#if>
     
