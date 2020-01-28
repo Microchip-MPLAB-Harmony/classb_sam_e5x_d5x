@@ -58,6 +58,7 @@
 #include "classb/src/classb_sram_test.h"
 #include "classb/src/classb_flash_test.h"
 #include "classb/src/classb_interrupt_test.h"
+#include "classb/src/classb_clock_test.h"
 
 /*----------------------------------------------------------------------------
  *     Constants
@@ -72,6 +73,12 @@
 #define CLASSB_FLASH_CRC32_ADDR             ${CLASSB_FLASHCRC_ADDR}
 #define CLASSB_SRAM_STARTUP_TEST_SIZE       (HSRAM_SIZE - CLASSB_SRAM_RESERVE_AREA_SIZE)
 #define CLASSB_INTERRUPT_TEST_VAR_ADDR      0x20000018
+#define CLASSB_CLOCK_DEFAULT_CLOCK_FREQ     48000000
+#define CLASSB_CLOCK_ERROR_PERCENT          5
+#define CLASSB_CLOCK_TEST_RTC_CYCLES        200
+// RTC is clocked from 32687 Hz Crystal. One RTC cycle is 30520 nano sec
+#define CLASSB_CLOCK_TEST_RTC_RATIO_NS      30520
+#define CLASSB_CLOCK_TEST_RATIO_NS_MS       1000000
 
 /*----------------------------------------------------------------------------
  *     Data types

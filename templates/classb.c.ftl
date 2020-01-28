@@ -288,6 +288,13 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
     CLASSB_STARTUP_STATUS cb_startup_status = CLASSB_STARTUP_TEST_FAILED;
     CLASSB_STARTUP_STATUS cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
     CLASSB_TEST_STATUS cb_test_status = CLASSB_TEST_NOT_EXECUTED;
+    <#if CLASSB_CLOCK_TEST_OPT??>
+        <#if CLASSB_CLOCK_TEST_OPT == true>
+            <#if CLASSB_CLOCK_TEST_DURATION?has_content>
+            <#lt>    uint16_t clock_test_rtc_cycles = ((${CLASSB_CLOCK_TEST_DURATION} * CLASSB_CLOCK_TEST_RATIO_NS_MS) / CLASSB_CLOCK_TEST_RTC_RATIO_NS);
+            </#if>
+        </#if>
+    </#if>
     
     <#if CLASSB_FPU_OPT??>
         <#if CLASSB_FPU_OPT == true>
@@ -363,6 +370,24 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
     <#if CLASSB_INTERRUPT_TEST_OPT??>
         <#if CLASSB_INTERRUPT_TEST_OPT == true>
             <#lt>    cb_test_status = CLASSB_SST_InterruptTest();
+            <#lt>    if (CLASSB_TEST_PASSED == cb_test_status)
+            <#lt>    {
+            <#lt>        cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;
+            <#lt>    }
+            <#lt>    else if (CLASSB_TEST_FAILED == cb_test_status)
+            <#lt>    {
+            <#lt>        cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
+            <#lt>    }
+        </#if>
+    </#if>
+    
+    <#if CLASSB_CLOCK_TEST_OPT??>
+        <#if CLASSB_CLOCK_TEST_OPT == true>
+            <#if CLASSB_CLOCK_TEST_PERCENT?has_content && CLASSB_CLOCK_TEST_DURATION?has_content>
+                <#lt>    cb_test_status = CLASSB_ClockTest(CLASSB_CLOCK_DEFAULT_CLOCK_FREQ, ${CLASSB_CLOCK_TEST_PERCENT}, clock_test_rtc_cycles, false);
+            <#else>
+                <#lt>    cb_test_status = CLASSB_ClockTest(CLASSB_CLOCK_DEFAULT_CLOCK_FREQ, CLASSB_CLOCK_ERROR_PERCENT, CLASSB_CLOCK_TEST_RTC_CYCLES, false);
+            </#if>
             <#lt>    if (CLASSB_TEST_PASSED == cb_test_status)
             <#lt>    {
             <#lt>        cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;

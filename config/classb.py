@@ -88,6 +88,34 @@ def instantiateComponent(classBComponent):
     classB_UseInterTest.setVisible(True)
     classB_UseInterTest.setDefaultValue(False)
     
+    # Insert Clock test
+    classB_UseClockTest = classBComponent.createBooleanSymbol("CLASSB_CLOCK_TEST_OPT", classBMenu)
+    classB_UseClockTest.setLabel("Test CPU Clock?")
+    classB_UseClockTest.setVisible(True)
+    classB_UseClockTest.setDefaultValue(False)
+    
+    # Acceptable CPU clock frequency error at startup
+    classb_ClockTestPercentage = classBComponent.createKeyValueSetSymbol("CLASSB_CLOCK_TEST_PERCENT", classBMenu)
+    classb_ClockTestPercentage.setLabel("Permitted CPU clock error at startup")
+    classb_ClockTestPercentage.addKey("CLASSB_CLOCK_5PERCENT", "5", "5 %")
+    classb_ClockTestPercentage.addKey("CLASSB_CLOCK_10PERCENT", "10", "10 %")
+    classb_ClockTestPercentage.addKey("CLASSB_CLOCK_15PERCENT", "15", "15 %")
+    classb_ClockTestPercentage.setOutputMode("Value")
+    classb_ClockTestPercentage.setDisplayMode("Description")
+    classb_ClockTestPercentage.setDescription("Selects the permitted CPU clock error at startup")
+    classb_ClockTestPercentage.setDefaultValue(0)
+    classb_ClockTestPercentage.setVisible(False)
+    classb_ClockTestPercentage.setDependencies(setClassB_SymbolVisibility, ["CLASSB_CLOCK_TEST_OPT"])
+    
+    # Clock test duration
+    classb_ClockTestDuration = classBComponent.createIntegerSymbol("CLASSB_CLOCK_TEST_DURATION", classBMenu)
+    classb_ClockTestDuration.setLabel("Clock Test Duration (ms)")
+    classb_ClockTestDuration.setDefaultValue(5)
+    classb_ClockTestDuration.setVisible(False)
+    classb_ClockTestDuration.setMin(5)
+    classb_ClockTestDuration.setMax(20)
+    classb_ClockTestDuration.setDependencies(setClassB_SymbolVisibility, ["CLASSB_CLOCK_TEST_OPT"])
+    
 ############################################################################
 #### Code Generation ####
 ############################################################################
@@ -198,6 +226,22 @@ def instantiateComponent(classBComponent):
     classBHeaderInterruptTest.setDestPath("/classb/src")
     classBHeaderInterruptTest.setProjectPath("config/" + configName +"/classb/src/")
     classBHeaderInterruptTest.setType("HEADER")
+    
+    # Source File for Interrupt test
+    classBSourceClockTest = classBComponent.createFileSymbol("CLASSB_SOURCE_CLOCK_TEST", None)
+    classBSourceClockTest.setSourcePath("/src/classb_clock_test.c")
+    classBSourceClockTest.setOutputName("classb_clock_test.c")
+    classBSourceClockTest.setDestPath("/classb/src")
+    classBSourceClockTest.setProjectPath("config/" + configName + "/classb/src/")
+    classBSourceClockTest.setType("SOURCE")
+    
+    # Header File for Clock test
+    classBHeaderClockTest = classBComponent.createFileSymbol("CLASSB_HEADER_CLOCK_TEST", None)
+    classBHeaderClockTest.setSourcePath("/src/classb_clock_test.h")
+    classBHeaderClockTest.setOutputName("classb_clock_test.h")
+    classBHeaderClockTest.setDestPath("/classb/src")
+    classBHeaderClockTest.setProjectPath("config/" + configName +"/classb/src/")
+    classBHeaderClockTest.setType("HEADER")
     
     # System Definition
     classBSystemDefFile = classBComponent.createFileSymbol("CLASSB_SYS_DEF", None)
