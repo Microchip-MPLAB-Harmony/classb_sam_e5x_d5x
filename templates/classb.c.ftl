@@ -367,19 +367,8 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
         </#if>
     </#if>
     
-    <#if CLASSB_INTERRUPT_TEST_OPT??>
-        <#if CLASSB_INTERRUPT_TEST_OPT == true>
-            <#lt>    cb_test_status = CLASSB_SST_InterruptTest();
-            <#lt>    if (CLASSB_TEST_PASSED == cb_test_status)
-            <#lt>    {
-            <#lt>        cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;
-            <#lt>    }
-            <#lt>    else if (CLASSB_TEST_FAILED == cb_test_status)
-            <#lt>    {
-            <#lt>        cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
-            <#lt>    }
-        </#if>
-    </#if>
+    // Kick WDT
+    WDT_REGS->WDT_CLEAR = WDT_CLEAR_CLEAR_KEY;
     
     <#if CLASSB_CLOCK_TEST_OPT??>
         <#if CLASSB_CLOCK_TEST_OPT == true>
@@ -399,6 +388,23 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
         </#if>
     </#if>
     
+    // Kick WDT
+    WDT_REGS->WDT_CLEAR = WDT_CLEAR_CLEAR_KEY;
+    
+    <#if CLASSB_INTERRUPT_TEST_OPT??>
+        <#if CLASSB_INTERRUPT_TEST_OPT == true>
+            <#lt>    cb_test_status = CLASSB_SST_InterruptTest();
+            <#lt>    if (CLASSB_TEST_PASSED == cb_test_status)
+            <#lt>    {
+            <#lt>        cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;
+            <#lt>    }
+            <#lt>    else if (CLASSB_TEST_FAILED == cb_test_status)
+            <#lt>    {
+            <#lt>        cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
+            <#lt>    }
+        </#if>
+    </#if>
+  
     // TBD
     // Add all SSTs here
     if (CLASSB_STARTUP_TEST_PASSED == cb_temp_startup_status)
