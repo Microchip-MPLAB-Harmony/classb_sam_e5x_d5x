@@ -59,6 +59,7 @@
 #include "classb/src/classb_flash_test.h"
 #include "classb/src/classb_interrupt_test.h"
 #include "classb/src/classb_clock_test.h"
+#include "classb/src/classb_io_pin_test.h"
 
 /*----------------------------------------------------------------------------
  *     Constants

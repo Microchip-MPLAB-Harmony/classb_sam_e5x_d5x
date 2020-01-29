@@ -333,11 +333,11 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
     
     // SRAM test
     <#if CLASSB_SRAM_MARCH_ALGORITHM?has_content>
-    cb_test_status = CLASSB_SRAM_MarchTestInit((uint32_t *)CLASSB_SRAM_RESERVE_AREA_END,
-        CLASSB_SRAM_STARTUP_TEST_SIZE, ${CLASSB_SRAM_MARCH_ALGORITHM}, false);
+        <#lt>    cb_test_status = CLASSB_SRAM_MarchTestInit((uint32_t *)CLASSB_SRAM_RESERVE_AREA_END,
+            <#lt>    CLASSB_SRAM_STARTUP_TEST_SIZE, ${CLASSB_SRAM_MARCH_ALGORITHM}, false);
     <#else>
-    cb_test_status = CLASSB_SRAM_MarchTestInit((uint32_t *)CLASSB_SRAM_RESERVE_AREA_END,
-        CLASSB_SRAM_STARTUP_TEST_SIZE, CLASSB_SRAM_MARCH_C, false);
+        <#lt>    cb_test_status = CLASSB_SRAM_MarchTestInit((uint32_t *)CLASSB_SRAM_RESERVE_AREA_END,
+            <#lt>    CLASSB_SRAM_STARTUP_TEST_SIZE, CLASSB_SRAM_MARCH_C, false);
     </#if>
     if (CLASSB_TEST_PASSED == cb_test_status)
     {
@@ -347,31 +347,31 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
     {
         cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
     }
-    
-    // Kick WDT
-    WDT_REGS->WDT_CLEAR = WDT_CLEAR_CLEAR_KEY;
-    
     <#if CLASSB_FLASH_CRC_CONF?has_content>
         <#if CLASSB_FLASH_CRC_CONF == true>
-    // Flash test. Read CRC-32 and verify it
-    cb_test_status = CLASSB_FlashCRCTest(0, (CLASSB_FLASH_CRC32_ADDR - 1),
-        *(uint32_t *)CLASSB_FLASH_CRC32_ADDR, false);
-    if (CLASSB_TEST_PASSED == cb_test_status)
-    {
-        cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;
-    }
-    else if (CLASSB_TEST_FAILED == cb_test_status)
-    {
-        cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
-    }
+
+            <#lt>    // Flash Test   
+            <#lt>    // Clear WDT before test
+            <#lt>    WDT_REGS->WDT_CLEAR = WDT_CLEAR_CLEAR_KEY;
+            <#lt>    // Flash test. Read CRC-32 and verify it
+            <#lt>    cb_test_status = CLASSB_FlashCRCTest(0, (CLASSB_FLASH_CRC32_ADDR - 1),
+                <#lt>    *(uint32_t *)CLASSB_FLASH_CRC32_ADDR, false);
+            <#lt>    if (CLASSB_TEST_PASSED == cb_test_status)
+            <#lt>    {
+                <#lt>    cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;
+            <#lt>    }
+            <#lt>    else if (CLASSB_TEST_FAILED == cb_test_status)
+            <#lt>    {
+                <#lt>    cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
+            <#lt>    }
         </#if>
     </#if>
-    
-    // Kick WDT
-    WDT_REGS->WDT_CLEAR = WDT_CLEAR_CLEAR_KEY;
-    
     <#if CLASSB_CLOCK_TEST_OPT??>
         <#if CLASSB_CLOCK_TEST_OPT == true>
+
+            <#lt>    // Clock Test    
+            <#lt>    // Clear WDT before test
+            <#lt>    WDT_REGS->WDT_CLEAR = WDT_CLEAR_CLEAR_KEY;
             <#if CLASSB_CLOCK_TEST_PERCENT?has_content && CLASSB_CLOCK_TEST_DURATION?has_content>
                 <#lt>    cb_test_status = CLASSB_ClockTest(CLASSB_CLOCK_DEFAULT_CLOCK_FREQ, ${CLASSB_CLOCK_TEST_PERCENT}, clock_test_rtc_cycles, false);
             <#else>
@@ -387,12 +387,12 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
             <#lt>    }
         </#if>
     </#if>
-    
-    // Kick WDT
-    WDT_REGS->WDT_CLEAR = WDT_CLEAR_CLEAR_KEY;
-    
     <#if CLASSB_INTERRUPT_TEST_OPT??>
         <#if CLASSB_INTERRUPT_TEST_OPT == true>
+ 
+            <#lt>    // Interrupt Test
+            <#lt>    // Clear WDT before test
+            <#lt>    WDT_REGS->WDT_CLEAR = WDT_CLEAR_CLEAR_KEY;
             <#lt>    cb_test_status = CLASSB_SST_InterruptTest();
             <#lt>    if (CLASSB_TEST_PASSED == cb_test_status)
             <#lt>    {
@@ -404,9 +404,7 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
             <#lt>    }
         </#if>
     </#if>
-  
-    // TBD
-    // Add all SSTs here
+    
     if (CLASSB_STARTUP_TEST_PASSED == cb_temp_startup_status)
     {
         cb_startup_status = CLASSB_STARTUP_TEST_PASSED;

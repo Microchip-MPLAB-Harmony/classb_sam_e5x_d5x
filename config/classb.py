@@ -81,12 +81,6 @@ def instantiateComponent(classBComponent):
     classB_CRC_address.setVisible(False)
     #This should be enabled based on the above configuration
     classB_CRC_address.setDependencies(setClassB_SymbolVisibility, ["CLASSB_FLASH_CRC_CONF"])
-
-    # Insert Interrupt test
-    classB_UseInterTest = classBComponent.createBooleanSymbol("CLASSB_INTERRUPT_TEST_OPT", classBMenu)
-    classB_UseInterTest.setLabel("Test Interrupts?")
-    classB_UseInterTest.setVisible(True)
-    classB_UseInterTest.setDefaultValue(False)
     
     # Insert Clock test
     classB_UseClockTest = classBComponent.createBooleanSymbol("CLASSB_CLOCK_TEST_OPT", classBMenu)
@@ -115,6 +109,12 @@ def instantiateComponent(classBComponent):
     classb_ClockTestDuration.setMin(5)
     classb_ClockTestDuration.setMax(20)
     classb_ClockTestDuration.setDependencies(setClassB_SymbolVisibility, ["CLASSB_CLOCK_TEST_OPT"])
+    
+    # Insert Interrupt test
+    classB_UseInterTest = classBComponent.createBooleanSymbol("CLASSB_INTERRUPT_TEST_OPT", classBMenu)
+    classB_UseInterTest.setLabel("Test Interrupts?")
+    classB_UseInterTest.setVisible(True)
+    classB_UseInterTest.setDefaultValue(False)
     
 ############################################################################
 #### Code Generation ####
@@ -211,6 +211,22 @@ def instantiateComponent(classBComponent):
     classBHeaderFLASHTest.setProjectPath("config/" + configName +"/classb/src/")
     classBHeaderFLASHTest.setType("HEADER")
     
+    # Source File for Clock test
+    classBSourceClockTest = classBComponent.createFileSymbol("CLASSB_SOURCE_CLOCK_TEST", None)
+    classBSourceClockTest.setSourcePath("/src/classb_clock_test.c")
+    classBSourceClockTest.setOutputName("classb_clock_test.c")
+    classBSourceClockTest.setDestPath("/classb/src")
+    classBSourceClockTest.setProjectPath("config/" + configName + "/classb/src/")
+    classBSourceClockTest.setType("SOURCE")
+    
+    # Header File for Clock test
+    classBHeaderClockTest = classBComponent.createFileSymbol("CLASSB_HEADER_CLOCK_TEST", None)
+    classBHeaderClockTest.setSourcePath("/src/classb_clock_test.h")
+    classBHeaderClockTest.setOutputName("classb_clock_test.h")
+    classBHeaderClockTest.setDestPath("/classb/src")
+    classBHeaderClockTest.setProjectPath("config/" + configName +"/classb/src/")
+    classBHeaderClockTest.setType("HEADER")
+    
     # Source File for Interrupt test
     classBSourceInterruptTest = classBComponent.createFileSymbol("CLASSB_SOURCE_INTERRUPT_TEST", None)
     classBSourceInterruptTest.setSourcePath("/src/classb_interrupt_test.c")
@@ -227,21 +243,21 @@ def instantiateComponent(classBComponent):
     classBHeaderInterruptTest.setProjectPath("config/" + configName +"/classb/src/")
     classBHeaderInterruptTest.setType("HEADER")
     
-    # Source File for Interrupt test
-    classBSourceClockTest = classBComponent.createFileSymbol("CLASSB_SOURCE_CLOCK_TEST", None)
-    classBSourceClockTest.setSourcePath("/src/classb_clock_test.c")
-    classBSourceClockTest.setOutputName("classb_clock_test.c")
-    classBSourceClockTest.setDestPath("/classb/src")
-    classBSourceClockTest.setProjectPath("config/" + configName + "/classb/src/")
-    classBSourceClockTest.setType("SOURCE")
+    # Source File for IO pin test
+    classBSourceIOpinTest = classBComponent.createFileSymbol("CLASSB_SOURCE_IOPIN_TEST", None)
+    classBSourceIOpinTest.setSourcePath("/src/classb_io_pin_test.c")
+    classBSourceIOpinTest.setOutputName("classb_io_pin_test.c")
+    classBSourceIOpinTest.setDestPath("/classb/src")
+    classBSourceIOpinTest.setProjectPath("config/" + configName + "/classb/src/")
+    classBSourceIOpinTest.setType("SOURCE")
     
-    # Header File for Clock test
-    classBHeaderClockTest = classBComponent.createFileSymbol("CLASSB_HEADER_CLOCK_TEST", None)
-    classBHeaderClockTest.setSourcePath("/src/classb_clock_test.h")
-    classBHeaderClockTest.setOutputName("classb_clock_test.h")
-    classBHeaderClockTest.setDestPath("/classb/src")
-    classBHeaderClockTest.setProjectPath("config/" + configName +"/classb/src/")
-    classBHeaderClockTest.setType("HEADER")
+    # Header File for IO pin test
+    classBHeaderIOpinTest = classBComponent.createFileSymbol("CLASSB_HEADER_IOPIN_TEST", None)
+    classBHeaderIOpinTest.setSourcePath("/src/classb_io_pin_test.h")
+    classBHeaderIOpinTest.setOutputName("classb_io_pin_test.h")
+    classBHeaderIOpinTest.setDestPath("/classb/src")
+    classBHeaderIOpinTest.setProjectPath("config/" + configName +"/classb/src/")
+    classBHeaderIOpinTest.setType("HEADER")
     
     # System Definition
     classBSystemDefFile = classBComponent.createFileSymbol("CLASSB_SYS_DEF", None)
