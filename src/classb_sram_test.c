@@ -522,7 +522,7 @@ CLASSB_TEST_STATUS CLASSB_SRAM_MarchTestInit(uint32_t * start_addr,
     // 'start_addr' and 'test_size_bytes' must be multiple of four
     
     register uint32_t stack_address asm("r6") = 0;
-    register CLASSB_TEST_STATUS sram_init_retval asm("r7") =
+    register CLASSB_TEST_STATUS sram_init_retval asm("r8") =
         CLASSB_TEST_NOT_EXECUTED;
     
     /* The address and test size must be a multiple of 4

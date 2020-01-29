@@ -70,14 +70,16 @@ def instantiateComponent(classBComponent):
     classB_FlashCRC_Option.setLabel("Read CRC-32 value from Flash?")
     classB_FlashCRC_Option.setVisible(True)
     classB_FlashCRC_Option.setDefaultValue(False)
-    classB_FlashCRC_Option.setDescription("Enable this option if the CRC-32 checksum of the application image is stored at a spefic address in the Flash")
+    classB_FlashCRC_Option.setDescription("Enable this option if the CRC-32 checksum of the application image is stored at a specific address in the Flash")
     
     # Address at which CRC-32 of the application image is stored
-    classB_CRC_address = classBComponent.createIntegerSymbol("CLASSB_FLASHCRC_ADDR", classB_FlashCRC_Option)
+    classB_CRC_address = classBComponent.createHexSymbol("CLASSB_FLASHCRC_ADDR", classB_FlashCRC_Option)
     classB_CRC_address.setLabel("Flash CRC location")
     classB_CRC_address.setMin(0)
     classB_CRC_address.setMax(classB_FLASH_SIZE.getValue())
     classB_CRC_address.setDefaultValue(0xFE000)
+    classB_CRC_address.setMin(0)
+    classB_CRC_address.setMax(classB_FLASH_SIZE.getValue() - 4)
     classB_CRC_address.setVisible(False)
     #This should be enabled based on the above configuration
     classB_CRC_address.setDependencies(setClassB_SymbolVisibility, ["CLASSB_FLASH_CRC_CONF"])

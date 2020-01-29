@@ -334,7 +334,7 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
     // SRAM test
     <#if CLASSB_SRAM_MARCH_ALGORITHM?has_content>
         <#lt>    cb_test_status = CLASSB_SRAM_MarchTestInit((uint32_t *)CLASSB_SRAM_RESERVE_AREA_END,
-            <#lt>    CLASSB_SRAM_STARTUP_TEST_SIZE, ${CLASSB_SRAM_MARCH_ALGORITHM}, false);
+        <#lt>        CLASSB_SRAM_STARTUP_TEST_SIZE, ${CLASSB_SRAM_MARCH_ALGORITHM}, false);
     <#else>
         <#lt>    cb_test_status = CLASSB_SRAM_MarchTestInit((uint32_t *)CLASSB_SRAM_RESERVE_AREA_END,
             <#lt>    CLASSB_SRAM_STARTUP_TEST_SIZE, CLASSB_SRAM_MARCH_C, false);
@@ -354,15 +354,15 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
             <#lt>    // Clear WDT before test
             <#lt>    WDT_REGS->WDT_CLEAR = WDT_CLEAR_CLEAR_KEY;
             <#lt>    // Flash test. Read CRC-32 and verify it
-            <#lt>    cb_test_status = CLASSB_FlashCRCTest(0, (CLASSB_FLASH_CRC32_ADDR - 1),
-                <#lt>    *(uint32_t *)CLASSB_FLASH_CRC32_ADDR, false);
+            <#lt>    cb_test_status = CLASSB_FlashCRCTest(0, CLASSB_FLASH_CRC32_ADDR,
+            <#lt>       *(uint32_t *)CLASSB_FLASH_CRC32_ADDR, false);
             <#lt>    if (CLASSB_TEST_PASSED == cb_test_status)
             <#lt>    {
-                <#lt>    cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;
+            <#lt>       cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;
             <#lt>    }
             <#lt>    else if (CLASSB_TEST_FAILED == cb_test_status)
             <#lt>    {
-                <#lt>    cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
+            <#lt>       cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
             <#lt>    }
         </#if>
     </#if>
