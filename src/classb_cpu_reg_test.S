@@ -34,7 +34,7 @@
 * INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND
 * WHATSOEVER RELATED TO THE SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS
 * BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE. TO THE
-* FULLEST EXTENT ALLOWED BY LAW, MICROCHIPS TOTAL LIABILITY ON ALL CLAIMS IN
+* FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN
 * ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *******************************************************************************/
@@ -42,7 +42,7 @@
 .syntax unified
 .global CLASSB_CPU_RegistersTest
 .extern _CLASSB_UpdateTestResult
-    
+
 ; /* Test bit patterns for R0 */
 .equ CPU_TEST_PATTERN_A, 0xAA000000
 .equ CPU_TEST_PATTERN_B, 0x00AA0000
@@ -56,27 +56,24 @@
 ; /* Test bit patterns for r1 to r11 */
 .equ CPU_TEST_PATTERN_I, 0xAAAAAAAA
 .equ CPU_TEST_PATTERN_J, 0x55555555
-    
+
 ; /* Test bit patterns for MSP and PSP must be multiple of 4 */
 .equ CPU_TEST_PATTERN_K, 0xAAAAAAA8
 .equ CPU_TEST_PATTERN_L, 0x55555558
-    
-; /* Test bit pattern for floating point registers */
+
+; /* Test bit pattern for FPSCR */
 .equ FPSCR_TEST_PATTERN_A, 0xF7C0009F
-    
+
 ; /* Common test bit patterns */
 .equ CPU_TEST_PATTERN_ZERO, 0x00000000
 .equ CPU_TEST_PATTERN_APSR_A, 0xf80f0000
-.equ CPU_TEST_PATTERN_CONTROL_A, 0x05
-.equ CPU_TEST_PATTERN_CONTROL_A, 0x02
-     
+
 ;/* CLASSB_TEST_TYPE defined in classb_common.h */
 .equ CLASSB_TEST_TYPE_SST, 0x00
 .equ CLASSB_TEST_TYPE_RST, 0x01
 
 ; /* CLASSB_TEST_ID defined in classb_common.h */
 .equ CLASSB_TEST_CPU, 0x00
-.equ CLASSB_TEST_PC, 0x2
 
 ; /* CLASSB_TEST_STATUS defined in classb_common.h */
 .equ CLASSB_TEST_PASSED, 0x1
@@ -95,11 +92,11 @@ CLASSB_CPU_RegistersTest:
     ; /* Copy input arguments */
     mov	    r7, r0
     mov	    r6, r1
-    ; /* _CLASSB_UpdateTestResult after loading arguments into registers */
+    ; /* Call _CLASSB_UpdateTestResult after loading arguments into registers */
     ldr	    r0, =CLASSB_TEST_TYPE_SST
     cbz     r6, progress_test_type_sst
     ldr	    r0, =CLASSB_TEST_TYPE_RST
-progress_test_type_sst:    
+progress_test_type_sst:
     ldr	    r1, =CLASSB_TEST_CPU
     ldr	    r2, =CLASSB_TEST_INPROGRESS
     bl	    _CLASSB_UpdateTestResult
@@ -115,7 +112,7 @@ update_result_return:
     pop	    {r2-r7}
     ; /* retun by POP-ing LR into PC */
     pop	    {r15}
-    
+
 CLASSB_CPU_GPR_Test:
     push    {r14}
     bl	    cpu_test_r0
@@ -143,7 +140,7 @@ cpu_test_r0:
     ldr     r0, =CPU_TEST_PATTERN_D
     cmp	    r0, #0xAA
     bne	    cpu_test_failed
-    
+
     ; /* Immediate value for CMP operation is limited to 8-bits */
     ldr     r0, =CPU_TEST_PATTERN_E
     ; /* Shift the patten to right and compare */
@@ -174,15 +171,15 @@ pass_test_type_sst:
     ldr	    r2, =CLASSB_TEST_PASSED
     bl	    _CLASSB_UpdateTestResult
     pop	    {r15}
-    
+
 ; /* Remain in infinite loop if a register test is failed */
 cpu_test_failed:
     b cpu_test_failed
-    
+
 cpu_test_r1_r11:
     push    {lr}
     push    {r4-r11}
-    
+
     ; /* Test r1 to r11 with 0xAAAAAAAA */
     ldr	    r0, =CPU_TEST_PATTERN_I
     mov	    r1, r0
@@ -254,7 +251,7 @@ cpu_test_r1_r11:
     mov	    r11, r0
     cmp	    r11, r0
     bne	    cpu_test_failed
-    
+
     ; /* Code reaches here if none of the above tests are failed */
     pop     {r4-r11}
     pop	    {r15}
@@ -290,7 +287,7 @@ cpu_test_special_regs:
     bne	    cpu_test_failed
     ; /* Restore PSP */
     msr	    PSP, r3
-    
+
     ; /* Test LR */
     ldr	    r0, =CPU_TEST_PATTERN_I
     mov	    LR, r0
@@ -300,7 +297,7 @@ cpu_test_special_regs:
     mov	    LR, r0
     cmp	    LR, r0
     bne	    cpu_test_failed
-    
+
     ; /* Test APSR */
     ; /* Copy the value of APSR_g and restore after test */
     mrs     r6, PSR
@@ -320,7 +317,7 @@ cpu_test_special_regs:
     IT	    NE
     bne     cpu_test_failed
     msr     APSR_g, r6
-    
+
     ; /* Test PRIMASK */
     mrs     r6, PRIMASK
     mov	    r4, #1
@@ -336,7 +333,7 @@ cpu_test_special_regs:
     IT	    NE
     bne     cpu_test_failed
     msr     PRIMASK, r6
-    
+
     ; /* Test FAULTMASK */
     mrs     r6, FAULTMASK
     mov	    r4, #1
@@ -352,7 +349,7 @@ cpu_test_special_regs:
     IT	    NE
     bne     cpu_test_failed
     msr     FAULTMASK, r6
-    
+
     ; /* Test BASEPRI */
     mrs     r6, BASEPRI
     mov	    r4, #0x40
@@ -368,7 +365,7 @@ cpu_test_special_regs:
     IT	    NE
     bne     cpu_test_failed
     msr     BASEPRI, r6
-    
+
     ; /* Test CONTROL */
     mrs     r6, CONTROL
     mov	    r4, #0x6
@@ -384,10 +381,10 @@ cpu_test_special_regs:
     IT	    NE
     bne     cpu_test_failed
     msr     CONTROL, r6
-    
+
     pop     {r4-r7}
     pop	    {r15}
-    
+
 CLASSB_CPU_FPU_Test:
     push    {r14}
     push    {r4-r7}
@@ -406,7 +403,7 @@ CLASSB_CPU_FPU_Test:
     bne	    asm_fpu_reg_fail
     add     r7, #16
     mov	    SP, r7
-    
+
     ; /* Load first pattern into S1 to S31 */
     vldr    s1, =CPU_TEST_PATTERN_I
     vldr    s2, =CPU_TEST_PATTERN_I
@@ -503,7 +500,7 @@ CLASSB_CPU_FPU_Test:
     vmrs    APSR_nzcv, fpscr
     IT	    NE
     bne	    asm_fpu_reg_fail
-    
+
     ; /* Load second pattern into S0 to S31 */
     vldr    s0, =CPU_TEST_PATTERN_J
     vldr    s1, =CPU_TEST_PATTERN_J
@@ -585,7 +582,7 @@ CLASSB_CPU_FPU_Test:
     vcmpe.f32   s30, s31
     vmrs    APSR_nzcv, fpscr
     bne	    asm_fpu_reg_fail
-    
+
     ; /* Test FPSCR */
     ldr	    r4, =CPU_TEST_PATTERN_ZERO
     vmsr    fpscr, r4
@@ -597,7 +594,7 @@ CLASSB_CPU_FPU_Test:
     vmrs    r5, fpscr
     cmp	    r4, r5
     bne	    asm_fpu_reg_fail
-   
+
     vpop.32 {s16-s31}
     pop     {r4-r7}
     pop	    {r15}

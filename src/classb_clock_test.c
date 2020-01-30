@@ -79,7 +79,7 @@ Notes  : If SysTick is used by the application, ensure that it
 ============================================================================*/
 void _CLASSB_Clock_SysTickStart ( void )
 {
-	SysTick->LOAD = 0xFFFFFF;
+	SysTick->LOAD = CLASSB_CLOCK_MAX_SYSTICK_VAL;
     SysTick->VAL = 0;
 	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
 }
@@ -98,6 +98,7 @@ void _CLASSB_Clock_RTC_Enable ( void )
     while((RTC_REGS->MODE0.RTC_SYNCBUSY & RTC_MODE0_SYNCBUSY_ENABLE_Msk) == RTC_MODE0_SYNCBUSY_ENABLE_Msk)
     {
         // Wait for synchronization after Enabling RTC
+        ;
     }
 }
 
@@ -115,7 +116,7 @@ void _CLASSB_Clock_RTC_ClockInit(void)
 {
     // Enable APB clock for RTC
     MCLK_REGS->MCLK_APBAMASK |= MCLK_APBAMASK_RTC_Msk;
-    
+
     // Configure 32K External Oscillator
     OSC32KCTRL_REGS->OSC32KCTRL_XOSC32K = OSC32KCTRL_XOSC32K_STARTUP(2) |
         OSC32KCTRL_XOSC32K_ENABLE_Msk | OSC32KCTRL_XOSC32K_CGM(1) |
@@ -124,7 +125,7 @@ void _CLASSB_Clock_RTC_ClockInit(void)
     {
         // Wait for the XOSC32K Ready state
     }
-    // Select 32.768 kHz as RTC clock
+    // Select 32.768 kHz XOSC32K as RTC clock
     OSC32KCTRL_REGS->OSC32KCTRL_RTCCTRL = OSC32KCTRL_RTCCTRL_RTCSEL(5);
 }
 
@@ -139,10 +140,11 @@ Notes  : The clocks required for RTC are configured in a separate function.
 void _CLASSB_Clock_RTC_Init(uint32_t test_cycles)
 {
     RTC_REGS->MODE0.RTC_CTRLA = RTC_MODE0_CTRLA_SWRST_Msk;
-    
+
     while((RTC_REGS->MODE0.RTC_SYNCBUSY & RTC_MODE0_SYNCBUSY_SWRST_Msk) == RTC_MODE0_SYNCBUSY_SWRST_Msk)
     {
         // Wait for Synchronization after Software Reset
+        ;
     }
     RTC_REGS->MODE0.RTC_CTRLA = RTC_MODE0_CTRLA_MODE(0) | RTC_MODE0_CTRLA_PRESCALER(0x1) | RTC_MODE0_CTRLA_MATCHCLR_Msk ;
     RTC_REGS->MODE0.RTC_COMP[0] = test_cycles;
@@ -172,41 +174,41 @@ CLASSB_TEST_STATUS CLASSB_ClockTest(uint32_t cpu_clock_freq,
     volatile uint32_t systick_count_b = 0;
     int64_t ticks_passed = 0;
     uint8_t calculated_error_limit = 0;
-        
+
     if ((expected_ticks > CLASSB_CLOCK_MAX_SYSTICK_VAL)
-            || (cpu_clock_freq > CLASSB_CLOCK_MAX_CLOCK_FREQ)
-            || (error_limit < CLASSB_CLOCK_MAX_TEST_ACCURACY))
+        || (cpu_clock_freq > CLASSB_CLOCK_MAX_CLOCK_FREQ)
+        || (error_limit < CLASSB_CLOCK_MAX_TEST_ACCURACY))
     {
         ;
     }
     else
     {
-        if (running_context)
+        if (running_context == true)
         {
             _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_CLOCK,
-                CLASSB_TEST_INPROGRESS); 
+                CLASSB_TEST_INPROGRESS);
         }
         else
         {
             _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_CLOCK,
-                CLASSB_TEST_INPROGRESS); 
+                CLASSB_TEST_INPROGRESS);
         }
-    
+
         _CLASSB_Clock_RTC_ClockInit();
         _CLASSB_Clock_RTC_Init(clock_test_rtc_cycles);
         _CLASSB_Clock_SysTickStart();
         _CLASSB_Clock_RTC_Enable();
-        
+
         systick_count_a = _CLASSB_Clock_SysTickGetVal();
-        while(!(RTC_REGS->MODE0.RTC_INTFLAG & RTC_MODE0_INTFLAG_CMP0_Msk))
+        while(!((RTC_REGS->MODE0.RTC_INTFLAG & RTC_MODE0_INTFLAG_CMP0_Msk) == RTC_MODE0_INTFLAG_CMP0_Msk))
         {
             ;
         }
         systick_count_b = _CLASSB_Clock_SysTickGetVal();
-        
+
         expected_ticks = expected_ticks * CLASSB_CLOCK_MUL_FACTOR;
         ticks_passed = (systick_count_a - systick_count_b) * CLASSB_CLOCK_MUL_FACTOR;
-        
+
         if (ticks_passed < expected_ticks)
         {
             // The CPU clock is slower than expected
@@ -217,37 +219,37 @@ CLASSB_TEST_STATUS CLASSB_ClockTest(uint32_t cpu_clock_freq,
             // The CPU clock is faster than expected
             calculated_error_limit = ((((ticks_passed - expected_ticks) * CLASSB_CLOCK_MUL_FACTOR)/ (expected_ticks)) * 100) / CLASSB_CLOCK_MUL_FACTOR;
         }
-        
+
         if (error_limit > calculated_error_limit)
         {
             clock_test_status = CLASSB_TEST_PASSED;
-            if (running_context)
+            if (running_context == true)
             {
                 _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_CLOCK,
-                    CLASSB_TEST_PASSED); 
+                    CLASSB_TEST_PASSED);
             }
             else
             {
                 _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_CLOCK,
-                    CLASSB_TEST_PASSED); 
+                    CLASSB_TEST_PASSED);
             }
         }
         else
         {
             clock_test_status = CLASSB_TEST_FAILED;
-            if (running_context)
+            if (running_context == true)
             {
                 _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_CLOCK,
-                    CLASSB_TEST_FAILED); 
+                    CLASSB_TEST_FAILED);
             }
             else
             {
                 _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_CLOCK,
-                    CLASSB_TEST_FAILED); 
+                    CLASSB_TEST_FAILED);
             }
             CLASSB_SelfTest_FailSafe(CLASSB_TEST_CLOCK);
         }
     }
-    
+
     return clock_test_status;
 }

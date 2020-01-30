@@ -58,16 +58,16 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
 /*----------------------------------------------------------------------------
  *     Constants
  *----------------------------------------------------------------------------*/
-#define CLASSB_SRAM_START_ADDRESS         0x20000000
-#define CLASSB_SRAM_FINAL_WORD_ADDRESS    0x2003FFFC
-/* Linker option should contain -DRAM_ORIGIN=0x20000400 -DRAM_LENGTH=0x3FC00 */
-#define CLASSB_SRAM_BUFF_START_ADDRESS    0x20000200
-#define CLASSB_SRAM_RESERVE_AREA_SIZE     1024
+#define CLASSB_SRAM_START_ADDRESS         0x20000000U
+#define CLASSB_SRAM_FINAL_WORD_ADDRESS    0x2003FFFCU
+/* Linker option must contain -DRAM_ORIGIN=0x20000400 -DRAM_LENGTH=0x3FC00 */
+#define CLASSB_SRAM_BUFF_START_ADDRESS    0x20000200U
+#define CLASSB_SRAM_RESERVE_AREA_SIZE     1024U
 #define CLASSB_SRAM_RESERVE_AREA_END      (CLASSB_SRAM_START_ADDRESS + CLASSB_SRAM_RESERVE_AREA_SIZE)
-#define CLASSB_SRAM_TEST_BUFFER_SIZE      512
-#define CLASSB_SRAM_TEMP_STACK_ADDRESS    0x20000100
-#define CLASSB_STACK_GUARD_BYTES          64
-        
+#define CLASSB_SRAM_TEST_BUFFER_SIZE      512U
+#define CLASSB_SRAM_TEMP_STACK_ADDRESS    0x20000100U
+#define CLASSB_SRAM_ALL_32BITS_HIGH       0xFFFFFFFFU
+
 /*----------------------------------------------------------------------------
  *     Data types
  *----------------------------------------------------------------------------*/

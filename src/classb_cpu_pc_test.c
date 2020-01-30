@@ -108,27 +108,27 @@ CLASSB_TEST_STATUS CLASSB_CPU_PCTest(bool running_context)
     uint8_t pc_test_retval_b = 0;
     uint8_t pc_test_retval_c = 0;
 
-    if (running_context)
+    if (running_context == true)
     {
         _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_PC,
-            CLASSB_TEST_INPROGRESS); 
+            CLASSB_TEST_INPROGRESS);
     }
     else
     {
         _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_PC,
-            CLASSB_TEST_INPROGRESS); 
+            CLASSB_TEST_INPROGRESS);
     }
     /* The test routines left-shift the received data and returns it */
     pc_test_retval_a = _CLASSB_CPU_PCTestRoutineA(CLASSB_CPU_PC_TEST_ROUTINE_A_INPUT);
     pc_test_retval_b = _CLASSB_CPU_PCTestRoutineB(pc_test_retval_a);
     pc_test_retval_c = _CLASSB_CPU_PCTestRoutineC(pc_test_retval_b);
-    
-    if ((CLASSB_CPU_PC_ROUTINE_A_RET_VAL == pc_test_retval_a)
-        && (CLASSB_CPU_PC_ROUTINE_B_RET_VAL == pc_test_retval_b)
-        && (CLASSB_CPU_PC_ROUTINE_C_RET_VAL == pc_test_retval_c))
+
+    if ((pc_test_retval_a == CLASSB_CPU_PC_ROUTINE_A_RET_VAL)
+        && (pc_test_retval_b == CLASSB_CPU_PC_ROUTINE_B_RET_VAL)
+        && (pc_test_retval_c == CLASSB_CPU_PC_ROUTINE_C_RET_VAL))
     {
         pc_test_status = CLASSB_TEST_PASSED;
-        if (true == running_context)
+        if (running_context == true)
         {
             _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_PC,
                 CLASSB_TEST_PASSED);
@@ -142,7 +142,7 @@ CLASSB_TEST_STATUS CLASSB_CPU_PCTest(bool running_context)
     else
     {
         pc_test_status = CLASSB_TEST_FAILED;
-        if (true == running_context)
+        if (running_context == true)
         {
             _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_PC,
                 CLASSB_TEST_FAILED);
@@ -153,6 +153,6 @@ CLASSB_TEST_STATUS CLASSB_CPU_PCTest(bool running_context)
                 CLASSB_TEST_FAILED);
         }
     }
-    
+
     return pc_test_status;
 }

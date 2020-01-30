@@ -24,7 +24,7 @@ supportedDevices = ["SAME51","SAME53","SAME54","SAMD51"]
 notSupportedVariants = []
 
 def loadModule():
-    print("Load Module: Harmony Class B")
+    print("Load Module: Harmony Class B Library")
     for x in supportedDevices:
         if x in Variables.get("__PROCESSOR"):
             if Variables.get("__PROCESSOR") not in notSupportedVariants:

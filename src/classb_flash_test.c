@@ -61,10 +61,11 @@ Notes  : None.
 ============================================================================*/
 uint32_t CLASSB_FlashCRCGenerate(uint32_t start_addr, uint32_t size)
 {
-    uint32_t   i, j, value;
+    uint32_t   i, value;
     uint32_t   crc32_table[256];
     uint32_t   crc = 0xffffffff;
     uint8_t    data;
+    uint8_t    j;
 
     /* Generate table for CRC-32 calculation */
     for (i = 0; i < 256; i++)
@@ -73,9 +74,9 @@ uint32_t CLASSB_FlashCRCGenerate(uint32_t start_addr, uint32_t size)
 
         for (j = 0; j < 8; j++)
         {
-            if (value & 1)
+            if ((value & 1) == 1)
             {
-                value = (value >> 1) ^ 0xEDB88320;
+                value = (value >> 1) ^ CLASSB_FLASH_CRC32_POLYNOMIAL;
             }
             else
             {
@@ -84,7 +85,7 @@ uint32_t CLASSB_FlashCRCGenerate(uint32_t start_addr, uint32_t size)
         }
         crc32_table[i] = value;
     }
-    
+
     /* Generate checksum */
     for (i = 0; i < size; i++)
     {
@@ -112,26 +113,26 @@ CLASSB_TEST_STATUS CLASSB_FlashCRCTest(uint32_t start_addr,
     CLASSB_TEST_STATUS crc_test_status = CLASSB_TEST_NOT_EXECUTED;
     uint32_t calculated_crc = 0;
     uint32_t final_addr_tested = (start_addr + test_size) - 1;
-    
+
     /* Size must be less than the total flash size
      * Tested address must not exceed the available flash memory address
      */
     if ((test_size <= FLASH_SIZE) && (final_addr_tested < FLASH_SIZE))
     {
         /* Update test status to 'In Progress' */
-        if (running_context)
+        if (running_context == true)
         {
             _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_FLASH,
-                CLASSB_TEST_INPROGRESS); 
+                CLASSB_TEST_INPROGRESS);
         }
         else
         {
             _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_FLASH,
-                CLASSB_TEST_INPROGRESS); 
+                CLASSB_TEST_INPROGRESS);
         }
-        
+
         calculated_crc = CLASSB_FlashCRCGenerate(start_addr, test_size);
-        
+
         if (calculated_crc == crc_val)
         {
             crc_test_status = CLASSB_TEST_PASSED;
@@ -145,10 +146,10 @@ CLASSB_TEST_STATUS CLASSB_FlashCRCTest(uint32_t start_addr,
     {
         ;
     }
-    
-    if (CLASSB_TEST_PASSED == crc_test_status)
+
+    if (crc_test_status == CLASSB_TEST_PASSED)
     {
-        if (true == running_context)
+        if (running_context == true)
         {
             _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_FLASH,
                 CLASSB_TEST_PASSED);
@@ -159,9 +160,9 @@ CLASSB_TEST_STATUS CLASSB_FlashCRCTest(uint32_t start_addr,
                 CLASSB_TEST_PASSED);
         }
     }
-    else if (CLASSB_TEST_FAILED == crc_test_status)
+    else if (crc_test_status == CLASSB_TEST_FAILED)
     {
-        if (true == running_context)
+        if (running_context == true)
         {
             _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_FLASH,
                 CLASSB_TEST_FAILED);

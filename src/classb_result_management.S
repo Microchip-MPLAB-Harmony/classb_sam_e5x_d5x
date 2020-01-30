@@ -40,14 +40,14 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
 *******************************************************************************/
 
 ; /* CLASSB_TEST_STATUS CLASSB_GetTestResult(CLASSB_TEST_TYPE test_type,
-; CLASSB_TEST_ID test_id) */
+;       CLASSB_TEST_ID test_id) */
 .global CLASSB_GetTestResult
 
 ; /* void CLASSB_ClearTestResults(CLASSB_TEST_TYPE test_type) */
 .global CLASSB_ClearTestResults
 
-; /* void CLASSB_UpdateTestResult(CLASSB_TEST_TYPE test_type,
-; CLASSB_TEST_ID test_id, CLASSB_TEST_STATUS value) */
+; /* void _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE test_type,
+;       CLASSB_TEST_ID test_id, CLASSB_TEST_STATUS value) */
 .global _CLASSB_UpdateTestResult
 
 ; /* SRAM address for SST results */
@@ -58,18 +58,18 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
 .equ RESULT_BIT_MASK, 0x03
 ; /* CLASSB_TEST_STATUS */
 .equ CLASSB_TEST_NOT_EXECUTED, 0x0
-    
+
 ; /* Load to clear*/
 .equ REG_CLEAR_VAL, 0x00000000
 
 CLASSB_GetTestResult:
 ; /* Input arguments are test_type and test_id */
-; /* test_type in r0, test_id in r1 */    
+; /* test_type in r0, test_id in r1 */
     ; /* push used registers */
     push    {r4-r7}
     ldr     r4, =SST_RES_ADDRESS
     cbz     r0, GetResTestTypeSST
-    ldr     r4, =RST_RES_ADDRESS   
+    ldr     r4, =RST_RES_ADDRESS
 GetResTestTypeSST:
     ldr	    r6, =RESULT_BIT_MASK
     ; /* Load test result into r5 */
@@ -87,19 +87,19 @@ GetResTestTypeSST:
     cmp	    r5, #3
     beq	    TestResultValid
     ; /* Result mismatch. Return CLASSB_TEST_NOT_EXECUTED */
-    ldr	    r0, =CLASSB_TEST_NOT_EXECUTED 
+    ldr	    r0, =CLASSB_TEST_NOT_EXECUTED
 TestResultValid:
     pop     {r4-r7}
     bx	    r14
-    
+
 _CLASSB_UpdateTestResult:
 ; /* Input arguments are test_type, test_id and value */
-; /* test_type in r0, test_id in r1, value in r2 */    
+; /* test_type in r0, test_id in r1, value in r2 */
     ; /* push used registers */
     push    {r4-r7}
     ldr     r4, =SST_RES_ADDRESS
     cbz     r0, UpdateResTestTypeSST
-    ldr     r4, =RST_RES_ADDRESS   
+    ldr     r4, =RST_RES_ADDRESS
 UpdateResTestTypeSST:
     ;/* read the existing result */
     ldrh    r5, [r4]
@@ -118,13 +118,13 @@ UpdateResTestTypeSST:
     ; /* Take 1s complement of the value */
     mvn	    r2, r5
     str	    r2, [r4, #4]
-    
+
     pop     {r4-r7}
     bx	    r14
-    
+
 CLASSB_ClearTestResults:
 ; /* Input arguments are test_type and test_id */
-; /* test_type in r0 */    
+; /* test_type in r0 */
     ; /* push used registers */
     push    {r4-r7}
     ldr     r4, =SST_RES_ADDRESS
@@ -140,4 +140,3 @@ ClearResTestTypeSST:
     strh    r5, [r4]
     pop     {r4-r7}
     bx	    r14
-    

@@ -58,11 +58,11 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
 /*----------------------------------------------------------------------------
  *     Constants
  *----------------------------------------------------------------------------*/
-#define CLASSB_CPU_PC_TEST_ROUTINE_A_INPUT     0x01
-#define CLASSB_CPU_PC_ROUTINE_A_RET_VAL        0x02
-#define CLASSB_CPU_PC_ROUTINE_B_RET_VAL        0x04
-#define CLASSB_CPU_PC_ROUTINE_C_RET_VAL        0x08
- 
+#define CLASSB_CPU_PC_TEST_ROUTINE_A_INPUT     0x01U
+#define CLASSB_CPU_PC_ROUTINE_A_RET_VAL        0x02U
+#define CLASSB_CPU_PC_ROUTINE_B_RET_VAL        0x04U
+#define CLASSB_CPU_PC_ROUTINE_C_RET_VAL        0x08U
+
 /*----------------------------------------------------------------------------
  *     Data types
  *----------------------------------------------------------------------------*/

@@ -56,6 +56,12 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
 #include <stdbool.h>
 
 /*----------------------------------------------------------------------------
+ *     Constants
+ *----------------------------------------------------------------------------*/
+#define CLASSB_TEST_NOT_STARTED             0U
+#define CLASSB_TEST_STARTED                 1U
+
+/*----------------------------------------------------------------------------
  *     Globals
  *----------------------------------------------------------------------------*/
 
@@ -147,25 +153,6 @@ typedef enum classb_startup_status
 } CLASSB_STARTUP_STATUS;
 
 // *****************************************************************************
-/* Class B library self-test result representation
-
-  Summary:
-    Representation of Class B library self-test result
-
-  Description:
-    All test results are stored in normal form as well as 1's complement form.
-    This is to ensure validness of the result.
-
-  Remarks:
-    None.
-*/
-typedef enum classb_test_result_rep
-{
-    CLASSB_TEST_RESULT_REP_NORMAL  = 0,
-    CLASSB_TEST_RESULT_REP_COMPL   = 1
-} CLASSB_TEST_RESULT_REP;
-
-// *****************************************************************************
 /* Class B library self-test type
 
   Summary:
@@ -236,7 +223,7 @@ typedef struct classb_rst_result_bf
  *----------------------------------------------------------------------------*/
 
 void _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE test_type,
-        CLASSB_TEST_ID test_id, CLASSB_TEST_STATUS value);
+    CLASSB_TEST_ID test_id, CLASSB_TEST_STATUS value);
 /* Function called when a non-critical self-test fails */
 void CLASSB_SelfTest_FailSafe(CLASSB_TEST_ID test_id);
 

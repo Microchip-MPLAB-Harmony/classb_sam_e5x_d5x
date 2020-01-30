@@ -61,17 +61,19 @@ void CLASSB_IO_InputSamplingEnable(CLASSB_PORT_INDEX port, CLASSB_PORT_PIN pin);
 Purpose: Enable input sampling for a pin
 Input  : None.
 Output : None.
-Notes  : None.
+Notes  : Before testing an output pin, call this function to enable input
+         sampling, so that the 'IN' register will have the data from the
+         port pin.
 ============================================================================*/
 void CLASSB_IO_InputSamplingEnable(CLASSB_PORT_INDEX port, CLASSB_PORT_PIN pin)
 {
     // Enable input sampling
-    PORT_REGS->GROUP[port].PORT_PINCFG[pin] = PORT_PINCFG_INEN_Msk; 
+    PORT_REGS->GROUP[port].PORT_PINCFG[pin] = PORT_PINCFG_INEN_Msk;
 }
 
 /*============================================================================
 CLASSB_TEST_STATUS CLASSB_RST_IOTest(CLASSB_PORT_INDEX port, CLASSB_PORT_PIN pin,
-    PORT_PIN_DIR direction, CLASSB_PORT_PIN_STATE state);
+    CLASSB_PORT_PIN_STATE state);
 ------------------------------------------------------------------------------
 Purpose: Check whether the given I/O pin is at specified state
 Input  : PORT index, pin number and expected state.
@@ -83,20 +85,20 @@ CLASSB_TEST_STATUS CLASSB_RST_IOTest(CLASSB_PORT_INDEX port, CLASSB_PORT_PIN pin
 {
     CLASSB_TEST_STATUS io_test_status = CLASSB_TEST_NOT_EXECUTED;
     CLASSB_PORT_PIN_STATE pin_read_state  = PORT_PIN_INVALID;
-    
+
     // Check the input variable limits
     if ((port > PORTD) || (pin > PIN31))
     {
         ;
     }
-    
+
     else
     {
         io_test_status = CLASSB_TEST_INPROGRESS;
         _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_IO,
                 CLASSB_TEST_INPROGRESS);
 
-        if ((PORT_REGS->GROUP[port].PORT_IN & (1 << pin)))
+        if ((PORT_REGS->GROUP[port].PORT_IN & (1 << pin)) == (1 << pin))
         {
             pin_read_state = PORT_PIN_HIGH;
         }

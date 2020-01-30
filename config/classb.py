@@ -36,7 +36,7 @@ def instantiateComponent(classBComponent):
     configName = Variables.get("__CONFIGURATION_NAME")
 
     classBMenu = classBComponent.createMenuSymbol("CLASSB_MENU", None)
-    classBMenu.setLabel("Class B Starup Configuration")
+    classBMenu.setLabel("Class B Startup Configuration")
     
     execfile(Module.getPath() +"/config/interface.py")
     
@@ -54,8 +54,14 @@ def instantiateComponent(classBComponent):
     classB_FPU_Option.setVisible(True)
     classB_FPU_Option.setDefaultValue(False)
     
+    # Insert SRAM test
+    classB_UseSRAMTest = classBComponent.createBooleanSymbol("CLASSB_SRAM_TEST_OPT", classBMenu)
+    classB_UseSRAMTest.setLabel("Test SRAM?")
+    classB_UseSRAMTest.setVisible(True)
+    classB_UseSRAMTest.setDefaultValue(False)
+    
     # Select March algorithm for SRAM test
-    classb_Ram_marchAlgo = classBComponent.createKeyValueSetSymbol("CLASSB_SRAM_MARCH_ALGORITHM", classBMenu)
+    classb_Ram_marchAlgo = classBComponent.createKeyValueSetSymbol("CLASSB_SRAM_MARCH_ALGORITHM", classB_UseSRAMTest)
     classb_Ram_marchAlgo.setLabel("Select RAM March algorithm")
     classb_Ram_marchAlgo.addKey("CLASSB_SRAM_MARCH_C", "0", "March C")
     classb_Ram_marchAlgo.addKey("CLASSB_SRAM_MARCH_C_MINUS", "1", "March C minus")
@@ -64,6 +70,10 @@ def instantiateComponent(classBComponent):
     classb_Ram_marchAlgo.setDisplayMode("Description")
     classb_Ram_marchAlgo.setDescription("Selects the SRAM March algorithm to be used during startup")
     classb_Ram_marchAlgo.setDefaultValue(0)
+    classb_Ram_marchAlgo.setVisible(False)
+    #This should be enabled based on the above configuration
+    classb_Ram_marchAlgo.setDependencies(setClassB_SymbolVisibility, ["CLASSB_SRAM_TEST_OPT"])
+    
     
     # CRC-32 checksum availability
     classB_FlashCRC_Option = classBComponent.createBooleanSymbol("CLASSB_FLASH_CRC_CONF", classBMenu)
@@ -88,14 +98,13 @@ def instantiateComponent(classBComponent):
     classB_UseClockTest = classBComponent.createBooleanSymbol("CLASSB_CLOCK_TEST_OPT", classBMenu)
     classB_UseClockTest.setLabel("Test CPU Clock?")
     classB_UseClockTest.setVisible(True)
-    classB_UseClockTest.setDefaultValue(False)
     
     # Acceptable CPU clock frequency error at startup
-    classb_ClockTestPercentage = classBComponent.createKeyValueSetSymbol("CLASSB_CLOCK_TEST_PERCENT", classBMenu)
+    classb_ClockTestPercentage = classBComponent.createKeyValueSetSymbol("CLASSB_CLOCK_TEST_PERCENT", classB_UseClockTest)
     classb_ClockTestPercentage.setLabel("Permitted CPU clock error at startup")
-    classb_ClockTestPercentage.addKey("CLASSB_CLOCK_5PERCENT", "5", "5 %")
-    classb_ClockTestPercentage.addKey("CLASSB_CLOCK_10PERCENT", "10", "10 %")
-    classb_ClockTestPercentage.addKey("CLASSB_CLOCK_15PERCENT", "15", "15 %")
+    classb_ClockTestPercentage.addKey("CLASSB_CLOCK_5PERCENT", "5", "+-5 %")
+    classb_ClockTestPercentage.addKey("CLASSB_CLOCK_10PERCENT", "10", "+-10 %")
+    classb_ClockTestPercentage.addKey("CLASSB_CLOCK_15PERCENT", "15", "+-15 %")
     classb_ClockTestPercentage.setOutputMode("Value")
     classb_ClockTestPercentage.setDisplayMode("Description")
     classb_ClockTestPercentage.setDescription("Selects the permitted CPU clock error at startup")
@@ -104,7 +113,7 @@ def instantiateComponent(classBComponent):
     classb_ClockTestPercentage.setDependencies(setClassB_SymbolVisibility, ["CLASSB_CLOCK_TEST_OPT"])
     
     # Clock test duration
-    classb_ClockTestDuration = classBComponent.createIntegerSymbol("CLASSB_CLOCK_TEST_DURATION", classBMenu)
+    classb_ClockTestDuration = classBComponent.createIntegerSymbol("CLASSB_CLOCK_TEST_DURATION", classB_UseClockTest)
     classb_ClockTestDuration.setLabel("Clock Test Duration (ms)")
     classb_ClockTestDuration.setDefaultValue(5)
     classb_ClockTestDuration.setVisible(False)
