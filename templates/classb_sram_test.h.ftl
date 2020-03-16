@@ -58,15 +58,8 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
 /*----------------------------------------------------------------------------
  *     Constants
  *----------------------------------------------------------------------------*/
-#define CLASSB_SRAM_START_ADDRESS         0x20000000U
-#define CLASSB_SRAM_FINAL_WORD_ADDRESS    0x2003FFFCU
-/* Linker option must contain -DRAM_ORIGIN=0x20000400 -DRAM_LENGTH=0x3FC00 */
-#define CLASSB_SRAM_BUFF_START_ADDRESS    0x20000200U
-#define CLASSB_SRAM_RESERVE_AREA_SIZE     1024U
-#define CLASSB_SRAM_RESERVE_AREA_END      (CLASSB_SRAM_START_ADDRESS + CLASSB_SRAM_RESERVE_AREA_SIZE)
-#define CLASSB_SRAM_TEST_BUFFER_SIZE      512U
-#define CLASSB_SRAM_TEMP_STACK_ADDRESS    0x20000100U
-#define CLASSB_SRAM_ALL_32BITS_HIGH       0xFFFFFFFFU
+#define CLASSB_SRAM_TEST_BUFFER_SIZE      512 // Do not modify
+#define CLASSB_SRAM_RESERVE_AREA_END      0x${CLASSB_SRAM_APP_START}U // Do not modify
 
 /*----------------------------------------------------------------------------
  *     Data types
@@ -99,12 +92,12 @@ CLASSB_TEST_STATUS CLASSB_SRAM_MarchTestInit(uint32_t * start_addr,
 CLASSB_TEST_STATUS CLASSB_SRAM_MarchTest(uint32_t * start_addr,
     uint32_t test_size, CLASSB_SRAM_MARCH_ALGO march_algo, bool running_context);
 
-/* Internal functions for SRAM test
+/* RAM march algorithms
  * Optimization is set to zero, else the compiler optimizes these function away.
  */
-bool __attribute__((optimize("-O0"))) _CLASSB_RAMMarchC(uint32_t * start_addr, uint32_t test_size);
-bool __attribute__((optimize("-O0"))) _CLASSB_RAMMarchCMinus(uint32_t * start_addr, uint32_t test_size);
-bool __attribute__((optimize("-O0"))) _CLASSB_RAMMarchB(uint32_t * start_addr, uint32_t test_size);
+bool __attribute__((optimize("-O0"))) CLASSB_RAMMarchC(uint32_t * start_addr, uint32_t test_size);
+bool __attribute__((optimize("-O0"))) CLASSB_RAMMarchCMinus(uint32_t * start_addr, uint32_t test_size);
+bool __attribute__((optimize("-O0"))) CLASSB_RAMMarchB(uint32_t * start_addr, uint32_t test_size);
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility

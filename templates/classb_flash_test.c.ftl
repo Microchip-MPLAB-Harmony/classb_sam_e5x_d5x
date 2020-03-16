@@ -1,5 +1,5 @@
 /*******************************************************************************
-  Class B Library v0.1.0 Release
+  Class B Library ${REL_VER} Release
 
   Company:
     Microchip Technology Inc.
@@ -8,15 +8,15 @@
     classb_flash_test.c
 
   Summary:
-    Class B Library source file for the Internal Flash test
+    Class B Library flash program memory self-test source file
 
   Description:
-    This file provides self-test functions for the Internal Flash.
+    This file provides flash program memory self-test.
 
 *******************************************************************************/
 
 /*******************************************************************************
-* Copyright (C) 2020 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) ${REL_YEAR} Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -42,6 +42,11 @@
  *     include files
  *----------------------------------------------------------------------------*/
 #include "classb/src/classb_flash_test.h"
+
+/*----------------------------------------------------------------------------
+ *     Constants
+ *----------------------------------------------------------------------------*/
+#define CLASSB_FLASH_CRC32_POLYNOMIAL 0x${CLASSB_FLASH_CRC32_POLY}U
 
 /*----------------------------------------------------------------------------
  *     Global Variables

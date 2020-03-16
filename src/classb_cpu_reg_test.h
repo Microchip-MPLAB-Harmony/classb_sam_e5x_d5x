@@ -58,10 +58,6 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
 /*----------------------------------------------------------------------------
  *     Constants
  *----------------------------------------------------------------------------*/
-#define CLASSB_CPU_PC_TEST_ROUTINE_A_INPUT     0x01U
-#define CLASSB_CPU_PC_ROUTINE_A_RET_VAL        0x02U
-#define CLASSB_CPU_PC_ROUTINE_B_RET_VAL        0x04U
-#define CLASSB_CPU_PC_ROUTINE_C_RET_VAL        0x08U
 
 /*----------------------------------------------------------------------------
  *     Data types
@@ -76,7 +72,7 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
   Description:
     The CPU register test covers the processor core registers and FPU registers.
     Testing FPU registers can be optional since it may not be used by every
-    appication.
+    application.
 
   Remarks:
     None.
@@ -93,11 +89,6 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
 
 CLASSB_TEST_STATUS CLASSB_CPU_RegistersTest(CLASSB_FPU_CONFIG test_fpu, bool running_context);
 CLASSB_TEST_STATUS __attribute__((optimize("-O0"))) CLASSB_CPU_PCTest(bool running_context);
-
-/*Internal functions for PC test*/
-uint8_t __attribute__((optimize("-O0"))) _CLASSB_CPU_PCTestRoutineA(uint8_t);
-uint8_t __attribute__((optimize("-O0"))) _CLASSB_CPU_PCTestRoutineB(uint8_t);
-uint8_t __attribute__((optimize("-O0"))) _CLASSB_CPU_PCTestRoutineC(uint8_t);
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility

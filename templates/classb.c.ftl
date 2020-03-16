@@ -44,6 +44,31 @@
 #include "classb/src/classb.h"
 
 /*----------------------------------------------------------------------------
+ *     Constants
+ *----------------------------------------------------------------------------*/
+#define CLASSB_RESULT_ADDR                  0x20000000U
+#define CLASSB_COMPL_RESULT_ADDR            0x20000004U
+#define CLASSB_ONGOING_TEST_VAR_ADDR        0x20000008U
+#define CLASSB_TEST_IN_PROG_VAR_ADDR        0x2000000cU
+#define CLASSB_WDT_TEST_IN_PROG_VAR_ADDR    0x20000010U
+#define CLASSB_FLASH_TEST_VAR_ADDR          0x20000014U
+#define CLASSB_INTERRUPT_TEST_VAR_ADDR      0x20000018U
+#define CLASSB_INTERRUPT_COUNT_VAR_ADDR     0x2000001CU
+#define CLASSB_SRAM_STARTUP_TEST_SIZE       65536U
+#define CLASSB_CLOCK_DEFAULT_CLOCK_FREQ     48000000U
+#define CLASSB_CLOCK_ERROR_PERCENT          5U
+#define CLASSB_CLOCK_TEST_RTC_CYCLES        200U
+#define CLASSB_INVALID_TEST_ID              0xFFU
+// RTC is clocked from 32687 Hz Crystal. One RTC cycle is 30520 nano sec
+#define CLASSB_CLOCK_TEST_RTC_RATIO_NS      30520U
+#define CLASSB_CLOCK_TEST_RATIO_NS_MS       1000000U
+<#if CLASSB_FLASH_CRC_CONF?has_content>
+    <#if CLASSB_FLASH_CRC_CONF == true>
+#define CLASSB_FLASH_CRC32_ADDR             0x${CLASSB_FLASHCRC_ADDR}U
+    </#if>
+</#if>
+
+/*----------------------------------------------------------------------------
  *     Global Variables
  *----------------------------------------------------------------------------*/
 __attribute__((persistent)) volatile uint8_t * ongoing_sst_id;
@@ -66,6 +91,16 @@ Notes  : This function is called before C startup code
 ============================================================================*/
 void CLASSB_GlobalsInit(void)
 {
+    /* Initialize persistent pointers
+     * These variables point to address' in the reserved SRAM for the
+     * Class B library.
+     */
+    ongoing_sst_id = (volatile uint8_t *)CLASSB_ONGOING_TEST_VAR_ADDR;
+    classb_test_in_progress = (volatile uint8_t *)CLASSB_TEST_IN_PROG_VAR_ADDR;
+    wdt_test_in_progress = (volatile uint8_t *)CLASSB_WDT_TEST_IN_PROG_VAR_ADDR;
+    interrupt_tests_status = (volatile uint8_t *)CLASSB_INTERRUPT_TEST_VAR_ADDR;
+    interrupt_count = (volatile uint32_t *)CLASSB_INTERRUPT_COUNT_VAR_ADDR;
+    
     // Initialize variables
     *ongoing_sst_id = CLASSB_INVALID_TEST_ID;
     *classb_test_in_progress = CLASSB_TEST_NOT_STARTED;
@@ -164,7 +199,7 @@ void CLASSB_TestWDT(void)
         if ((WDT_REGS->WDT_CTRLA & WDT_CTRLA_ENABLE_Msk) == 0)
         {
             // Configure timeout
-            WDT_REGS->WDT_CONFIG = WDT_CONFIG_PER_CYC2048;
+            WDT_REGS->WDT_CONFIG = WDT_CONFIG_PER_CYC256;
             WDT_REGS->WDT_CTRLA |= WDT_CTRLA_ENABLE_Msk;
             // Infinite loop
             while (1)
@@ -242,9 +277,9 @@ CLASSB_INIT_STATUS CLASSB_Init(void)
             bool result_area_test_ok = false;
             bool ram_buffer_test_ok = false;
             // Test the reserved SRAM
-            result_area_test_ok = _CLASSB_RAMMarchC((uint32_t *)CLASSB_SRAM_START_ADDRESS,
+            result_area_test_ok = CLASSB_RAMMarchC((uint32_t *)HSRAM_ADDR,
                 CLASSB_SRAM_TEST_BUFFER_SIZE);
-            ram_buffer_test_ok = _CLASSB_RAMMarchC((uint32_t *)CLASSB_SRAM_BUFF_START_ADDRESS,
+            ram_buffer_test_ok = CLASSB_RAMMarchC((uint32_t *)HSRAM_ADDR + CLASSB_SRAM_TEST_BUFFER_SIZE,
                 CLASSB_SRAM_TEST_BUFFER_SIZE);
             if ((result_area_test_ok == true) && (ram_buffer_test_ok == true))
             {
@@ -290,7 +325,13 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
             </#if>
         </#if>
     </#if>
-
+    //Enable watchdog if it is not enabled
+    if (((WDT_REGS->WDT_CTRLA & WDT_CTRLA_ENABLE_Msk) == 0) &&
+        ((WDT_REGS->WDT_CTRLA & WDT_CTRLA_ALWAYSON_Msk) == 0))
+    {
+        WDT_REGS->WDT_CONFIG = WDT_CONFIG_PER_CYC256;
+        WDT_REGS->WDT_CTRLA |= WDT_CTRLA_ENABLE_Msk;
+    }
     <#if CLASSB_FPU_OPT??>
         <#if CLASSB_FPU_OPT == true>
             <#lt>    // Enable FPU

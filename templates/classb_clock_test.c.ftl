@@ -1,5 +1,5 @@
 /*******************************************************************************
-  Class B Library v0.1.0 Release
+  Class B Library ${REL_VER} Release
 
   Company:
     Microchip Technology Inc.
@@ -8,15 +8,15 @@
     classb_clock_test.c
 
   Summary:
-    Class B Library source file for the Clock test
+    Class B Library CPU clock frequency self-test source file
 
   Description:
-    This file provides self-test functions for the Clock.
+    This file provides CPU clock frequency self-test.
 
 *******************************************************************************/
 
 /*******************************************************************************
-* Copyright (C) 2020 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) ${REL_YEAR} Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -46,6 +46,14 @@
 /*----------------------------------------------------------------------------
  *     Constants
  *----------------------------------------------------------------------------*/
+#define CLASSB_CLOCK_MAX_CLOCK_FREQ         ${CLASSB_CPU_MAX_CLOCK}U
+#define CLASSB_CLOCK_MAX_SYSTICK_VAL        0x${CLASSB_SYSTICK_MAXCOUNT}U
+#define CLASSB_CLOCK_RTC_CLK_FREQ           ${CLASSB_RTC_EXPECTED_CLOCK}U
+#define CLASSB_CLOCK_MAX_TEST_ACCURACY      ${CLASSB_CPU_CLOCK_TEST_ACCUR}U
+/* Since no floating point is used for clock test, multiply intermediate
+ * values with 128.
+ */
+#define CLASSB_CLOCK_MUL_FACTOR             128U
 
 /*----------------------------------------------------------------------------
  *     Global Variables

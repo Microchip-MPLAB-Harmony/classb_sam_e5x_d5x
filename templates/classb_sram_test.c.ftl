@@ -1,5 +1,5 @@
 /*******************************************************************************
-  Class B Library v0.1.0 Release
+  Class B Library ${REL_VER} Release
 
   Company:
     Microchip Technology Inc.
@@ -8,15 +8,15 @@
     classb_sram_test.c
 
   Summary:
-    Class B Library source file for the SRAM test
+    Class B Library SRAM self-test source file
 
   Description:
-    This file provides self-test functions for the SRAM.
+    This file provides SRAM self-test function.
 
 *******************************************************************************/
 
 /*******************************************************************************
-* Copyright (C) 2020 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) ${REL_YEAR} Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -42,6 +42,14 @@
  *     include files
  *----------------------------------------------------------------------------*/
 #include "classb/src/classb_sram_test.h"
+
+/*----------------------------------------------------------------------------
+ *     Constants
+ *----------------------------------------------------------------------------*/
+#define CLASSB_SRAM_FINAL_WORD_ADDRESS    0x${CLASSB_SRAM_LASTWORD_ADDR}U
+#define CLASSB_SRAM_BUFF_START_ADDRESS    0x20000200U
+#define CLASSB_SRAM_TEMP_STACK_ADDRESS    0x20000100U
+#define CLASSB_SRAM_ALL_32BITS_HIGH       0xFFFFFFFFU
 
 /*----------------------------------------------------------------------------
  *     Global Variables
@@ -103,7 +111,7 @@ void _CLASSB_MemCopy(uint32_t* dest, uint32_t* src, uint32_t size_in_bytes)
 }
 
 /*============================================================================
-bool _CLASSB_RAMMarchC(uint32_t * start_addr, uint32_t test_size_bytes)
+bool CLASSB_RAMMarchC(uint32_t * start_addr, uint32_t test_size_bytes)
 ------------------------------------------------------------------------------
 Purpose: Runs March C algorithm on the given SRAM area
 Input  : Start address and size
@@ -119,7 +127,7 @@ Notes  : This function is used by SRAM tests. It performs the following,
         // High to low, read one write zero
         // High to low, read zero
 ============================================================================*/
-bool _CLASSB_RAMMarchC(uint32_t * start_addr, uint32_t test_size_bytes)
+bool CLASSB_RAMMarchC(uint32_t * start_addr, uint32_t test_size_bytes)
 {
     bool sram_march_c_result = true;
     int32_t i = 0;
@@ -236,7 +244,7 @@ bool _CLASSB_RAMMarchC(uint32_t * start_addr, uint32_t test_size_bytes)
 }
 
 /*============================================================================
-bool _CLASSB_RAMMarchCMinus(uint32_t * start_addr, uint32_t test_size_bytes)
+bool CLASSB_RAMMarchCMinus(uint32_t * start_addr, uint32_t test_size_bytes)
 ------------------------------------------------------------------------------
 Purpose: Runs March C algorithm on the given SRAM area
 Input  : Start address and size
@@ -251,7 +259,7 @@ Notes  : This function is used by SRAM tests. It performs the following,
         // High to low, read one write zero
         // High to low, read zero
 ============================================================================*/
-bool _CLASSB_RAMMarchCMinus(uint32_t * start_addr, uint32_t test_size_bytes)
+bool CLASSB_RAMMarchCMinus(uint32_t * start_addr, uint32_t test_size_bytes)
 {
     bool sram_march_c_result = true;
     int32_t i = 0;
@@ -355,7 +363,7 @@ bool _CLASSB_RAMMarchCMinus(uint32_t * start_addr, uint32_t test_size_bytes)
 }
 
 /*============================================================================
-bool _CLASSB_RAMMarchB(uint32_t * start_addr, uint32_t test_size_bytes)
+bool CLASSB_RAMMarchB(uint32_t * start_addr, uint32_t test_size_bytes)
 ------------------------------------------------------------------------------
 Purpose: Runs March C algorithm on the given SRAM area
 Input  : Start address and size
@@ -370,7 +378,7 @@ Notes  : This function is used by SRAM tests. It performs the following,
         // High to low, read one write zero, write one write zero
         // High to low, read zero write one, write zero
 ============================================================================*/
-bool _CLASSB_RAMMarchB(uint32_t * start_addr, uint32_t test_size_bytes)
+bool CLASSB_RAMMarchB(uint32_t * start_addr, uint32_t test_size_bytes)
 {
     bool sram_march_c_result = true;
     int32_t i = 0;
@@ -583,17 +591,17 @@ CLASSB_TEST_STATUS CLASSB_SRAM_MarchTest(uint32_t * start_addr,
         // Run the selected RAM March algorithm
         if (march_algo == CLASSB_SRAM_MARCH_C)
         {
-            march_test_retval = _CLASSB_RAMMarchC(iteration_start_addr,
+            march_test_retval = CLASSB_RAMMarchC(iteration_start_addr,
                 CLASSB_SRAM_TEST_BUFFER_SIZE);
         }
         else if (march_algo == CLASSB_SRAM_MARCH_C_MINUS)
         {
-            march_test_retval = _CLASSB_RAMMarchCMinus(iteration_start_addr,
+            march_test_retval = CLASSB_RAMMarchCMinus(iteration_start_addr,
                 CLASSB_SRAM_TEST_BUFFER_SIZE);
         }
         else if (march_algo == CLASSB_SRAM_MARCH_B)
         {
-            march_test_retval = _CLASSB_RAMMarchB(iteration_start_addr,
+            march_test_retval = CLASSB_RAMMarchB(iteration_start_addr,
                 CLASSB_SRAM_TEST_BUFFER_SIZE);
         }
         if (march_test_retval == false)
@@ -620,17 +628,17 @@ CLASSB_TEST_STATUS CLASSB_SRAM_MarchTest(uint32_t * start_addr,
         // Run the selected RAM March algorithm
         if (march_algo == CLASSB_SRAM_MARCH_C)
         {
-            march_test_retval = _CLASSB_RAMMarchC(iteration_start_addr,
+            march_test_retval = CLASSB_RAMMarchC(iteration_start_addr,
                 CLASSB_SRAM_TEST_BUFFER_SIZE);
         }
         else if (march_algo == CLASSB_SRAM_MARCH_C_MINUS)
         {
-            march_test_retval = _CLASSB_RAMMarchCMinus(iteration_start_addr,
+            march_test_retval = CLASSB_RAMMarchCMinus(iteration_start_addr,
                 CLASSB_SRAM_TEST_BUFFER_SIZE);
         }
         else if (march_algo == CLASSB_SRAM_MARCH_B)
         {
-            march_test_retval = _CLASSB_RAMMarchB(iteration_start_addr,
+            march_test_retval = CLASSB_RAMMarchB(iteration_start_addr,
                 CLASSB_SRAM_TEST_BUFFER_SIZE);
         }
         if (march_test_retval == false)

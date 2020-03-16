@@ -64,27 +64,7 @@
 /*----------------------------------------------------------------------------
  *     Constants
  *----------------------------------------------------------------------------*/
-#define CLASSB_RESULT_ADDR                  0x20000000U
-#define CLASSB_COMPL_RESULT_ADDR            0x20000004U
-#define CLASSB_ONGOING_TEST_VAR_ADDR        0x20000008U
-#define CLASSB_TEST_IN_PROG_VAR_ADDR        0x2000000cU
-#define CLASSB_WDT_TEST_IN_PROG_VAR_ADDR    0x20000010U
-#define CLASSB_FLASH_TEST_VAR_ADDR          0x20000014U
-#define CLASSB_INTERRUPT_TEST_VAR_ADDR      0x20000018U
-#define CLASSB_INTERRUPT_COUNT_VAR_ADDR     0x2000001CU
-#define CLASSB_SRAM_STARTUP_TEST_SIZE       65536U
-#define CLASSB_CLOCK_DEFAULT_CLOCK_FREQ     48000000U
-#define CLASSB_CLOCK_ERROR_PERCENT          5U
-#define CLASSB_CLOCK_TEST_RTC_CYCLES        200U
-#define CLASSB_INVALID_TEST_ID              0xFFU
-// RTC is clocked from 32687 Hz Crystal. One RTC cycle is 30520 nano sec
-#define CLASSB_CLOCK_TEST_RTC_RATIO_NS      30520U
-#define CLASSB_CLOCK_TEST_RATIO_NS_MS       1000000U
-<#if CLASSB_FLASH_CRC_CONF?has_content>
-    <#if CLASSB_FLASH_CRC_CONF == true>
-#define CLASSB_FLASH_CRC32_ADDR             0x${CLASSB_FLASHCRC_ADDR}U
-    </#if>
-</#if>
+
 /*----------------------------------------------------------------------------
  *     Data types
  *----------------------------------------------------------------------------*/

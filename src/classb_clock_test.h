@@ -58,14 +58,6 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
 /*----------------------------------------------------------------------------
  *     Constants
  *----------------------------------------------------------------------------*/
-#define CLASSB_CLOCK_MAX_CLOCK_FREQ         120000000U
-#define CLASSB_CLOCK_MAX_SYSTICK_VAL        0xFFFFFFU
-#define CLASSB_CLOCK_RTC_CLK_FREQ           32768U
-#define CLASSB_CLOCK_MAX_TEST_ACCURACY      2U
-/* Since no floating point is used for clock test, multiply intermediate
- * values with 128.
- */
-#define CLASSB_CLOCK_MUL_FACTOR             128U
 
 /*----------------------------------------------------------------------------
  *     Data types

@@ -58,11 +58,7 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
 /*----------------------------------------------------------------------------
  *     Constants
  *----------------------------------------------------------------------------*/
-#define CLASSB_INTR_DEVICE_VECT_OFFSET   16U
-#define CLASSB_INTR_VECTOR_TABLE_SIZE    (CLASSB_INTR_DEVICE_VECT_OFFSET + PERIPH_MAX_IRQn)
-#define CLASSB_INTR_MAX_INT_COUNT        30U
-#define CLASSB_INTR_TEST_RTC_COUNT       50U
-#define CLASSB_INTR_TEST_TC_COUNT        100U
+
 /*----------------------------------------------------------------------------
  *     Data types
  *----------------------------------------------------------------------------*/

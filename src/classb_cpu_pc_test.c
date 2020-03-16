@@ -44,12 +44,25 @@
 #include "classb/src/classb_cpu_reg_test.h"
 
 /*----------------------------------------------------------------------------
+ *     Constants
+ *----------------------------------------------------------------------------*/
+#define CLASSB_CPU_PC_TEST_ROUTINE_A_INPUT     0x01U
+#define CLASSB_CPU_PC_ROUTINE_A_RET_VAL        0x02U
+#define CLASSB_CPU_PC_ROUTINE_B_RET_VAL        0x04U
+#define CLASSB_CPU_PC_ROUTINE_C_RET_VAL        0x08U
+
+/*----------------------------------------------------------------------------
  *     Global Variables
  *----------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------
  *     Functions
  *----------------------------------------------------------------------------*/
+
+/*Internal functions for PC test*/
+uint8_t __attribute__((optimize("-O0"))) _CLASSB_CPU_PCTestRoutineA(uint8_t);
+uint8_t __attribute__((optimize("-O0"))) _CLASSB_CPU_PCTestRoutineB(uint8_t);
+uint8_t __attribute__((optimize("-O0"))) _CLASSB_CPU_PCTestRoutineC(uint8_t);
 
 /*============================================================================
 uint8_t _CLASSB_CPU_PCTestRoutineA(uint8_t pc_test_data)
