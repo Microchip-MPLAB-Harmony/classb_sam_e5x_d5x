@@ -58,8 +58,6 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
 /*----------------------------------------------------------------------------
  *     Constants
  *----------------------------------------------------------------------------*/
-#define CLASSB_TEST_NOT_STARTED             0U
-#define CLASSB_TEST_STARTED                 1U
 
 /*----------------------------------------------------------------------------
  *     Globals
@@ -68,6 +66,25 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
 /*----------------------------------------------------------------------------
  *     Data types
  *----------------------------------------------------------------------------*/
+ 
+// *****************************************************************************
+/* Class B library self-test state
+
+  Summary:
+    Identifies Class B library test state
+
+  Description:
+    This data type is used to update flags which indicates whether a test
+    has started or not.
+
+  Remarks:
+    None.
+*/
+typedef enum classb_test_state
+{
+    CLASSB_TEST_NOT_STARTED = 0,
+    CLASSB_TEST_STARTED = 1
+} CLASSB_TEST_STATE;
 
 // *****************************************************************************
 /* Class B library self-test identifier
@@ -77,7 +94,7 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
 
   Description:
     This enumeration can be used to read the self-test status and update it.
-    Test ID corresponds to the bit possition at which the 2-bit test result
+    Test ID corresponds to the bit position at which the 2-bit test result
     is stored.
 
   Remarks:

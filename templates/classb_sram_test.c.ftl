@@ -46,10 +46,10 @@
 /*----------------------------------------------------------------------------
  *     Constants
  *----------------------------------------------------------------------------*/
-#define CLASSB_SRAM_FINAL_WORD_ADDRESS    0x${CLASSB_SRAM_LASTWORD_ADDR}U
-#define CLASSB_SRAM_BUFF_START_ADDRESS    0x20000200U
-#define CLASSB_SRAM_TEMP_STACK_ADDRESS    0x20000100U
-#define CLASSB_SRAM_ALL_32BITS_HIGH       0xFFFFFFFFU
+#define CLASSB_SRAM_FINAL_WORD_ADDRESS      (0x${CLASSB_SRAM_LASTWORD_ADDR}U)
+#define CLASSB_SRAM_BUFF_START_ADDRESS      (0x20000200U)
+#define CLASSB_SRAM_TEMP_STACK_ADDRESS      (0x20000100U)
+#define CLASSB_SRAM_ALL_32BITS_HIGH         (0xFFFFFFFFU)
 
 /*----------------------------------------------------------------------------
  *     Global Variables
@@ -539,7 +539,7 @@ CLASSB_TEST_STATUS CLASSB_SRAM_MarchTestInit(uint32_t * start_addr,
     if ((((uint32_t)start_addr % 4) != 0)
             || ((test_size_bytes % 4) != 0)
             || (march_test_end_address > CLASSB_SRAM_FINAL_WORD_ADDRESS)
-            || (mem_start_address < CLASSB_SRAM_RESERVE_AREA_END))
+            || (mem_start_address < CLASSB_SRAM_APP_AREA_START))
     {
         ;
     }

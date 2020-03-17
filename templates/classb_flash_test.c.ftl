@@ -46,7 +46,7 @@
 /*----------------------------------------------------------------------------
  *     Constants
  *----------------------------------------------------------------------------*/
-#define CLASSB_FLASH_CRC32_POLYNOMIAL 0x${CLASSB_FLASH_CRC32_POLY}U
+#define CLASSB_FLASH_CRC32_POLYNOMIAL (0x${CLASSB_FLASH_CRC32_POLY}U)
 
 /*----------------------------------------------------------------------------
  *     Global Variables

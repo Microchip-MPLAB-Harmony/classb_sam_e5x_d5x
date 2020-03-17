@@ -46,27 +46,27 @@
 /*----------------------------------------------------------------------------
  *     Constants
  *----------------------------------------------------------------------------*/
-#define CLASSB_RESULT_ADDR                  0x20000000U
-#define CLASSB_COMPL_RESULT_ADDR            0x20000004U
-#define CLASSB_ONGOING_TEST_VAR_ADDR        0x20000008U
-#define CLASSB_TEST_IN_PROG_VAR_ADDR        0x2000000cU
-#define CLASSB_WDT_TEST_IN_PROG_VAR_ADDR    0x20000010U
-#define CLASSB_FLASH_TEST_VAR_ADDR          0x20000014U
-#define CLASSB_INTERRUPT_TEST_VAR_ADDR      0x20000018U
-#define CLASSB_INTERRUPT_COUNT_VAR_ADDR     0x2000001CU
-#define CLASSB_SRAM_STARTUP_TEST_SIZE       65536U
-#define CLASSB_CLOCK_DEFAULT_CLOCK_FREQ     48000000U
-#define CLASSB_CLOCK_ERROR_PERCENT          5U
-#define CLASSB_CLOCK_TEST_RTC_CYCLES        200U
-#define CLASSB_INVALID_TEST_ID              0xFFU
-// RTC is clocked from 32687 Hz Crystal. One RTC cycle is 30520 nano sec
-#define CLASSB_CLOCK_TEST_RTC_RATIO_NS      30520U
-#define CLASSB_CLOCK_TEST_RATIO_NS_MS       1000000U
+#define CLASSB_RESULT_ADDR                  (0x${CLASSB_SRAM_START_ADDRESS}U)
+#define CLASSB_COMPL_RESULT_ADDR            (0x${CLASSB_SRAM_START_MSB + "04"}U)
+#define CLASSB_ONGOING_TEST_VAR_ADDR        (0x${CLASSB_SRAM_START_MSB + "08"}U)
+#define CLASSB_TEST_IN_PROG_VAR_ADDR        (0x${CLASSB_SRAM_START_MSB + "0c"}U)
+#define CLASSB_WDT_TEST_IN_PROG_VAR_ADDR    (0x${CLASSB_SRAM_START_MSB + "10"}U)
+#define CLASSB_FLASH_TEST_VAR_ADDR          (0x${CLASSB_SRAM_START_MSB + "14"}U)
+#define CLASSB_INTERRUPT_TEST_VAR_ADDR      (0x${CLASSB_SRAM_START_MSB + "18"}U)
+#define CLASSB_INTERRUPT_COUNT_VAR_ADDR     (0x${CLASSB_SRAM_START_MSB + "1c"}U)
+#define CLASSB_SRAM_STARTUP_TEST_SIZE       (${CLASSB_SRAM_MARCH_SIZE}U)
+#define CLASSB_CLOCK_ERROR_PERCENT          (${CLASSB_CLOCK_TEST_PERCENT}U)
 <#if CLASSB_FLASH_CRC_CONF?has_content>
     <#if CLASSB_FLASH_CRC_CONF == true>
-#define CLASSB_FLASH_CRC32_ADDR             0x${CLASSB_FLASHCRC_ADDR}U
+#define CLASSB_FLASH_CRC32_ADDR             (0x${CLASSB_FLASHCRC_ADDR}U)
     </#if>
 </#if>
+#define CLASSB_CLOCK_TEST_RTC_CYCLES        (200U)
+// RTC is clocked from 32768 Hz Crystal. One RTC cycle is 30517 nano sec
+#define CLASSB_CLOCK_TEST_RTC_RATIO_NS      (30517U)
+#define CLASSB_CLOCK_TEST_RATIO_NS_MS       (1000000U)
+#define CLASSB_CLOCK_DEFAULT_CLOCK_FREQ     (48000000U)
+#define CLASSB_INVALID_TEST_ID              (0xFFU)
 
 /*----------------------------------------------------------------------------
  *     Global Variables
@@ -332,42 +332,43 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
         WDT_REGS->WDT_CONFIG = WDT_CONFIG_PER_CYC256;
         WDT_REGS->WDT_CTRLA |= WDT_CTRLA_ENABLE_Msk;
     }
-    <#if CLASSB_FPU_OPT??>
-        <#if CLASSB_FPU_OPT == true>
-            <#lt>    // Enable FPU
-            <#lt>    SCB->CPACR |= (0xFu << 20);
-            <#lt>    __DSB();
-            <#lt>    __ISB();
-            <#lt>    // Test processor core registers and FPU registers
-            <#lt>    *ongoing_sst_id = CLASSB_TEST_CPU;
-            <#lt>    cb_test_status = CLASSB_CPU_RegistersTest(CLASSB_FPU_TEST_ENABLE, false);
-        <#else>
-            <#lt>    // Test processor core registers
-            <#lt>    cb_test_status = CLASSB_CPU_RegistersTest(CLASSB_FPU_TEST_DISABLE, false);
+    <#if CLASSB_CPU_TEST_OPT?? && CLASSB_CPU_TEST_OPT == true>
+        <#if CLASSB_FPU_OPT??>
+            <#if CLASSB_FPU_OPT == true && CLASSB_CPU_TEST_OPT == true>
+                <#lt>    // Enable FPU
+                <#lt>    SCB->CPACR |= (0xFu << 20);
+                <#lt>    __DSB();
+                <#lt>    __ISB();
+                <#lt>    // Test processor core registers and FPU registers
+                <#lt>    *ongoing_sst_id = CLASSB_TEST_CPU;
+                <#lt>    cb_test_status = CLASSB_CPU_RegistersTest(CLASSB_FPU_TEST_ENABLE, false);
+            <#else>
+                <#lt>    // Test processor core registers
+                <#lt>    cb_test_status = CLASSB_CPU_RegistersTest(CLASSB_FPU_TEST_DISABLE, false);
+            </#if>
         </#if>
+        if (cb_test_status == CLASSB_TEST_PASSED)
+        {
+            cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;
+        }
+        else if (cb_test_status == CLASSB_TEST_FAILED)
+        {
+            cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
+        }
+
+        // Program Counter test
+        *ongoing_sst_id = CLASSB_TEST_PC;
+        cb_test_status = CLASSB_CPU_PCTest(false);
+
+        if (cb_test_status == CLASSB_TEST_PASSED)
+        {
+            cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;
+        }
+        else if (cb_test_status == CLASSB_TEST_FAILED)
+        {
+            cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
+        }
     </#if>
-
-    if (cb_test_status == CLASSB_TEST_PASSED)
-    {
-        cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;
-    }
-    else if (cb_test_status == CLASSB_TEST_FAILED)
-    {
-        cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
-    }
-
-    // Program Counter test
-    *ongoing_sst_id = CLASSB_TEST_PC;
-    cb_test_status = CLASSB_CPU_PCTest(false);
-
-    if (cb_test_status == CLASSB_TEST_PASSED)
-    {
-        cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;
-    }
-    else if (cb_test_status == CLASSB_TEST_FAILED)
-    {
-        cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
-    }
     <#if CLASSB_SRAM_TEST_OPT??>
         <#if CLASSB_SRAM_TEST_OPT == true>
 
@@ -376,10 +377,10 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
             <#lt>    WDT_REGS->WDT_CLEAR = WDT_CLEAR_CLEAR_KEY;
             <#lt>    *ongoing_sst_id = CLASSB_TEST_RAM;
             <#if CLASSB_SRAM_MARCH_ALGORITHM?has_content>
-                <#lt>    cb_test_status = CLASSB_SRAM_MarchTestInit((uint32_t *)CLASSB_SRAM_RESERVE_AREA_END,
+                <#lt>    cb_test_status = CLASSB_SRAM_MarchTestInit((uint32_t *)CLASSB_SRAM_APP_AREA_START,
                 <#lt>        CLASSB_SRAM_STARTUP_TEST_SIZE, ${CLASSB_SRAM_MARCH_ALGORITHM}, false);
             <#else>
-                <#lt>    cb_test_status = CLASSB_SRAM_MarchTestInit((uint32_t *)CLASSB_SRAM_RESERVE_AREA_END,
+                <#lt>    cb_test_status = CLASSB_SRAM_MarchTestInit((uint32_t *)CLASSB_SRAM_APP_AREA_START,
                 <#lt>    CLASSB_SRAM_STARTUP_TEST_SIZE, CLASSB_SRAM_MARCH_C, false);
             </#if>
             <#lt>    if (cb_test_status == CLASSB_TEST_PASSED)
@@ -420,7 +421,7 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
             <#lt>    // Clear WDT before test
             <#lt>    WDT_REGS->WDT_CLEAR = WDT_CLEAR_CLEAR_KEY;
             <#if CLASSB_CLOCK_TEST_PERCENT?has_content && CLASSB_CLOCK_TEST_DURATION?has_content>
-                <#lt>    cb_test_status = CLASSB_ClockTest(CLASSB_CLOCK_DEFAULT_CLOCK_FREQ, ${CLASSB_CLOCK_TEST_PERCENT}, clock_test_rtc_cycles, false);
+                <#lt>    cb_test_status = CLASSB_ClockTest(CLASSB_CLOCK_DEFAULT_CLOCK_FREQ, CLASSB_CLOCK_ERROR_PERCENT, clock_test_rtc_cycles, false);
             <#else>
                 <#lt>    cb_test_status = CLASSB_ClockTest(CLASSB_CLOCK_DEFAULT_CLOCK_FREQ, CLASSB_CLOCK_ERROR_PERCENT, CLASSB_CLOCK_TEST_RTC_CYCLES, false);
             </#if>

@@ -46,10 +46,32 @@
 /*----------------------------------------------------------------------------
  *     Constants
  *----------------------------------------------------------------------------*/
-#define CLASSB_CPU_PC_TEST_ROUTINE_A_INPUT     0x01U
-#define CLASSB_CPU_PC_ROUTINE_A_RET_VAL        0x02U
-#define CLASSB_CPU_PC_ROUTINE_B_RET_VAL        0x04U
-#define CLASSB_CPU_PC_ROUTINE_C_RET_VAL        0x08U
+
+/*----------------------------------------------------------------------------
+ *     Data types
+ *----------------------------------------------------------------------------*/
+
+// *****************************************************************************
+/* Class B library Program Counter Test input and output values
+
+  Summary:
+    Data type for PC Test input and output values.
+
+  Description:
+    The PC tests performs logical left-shift of the input value and returns it.
+    Values from this enum can be used as arguments.
+
+  Remarks:
+    None.
+*/
+typedef enum classb_pc_test_val
+{
+    CLASSB_CPU_PC_TEST_ROUTINE_A_INPUT  = 1U,
+    CLASSB_CPU_PC_ROUTINE_A_RET_VAL   = 2U,
+    CLASSB_CPU_PC_ROUTINE_B_RET_VAL   = 4U,
+    CLASSB_CPU_PC_ROUTINE_C_RET_VAL   = 8U,
+    CLASSB_CPU_PC_TEST_INIT_VAL = 0U
+} CLASSB_CPU_PC_TEST_VALUES;
 
 /*----------------------------------------------------------------------------
  *     Global Variables
@@ -60,12 +82,12 @@
  *----------------------------------------------------------------------------*/
 
 /*Internal functions for PC test*/
-uint8_t __attribute__((optimize("-O0"))) _CLASSB_CPU_PCTestRoutineA(uint8_t);
-uint8_t __attribute__((optimize("-O0"))) _CLASSB_CPU_PCTestRoutineB(uint8_t);
-uint8_t __attribute__((optimize("-O0"))) _CLASSB_CPU_PCTestRoutineC(uint8_t);
+CLASSB_CPU_PC_TEST_VALUES __attribute__((optimize("-O0"))) _CLASSB_CPU_PCTestRoutineA(CLASSB_CPU_PC_TEST_VALUES);
+CLASSB_CPU_PC_TEST_VALUES __attribute__((optimize("-O0"))) _CLASSB_CPU_PCTestRoutineB(CLASSB_CPU_PC_TEST_VALUES);
+CLASSB_CPU_PC_TEST_VALUES __attribute__((optimize("-O0"))) _CLASSB_CPU_PCTestRoutineC(CLASSB_CPU_PC_TEST_VALUES);
 
 /*============================================================================
-uint8_t _CLASSB_CPU_PCTestRoutineA(uint8_t pc_test_data)
+CLASSB_CPU_PC_TEST_VALUES _CLASSB_CPU_PCTestRoutineA(CLASSB_CPU_PC_TEST_VALUES pc_test_data)
 ------------------------------------------------------------------------------
 Purpose: 'Test routine A' for PC self-test.
 Input  : Data to be modified and returned.
@@ -73,13 +95,13 @@ Output : Modified data.
 Notes  : This function is called from 'CLASSB_CPU_PCTest' to check the Program
          Counter (PC) functionality
 ============================================================================*/
-uint8_t _CLASSB_CPU_PCTestRoutineA(uint8_t pc_test_data)
+CLASSB_CPU_PC_TEST_VALUES _CLASSB_CPU_PCTestRoutineA(CLASSB_CPU_PC_TEST_VALUES pc_test_data)
 {
     return (pc_test_data << 1);
 }
 
 /*============================================================================
-uint8_t _CLASSB_CPU_PCTestRoutineB(uint8_t pc_test_data)
+CLASSB_CPU_PC_TEST_VALUES _CLASSB_CPU_PCTestRoutineB(CLASSB_CPU_PC_TEST_VALUES pc_test_data)
 ------------------------------------------------------------------------------
 Purpose: 'Test routine B' for PC self-test.
 Input  : Data to be modified and returned.
@@ -87,13 +109,13 @@ Output : Modified data.
 Notes  : This function is called from 'CLASSB_CPU_PCTest' to check the Program
          Counter (PC) functionality
 ============================================================================*/
-uint8_t _CLASSB_CPU_PCTestRoutineB(uint8_t pc_test_data)
+CLASSB_CPU_PC_TEST_VALUES _CLASSB_CPU_PCTestRoutineB(CLASSB_CPU_PC_TEST_VALUES pc_test_data)
 {
     return (pc_test_data << 1);
 }
 
 /*============================================================================
-uint8_t _CLASSB_CPU_PCTestRoutineC(uint8_t pc_test_data)
+CLASSB_CPU_PC_TEST_VALUES _CLASSB_CPU_PCTestRoutineC(CLASSB_CPU_PC_TEST_VALUES pc_test_data)
 ------------------------------------------------------------------------------
 Purpose: 'Test routine C' for PC self-test.
 Input  : Data to be modified and returned.
@@ -101,7 +123,7 @@ Output : Modified data.
 Notes  : This function is called from 'CLASSB_CPU_PCTest' to check the Program
          Counter (PC) functionality
 ============================================================================*/
-uint8_t _CLASSB_CPU_PCTestRoutineC(uint8_t pc_test_data)
+CLASSB_CPU_PC_TEST_VALUES _CLASSB_CPU_PCTestRoutineC(CLASSB_CPU_PC_TEST_VALUES pc_test_data)
 {
     return (pc_test_data << 1);
 }
@@ -117,9 +139,9 @@ Notes  : None
 CLASSB_TEST_STATUS CLASSB_CPU_PCTest(bool running_context)
 {
     CLASSB_TEST_STATUS pc_test_status = CLASSB_TEST_NOT_EXECUTED;
-    uint8_t pc_test_retval_a = 0;
-    uint8_t pc_test_retval_b = 0;
-    uint8_t pc_test_retval_c = 0;
+    CLASSB_CPU_PC_TEST_VALUES pc_test_retval_a = CLASSB_CPU_PC_TEST_INIT_VAL;
+    CLASSB_CPU_PC_TEST_VALUES pc_test_retval_b = CLASSB_CPU_PC_TEST_INIT_VAL;
+    CLASSB_CPU_PC_TEST_VALUES pc_test_retval_c = CLASSB_CPU_PC_TEST_INIT_VAL;
 
     if (running_context == true)
     {

@@ -54,6 +54,14 @@ def instantiateComponent(classBComponent):
         classB_SRAM_SIZE = classBComponent.createIntegerSymbol("CLASSB_SRAM_SIZE", None)
         classB_SRAM_SIZE.setVisible(False)
         classB_SRAM_SIZE.setDefaultValue(int(classBSRAMNode.getAttribute("size"), 16))
+        #SRAM address
+        classB_SRAM_ADDR = classBComponent.createHexSymbol("CLASSB_SRAM_START_ADDRESS", None)
+        classB_SRAM_ADDR.setVisible(False)
+        classB_SRAM_ADDR.setDefaultValue(int(classBSRAMNode.getAttribute("start"), 16))
+        #SRAM address MSB 24 bits
+        classB_SRAM_START_MSB = classBComponent.createHexSymbol("CLASSB_SRAM_START_MSB", None)
+        classB_SRAM_START_MSB.setVisible(False)
+        classB_SRAM_START_MSB.setDefaultValue(int(classBSRAMNode.getAttribute("start"), 16) >> 8)
     
     # Insert CPU test
     classB_UseCPUTest = classBComponent.createBooleanSymbol("CLASSB_CPU_TEST_OPT", classBMenu)
@@ -101,7 +109,7 @@ def instantiateComponent(classBComponent):
     
     # CRC-32 checksum availability
     classB_FlashCRC_Option = classBComponent.createBooleanSymbol("CLASSB_FLASH_CRC_CONF", classBMenu)
-    classB_FlashCRC_Option.setLabel("Read CRC-32 value from Flash?")
+    classB_FlashCRC_Option.setLabel("Test Internal Flash?")
     classB_FlashCRC_Option.setVisible(True)
     classB_FlashCRC_Option.setDefaultValue(False)
     classB_FlashCRC_Option.setDescription("Enable this option if the CRC-32 checksum of the application image is stored at a specific address in the Flash")
@@ -152,7 +160,7 @@ def instantiateComponent(classBComponent):
     
     
     classBReadOnlyParams = classBComponent.createMenuSymbol("CLASSB_ADDR_MENU", None)
-    classBReadOnlyParams.setLabel("Read-only parameters used by the library")
+    classBReadOnlyParams.setLabel("Build parameters (read-only) used by the library")
     
     # Read-only symbol for start of non-reserved SRAM
     classb_AppRam_start = classBComponent.createHexSymbol("CLASSB_SRAM_APP_START", classBReadOnlyParams)

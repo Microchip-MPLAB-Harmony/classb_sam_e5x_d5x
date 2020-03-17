@@ -46,14 +46,14 @@
 /*----------------------------------------------------------------------------
  *     Constants
  *----------------------------------------------------------------------------*/
-#define CLASSB_CLOCK_MAX_CLOCK_FREQ         ${CLASSB_CPU_MAX_CLOCK}U
-#define CLASSB_CLOCK_MAX_SYSTICK_VAL        0x${CLASSB_SYSTICK_MAXCOUNT}U
-#define CLASSB_CLOCK_RTC_CLK_FREQ           ${CLASSB_RTC_EXPECTED_CLOCK}U
-#define CLASSB_CLOCK_MAX_TEST_ACCURACY      ${CLASSB_CPU_CLOCK_TEST_ACCUR}U
+#define CLASSB_CLOCK_MAX_CLOCK_FREQ         (${CLASSB_CPU_MAX_CLOCK}U)
+#define CLASSB_CLOCK_MAX_SYSTICK_VAL        (0x${CLASSB_SYSTICK_MAXCOUNT}U)
+#define CLASSB_CLOCK_RTC_CLK_FREQ           (${CLASSB_RTC_EXPECTED_CLOCK}U)
+#define CLASSB_CLOCK_MAX_TEST_ACCURACY      (${CLASSB_CPU_CLOCK_TEST_ACCUR}U)
 /* Since no floating point is used for clock test, multiply intermediate
  * values with 128.
  */
-#define CLASSB_CLOCK_MUL_FACTOR             128U
+#define CLASSB_CLOCK_MUL_FACTOR             (128U)
 
 /*----------------------------------------------------------------------------
  *     Global Variables

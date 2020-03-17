@@ -77,11 +77,11 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
   Remarks:
     None.
 */
-    typedef enum classb_fpu_config
-    {
-        CLASSB_FPU_TEST_DISABLE  = 0,
-        CLASSB_FPU_TEST_ENABLE   = 1
-    } CLASSB_FPU_CONFIG;
+typedef enum classb_fpu_config
+{
+    CLASSB_FPU_TEST_DISABLE  = 0,
+    CLASSB_FPU_TEST_ENABLE   = 1
+} CLASSB_FPU_CONFIG;
 
 /*----------------------------------------------------------------------------
  *     Functions
