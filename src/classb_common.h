@@ -238,9 +238,6 @@ typedef struct classb_rst_result_bf
 /*----------------------------------------------------------------------------
  *     Functions
  *----------------------------------------------------------------------------*/
-
-void _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE test_type,
-    CLASSB_TEST_ID test_id, CLASSB_TEST_STATUS value);
 /* Function called when a non-critical self-test fails */
 void CLASSB_SelfTest_FailSafe(CLASSB_TEST_ID test_id);
 

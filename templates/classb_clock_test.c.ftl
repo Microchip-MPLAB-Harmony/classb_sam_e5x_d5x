@@ -62,6 +62,8 @@
 /*----------------------------------------------------------------------------
  *     Functions
  *----------------------------------------------------------------------------*/
+extern void _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE test_type,
+    CLASSB_TEST_ID test_id, CLASSB_TEST_STATUS value);
 
 /*============================================================================
 void _CLASSB_Clock_SysTickGetVal(void)

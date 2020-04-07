@@ -54,6 +54,8 @@
 /*----------------------------------------------------------------------------
  *     Functions
  *----------------------------------------------------------------------------*/
+extern void _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE test_type,
+    CLASSB_TEST_ID test_id, CLASSB_TEST_STATUS value);
 
 /*============================================================================
 void CLASSB_IO_InputSamplingEnable(CLASSB_PORT_INDEX port, CLASSB_PORT_PIN pin);

@@ -57,9 +57,12 @@
 extern uint32_t _heap;
 extern uint32_t _min_heap_size;
 extern uint32_t _stack;
+
 /*----------------------------------------------------------------------------
  *     Functions
  *----------------------------------------------------------------------------*/
+extern void _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE test_type,
+    CLASSB_TEST_ID test_id, CLASSB_TEST_STATUS value);
 
 /*============================================================================
 uint32_t _CLASSB_GetStackPointer(void)

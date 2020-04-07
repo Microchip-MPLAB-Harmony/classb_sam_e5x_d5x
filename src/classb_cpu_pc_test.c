@@ -80,6 +80,8 @@ typedef enum classb_pc_test_val
 /*----------------------------------------------------------------------------
  *     Functions
  *----------------------------------------------------------------------------*/
+extern void _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE test_type,
+    CLASSB_TEST_ID test_id, CLASSB_TEST_STATUS value);
 
 /*Internal functions for PC test*/
 CLASSB_CPU_PC_TEST_VALUES __attribute__((optimize("-O0"))) _CLASSB_CPU_PCTestRoutineA(CLASSB_CPU_PC_TEST_VALUES);
