@@ -189,6 +189,14 @@ CLASSB_TEST_STATUS CLASSB_CPU_PCTest(bool running_context)
             _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_PC,
                 CLASSB_TEST_FAILED);
         }
+        
+        /* Remain in a while(1) loop if the Program Counter test fails
+         * If WDT is configured, this will result in a device reset
+         */
+        while (1)
+        {
+            ;
+        }
     }
 
     return pc_test_status;
