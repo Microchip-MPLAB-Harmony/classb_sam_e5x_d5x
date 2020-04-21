@@ -165,6 +165,7 @@ typedef enum classb_init_status
 */
 typedef enum classb_startup_status
 {
+    CLASSB_STARTUP_TEST_NOT_EXECUTED  = 0,
     CLASSB_STARTUP_TEST_PASSED = 1,
     CLASSB_STARTUP_TEST_FAILED = 2
 } CLASSB_STARTUP_STATUS;

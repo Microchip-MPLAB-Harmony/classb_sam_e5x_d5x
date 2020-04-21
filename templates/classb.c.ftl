@@ -311,13 +311,20 @@ Input  : None
 Output : None
 Notes  : This function calls all the configured self-tests during startup.
          The MPLAB Harmony Configurator (MHC) has options to configure
-         the startup self-tests.
+         the startup self-tests. If startup tests are not enabled via MHC,
+         this function enables the WDT and returns CLASSB_STARTUP_TEST_NOT_EXECUTED.
 ============================================================================*/
 CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
 {
-    CLASSB_STARTUP_STATUS cb_startup_status = CLASSB_STARTUP_TEST_FAILED;
-    CLASSB_STARTUP_STATUS cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
+    CLASSB_STARTUP_STATUS cb_startup_status = CLASSB_STARTUP_TEST_NOT_EXECUTED;
+    <#if (CLASSB_CPU_TEST_OPT?? && CLASSB_CPU_TEST_OPT == true) ||
+         (CLASSB_SRAM_TEST_OPT?? && CLASSB_SRAM_TEST_OPT == true) ||
+         (CLASSB_FLASH_CRC_CONF?? && CLASSB_FLASH_CRC_CONF == true) ||
+         (CLASSB_CLOCK_TEST_OPT?? && CLASSB_CLOCK_TEST_OPT == true) ||
+         (CLASSB_INTERRUPT_TEST_OPT?? && CLASSB_INTERRUPT_TEST_OPT == true)>
+    CLASSB_STARTUP_STATUS cb_temp_startup_status = CLASSB_STARTUP_TEST_NOT_EXECUTED;
     CLASSB_TEST_STATUS cb_test_status = CLASSB_TEST_NOT_EXECUTED;
+    </#if>
     <#if CLASSB_CLOCK_TEST_OPT??>
         <#if CLASSB_CLOCK_TEST_OPT == true>
             <#if CLASSB_CLOCK_TEST_DURATION?has_content>
@@ -453,7 +460,11 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
             <#lt>    }
         </#if>
     </#if>
-
+    <#if (CLASSB_CPU_TEST_OPT?? && CLASSB_CPU_TEST_OPT == true) ||
+         (CLASSB_SRAM_TEST_OPT?? && CLASSB_SRAM_TEST_OPT == true) ||
+         (CLASSB_FLASH_CRC_CONF?? && CLASSB_FLASH_CRC_CONF == true) ||
+         (CLASSB_CLOCK_TEST_OPT?? && CLASSB_CLOCK_TEST_OPT == true) ||
+         (CLASSB_INTERRUPT_TEST_OPT?? && CLASSB_INTERRUPT_TEST_OPT == true)>
     if (cb_temp_startup_status == CLASSB_STARTUP_TEST_PASSED)
     {
         cb_startup_status = CLASSB_STARTUP_TEST_PASSED;
@@ -462,7 +473,7 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
     {
         cb_startup_status = CLASSB_STARTUP_TEST_FAILED;
     }
-
+    </#if>
     return cb_startup_status;
 }
 
@@ -492,7 +503,7 @@ void _on_reset(void)
             // Reset the device if all tests are passed.
             NVIC_SystemReset();
         }
-        else
+        else if (startup_tests_status == CLASSB_STARTUP_TEST_FAILED)
         {
 #if (defined(__DEBUG) || defined(__DEBUG_D)) && defined(__XC32)
             __builtin_software_breakpoint();
@@ -502,6 +513,11 @@ void _on_reset(void)
             {
                 ;
             }
+        }
+        else
+        {
+            // If startup tests are not enabled via MHC, do nothing.
+            ;
         }
     }
     else if (init_status == CLASSB_SST_DONE)
