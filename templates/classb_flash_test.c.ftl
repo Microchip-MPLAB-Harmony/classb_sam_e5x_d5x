@@ -46,6 +46,10 @@
 /*----------------------------------------------------------------------------
  *     Constants
  *----------------------------------------------------------------------------*/
+
+/* Functions in this library uses reversed representation of the
+ * CRC-32 polynomial 0x04C11DB7
+ */
 #define CLASSB_FLASH_CRC32_POLYNOMIAL (0x${CLASSB_FLASH_CRC32_POLY}U)
 
 /*----------------------------------------------------------------------------
