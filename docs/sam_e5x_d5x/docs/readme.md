@@ -9,7 +9,7 @@ family:
     - SAME51
     - SAME53
     - SAME54
-    
+
 technology: classb
 ---
 ## [Introduction](./introduction.md)

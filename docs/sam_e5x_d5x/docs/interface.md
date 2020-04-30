@@ -25,9 +25,9 @@ nav_order: 5
 | CLASSB_RESULT_ADDR | Address of test results. |
 | CLASSB_COMPL_RESULT_ADDR | Address of one's complement test results. |
 | CLASSB_ONGOING_TEST_VAR_ADDR | Address at which the ID of ongoing test is stored. |
-| CLASSB_TEST_IN_PROG_VAR_ADDR | Address of the variable which indicates that |
-| CLASSB_WDT_TEST_IN_PROG_VAR_ADDR | Address of the variable which indicates that |
-| CLASSB_FLASH_TEST_VAR_ADDR | Address of the variable which indicates that |
+| CLASSB_TEST_IN_PROG_VAR_ADDR | Address of the variable which indicates that a Class B test is in progress. |
+| CLASSB_WDT_TEST_IN_PROG_VAR_ADDR | Address of the variable which indicates that a WDT test is in progress. |
+| CLASSB_FLASH_TEST_VAR_ADDR | Address of the variable which indicates that a flash test is in progress. |
 | CLASSB_INTERRUPT_TEST_VAR_ADDR | Address of the variable which keeps interrupt test internal status. |
 | CLASSB_INTERRUPT_COUNT_VAR_ADDR | Address of the variable which keeps interrupt count. |
 | CLASSB_SRAM_STARTUP_TEST_SIZE | Size of the SRAM tested during startup. |
@@ -59,19 +59,19 @@ nav_order: 5
 
 | Name | Description |
 |-|-|
-| CLASSB_TEST_ID | Identifies Class B library tests |
-| CLASSB_TEST_STATUS | Identifies result from Class B library test |
-| CLASSB_TEST_STATE | Identifies Class B library test state |
-| CLASSB_INIT_STATUS | Identifies Class B initialization status |
-| CLASSB_STARTUP_STATUS | Identifies startup test status |
-| CLASSB_TEST_TYPE | Identifies type of the Class B library test |
-| *CLASSB_SST_RESULT_BF | Structure for Class B library startup self-test result |
-| *CLASSB_RST_RESULT_BF | Structure for Class B library run-time self-test result |
+| CLASSB_TEST_ID | Identifies Class B library tests. |
+| CLASSB_TEST_STATUS | Identifies result from Class B library test. |
+| CLASSB_TEST_STATE | Identifies Class B library test state. |
+| CLASSB_INIT_STATUS | Identifies Class B initialization status. |
+| CLASSB_STARTUP_STATUS | Identifies startup test status. |
+| CLASSB_TEST_TYPE | Identifies type of the Class B library test. |
+| *CLASSB_SST_RESULT_BF | Pointer to the structure for the Class B library startup self-test result. |
+| *CLASSB_RST_RESULT_BF | Pointer to the structure for the Class B library run-time self-test result. |
 | CLASSB_FPU_CONFIG | Data type for enabling FPU register test. |
 | CLASSB_SRAM_MARCH_ALGO | Selects the RAM March algorithm to run. |
-| CLASSB_PORT_INDEX | PORT index definitions for Class B library I/O pin test |
-| CLASSB_PORT_PIN | PIN definitions for Class B library I/O pin test |
-| CLASSB_PORT_PIN_STATE | PORT pin state |
+| CLASSB_PORT_INDEX | PORT index definitions for Class B library I/O pin test. |
+| CLASSB_PORT_PIN | PIN definitions for Class B library I/O pin test. |
+| CLASSB_PORT_PIN_STATE | PORT pin state. |
 | CLASSB_CPU_PC_TEST_VALUES | Data type for PC Test input and output values. |
 
 ## Interface Routines Summary
@@ -81,15 +81,15 @@ nav_order: 5
 | CLASSB_ClearTestResults | Clears the results of SSTs or RSTs. |
 | CLASSB_GetTestResult | Returns the result of the specified self-test. |
 | CLASSB_TestWDT | This function tests the WatchDog Timer (WDT). |
-| CLASSB_Init | This function is executed on every device reset. This shall be |
-| CLASSB_Startup_Tests | This function executes all startup self-tests inserted into classb.c file |
-| CLASSB_SST_WDT_Recovery | This function is called if a WDT reset is caused while a startup |
-| CLASSB_App_WDT_Recovery | This function is called if a WDT reset is caused during run-time. |
-| CLASSB_SelfTest_FailSafe | This function is called if any of the non-critical tests are failed. |
-| CLASSB_CPU_RegistersTest | This self-test checks the processor core registers and FPU registers |
-| CLASSB_CPU_PCTest | This self-test checks the Program Counter register (PC) |
+| CLASSB_Init | This function is executed on every device reset. This shall be called right after the reset, before any other initialization is performed. |
+| CLASSB_Startup_Tests | This function executes all startup self-tests inserted into classb.c file. |
+| CLASSB_SST_WDT_Recovery | This function is called if a WDT reset has happened during the execution of an SST. |
+| CLASSB_App_WDT_Recovery | This function is called if a WDT reset has happened during run-time. |
+| CLASSB_SelfTest_FailSafe | This function is called if any of the non-critical tests detects a failure. |
+| CLASSB_CPU_RegistersTest | This self-test checks the processor core registers and FPU registers. |
+| CLASSB_CPU_PCTest | This self-test checks the Program Counter register (PC). |
 | CLASSB_FlashCRCGenerate | Generates CRC-32 checksum for a given memory area. |
-| CLASSB_FlashCRCTest | This self-test checks the internal Flash program memory to detect |
+| CLASSB_FlashCRCTest | This self-test checks the internal Flash program memory to detect single bit faults. |
 | CLASSB_SRAM_MarchTestInit | This self-test checks the SRAM with the help of RAM March algorithm. |
 | CLASSB_ClockTest | This self-test checks whether the CPU clock frequency is within the permissible limit. |
 | CLASSB_SST_InterruptTest | This self-test checks basic functionality of the interrupt handling mechanism. |
@@ -103,15 +103,15 @@ nav_order: 5
 
 **Summary**
 
-Address of test results.  
+Address of test results.
 
 **Description**
 
-This constant defines the address in SRAM where the test results are stored.  
+This constant defines the address in SRAM where the test results are stored.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_RESULT_ADDR (0x20000000U)
@@ -122,15 +122,15 @@ This value must not be modified.
 
 **Summary**
 
-Address of one's complement test results.  
+Address of one's complement test results.
 
 **Description**
 
-This constant defines the address in SRAM where the one's complement of the test results are stored.  
+This constant defines the address in SRAM where the one's complement of the test results are stored.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_COMPL_RESULT_ADDR (0x20000004U)
@@ -141,15 +141,15 @@ This value must not be modified.
 
 **Summary**
 
-Address at which the ID of ongoing test is stored.  
+Address at which the ID of ongoing test is stored.
 
 **Description**
 
-This constant defines the address in SRAM where the the ID of ongoing test is stored.  
+This constant defines the address in SRAM where the the ID of ongoing test is stored.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_ONGOING_TEST_VAR_ADDR (0x20000008U)
@@ -160,18 +160,18 @@ This value must not be modified.
 
 **Summary**
 
-Address of the variable which indicates that a Class B test is in progress.  
+Address of the variable which indicates that a Class B test is in progress.
 
 **Description**
 
-Defines the address of the variable which indicates that a Class B test is in progress.  
+Defines the address of the variable which indicates that a Class B test is in progress.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
-#define CLASSB_TEST_IN_PROG_VAR_ADDR (0x2000000cU)
+#define CLASSB_TEST_IN_PROG_VAR_ADDR (0x2000000CU)
 ```
 
 ### CLASSB_WDT_TEST_IN_PROG_VAR_ADDR
@@ -179,15 +179,15 @@ This value must not be modified.
 
 **Summary**
 
-Address of the variable which indicates that a WDT test is in progress.  
+Address of the variable which indicates that a WDT test is in progress.
 
 **Description**
 
-Defines the address of the variable which indicates that a WDT test is in progress.  
+Defines the address of the variable which indicates that a WDT test is in progress.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_WDT_TEST_IN_PROG_VAR_ADDR (0x20000010U)
@@ -198,15 +198,15 @@ This value must not be modified.
 
 **Summary**
 
-Address of the variable which indicates that a flash test is in progress.  
+Address of the variable which indicates that a flash test is in progress.
 
 **Description**
 
-Defines the address of the variable which indicates that a flash test is in progress.  
+Defines the address of the variable which indicates that a flash test is in progress.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_FLASH_TEST_VAR_ADDR (0x20000014U)
@@ -217,15 +217,15 @@ This value must not be modified.
 
 **Summary**
 
-Address of the variable which keeps interrupt test internal status.  
+Address of the variable which keeps interrupt test internal status.
 
 **Description**
 
-Defines the address of the variable which keeps interrupt test internal status.  
+Defines the address of the variable which keeps interrupt test internal status.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_INTERRUPT_TEST_VAR_ADDR (0x20000018U)
@@ -236,15 +236,15 @@ This value must not be modified.
 
 **Summary**
 
-Address of the variable which keeps interrupt count.  
+Address of the variable which keeps interrupt count.
 
 **Description**
 
-Defines the address of the variable which keeps interrupt count.  
+Defines the address of the variable which keeps interrupt count.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_INTERRUPT_COUNT_VAR_ADDR (0x2000001cU)
@@ -255,16 +255,16 @@ This value must not be modified.
 
 **Summary**
 
-Size of the SRAM tested during startup.  
+Size of the SRAM tested during startup.
 
 **Description**
 
 Defines the size of the SRAM tested during startup. Modify this macro to change the area of the
-tested SRAM area. The test size must be a multiple of four.  
+tested SRAM area. The test size must be a multiple of four.
 
 **Remarks**
 
-This value can be modified. 
+This value can be modified.
 
 ```c
 #define CLASSB_SRAM_STARTUP_TEST_SIZE (65536U)
@@ -275,16 +275,16 @@ This value can be modified.
 
 **Summary**
 
-Clock error percentage selected for startup test.  
+Clock error percentage selected for startup test.
 
 **Description**
 
 Defines the acceptable error percentage of the CPU clock. This value is configured via MHC and is used
-during startup self-test of the CPU clock.  
+during startup self-test of the CPU clock.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_CLOCK_ERROR_PERCENT (5U)
@@ -295,15 +295,15 @@ This value must not be modified.
 
 **Summary**
 
-RTC clock frequency.  
+RTC clock frequency.
 
 **Description**
 
-Defines the RTC clock frequency.  
+Defines the RTC clock frequency.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_CLOCK_RTC_CLK_FREQ (32768U)
@@ -314,15 +314,15 @@ This value must not be modified.
 
 **Summary**
 
-Duration of the CPU clock test.  
+Duration of the CPU clock test.
 
 **Description**
 
-Defines the duration of the CPU clock test in terms of RTC cycles.  
+Defines the duration of the CPU clock test in terms of RTC cycles.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_CLOCK_TEST_RTC_CYCLES (200U)
@@ -333,15 +333,15 @@ This value must not be modified.
 
 **Summary**
 
-Duration of RTC clock in nano seconds.  
+Duration of RTC clock in nano seconds.
 
 **Description**
 
-Defines the duration of RTC clock in nano seconds. This is used to calculate the duration of CPU clock test in terms of RTC cycles.  
+Defines the duration of RTC clock in nano seconds. This is used to calculate the duration of CPU clock test in terms of RTC cycles.
 
 **Remarks**
 
-RTC is clocked from 32768 Hz Crystal. One RTC cycle is 30517 nano sec. This value must not be modified. 
+RTC is clocked from 32768 Hz Crystal. One RTC cycle is 30517 nano sec. This value must not be modified.
 
 ```c
 #define CLASSB_CLOCK_TEST_RTC_RATIO_NS (30517U)
@@ -352,15 +352,15 @@ RTC is clocked from 32768 Hz Crystal. One RTC cycle is 30517 nano sec. This valu
 
 **Summary**
 
-Ratio of milli second to nano second.  
+Ratio of milli second to nano second.
 
 **Description**
 
-Defines the ratio of milli second to nano second. This is used to calculate the duration of CPU clock test in terms of RTC cycles.  
+Defines the ratio of milli second to nano second. This is used to calculate the duration of CPU clock test in terms of RTC cycles.
 
 **Remarks**
 
-Used to avoid the use of floating point math. This value must not be modified. 
+Used to avoid the use of floating point math. This value must not be modified.
 
 ```c
 #define CLASSB_CLOCK_TEST_RATIO_NS_MS (1000000U)
@@ -371,15 +371,15 @@ Used to avoid the use of floating point math. This value must not be modified.
 
 **Summary**
 
-Default CPU clock speed.  
+Default CPU clock speed.
 
 **Description**
 
-Defines the default CPU clock speed after a reset.  
+Defines the default CPU clock speed after a reset.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_CLOCK_DEFAULT_CLOCK_FREQ (48000000U)
@@ -390,15 +390,15 @@ This value must not be modified.
 
 **Summary**
 
-Invalid test ID.  
+Invalid test ID.
 
 **Description**
 
-Defines a constant to initialize the variable which holds the ID of the ongoing self-test.  
+Defines a constant to initialize the variable which holds the ID of the ongoing self-test.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_INVALID_TEST_ID (0xFFU)
@@ -409,15 +409,15 @@ This value must not be modified.
 
 **Summary**
 
-Maximum CPU clock speed.  
+Maximum CPU clock speed.
 
 **Description**
 
-Defines the maximum CPU clock speed for the microcontroller.  
+Defines the maximum CPU clock speed for the microcontroller.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_CLOCK_MAX_CLOCK_FREQ (120000000U)
@@ -428,15 +428,15 @@ This value must not be modified.
 
 **Summary**
 
-Upper limit of SysTick counter.  
+Upper limit of SysTick counter.
 
 **Description**
 
-Defines the upper limit of SysTick counter.  
+Defines the upper limit of SysTick counter.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_CLOCK_MAX_SYSTICK_VAL (0xffffffU)
@@ -447,15 +447,15 @@ This value must not be modified.
 
 **Summary**
 
-Maximum detectable accuracy for clock self-test.  
+Maximum detectable accuracy for clock self-test.
 
 **Description**
 
-Defines the maximum detectable accuracy for clock self-test.  
+Defines the maximum detectable accuracy for clock self-test.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_CLOCK_MAX_TEST_ACCURACY (5U)
@@ -466,16 +466,16 @@ This value must not be modified.
 
 **Summary**
 
-Multiplication factor used in clock test.  
+Multiplication factor used in clock test.
 
 **Description**
 
 Defines the multiplication factor used in clock test. This is used to calculate the CPU clock error.
-Used to avoid the use of floating point math.  
+Used to avoid the use of floating point math.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_CLOCK_MUL_FACTOR (128U)
@@ -486,15 +486,15 @@ This value must not be modified.
 
 **Summary**
 
-CRC-32 polynomial.  
+CRC-32 polynomial.
 
 **Description**
 
-Defines the CRC-32 polynomial used for Flash self-test.  
+Defines the CRC-32 polynomial used for Flash self-test.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_FLASH_CRC32_POLYNOMIAL (0xedb88320U)
@@ -505,18 +505,18 @@ This value must not be modified.
 
 **Summary**
 
-Defines the size of the buffer used for SRAM test.  
+Defines the size of the buffer used for SRAM test.
 
 **Description**
 
-This constant defines the size of the buffer used for SRAM test.  
+This constant defines the size of the buffer used for SRAM test.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
-#define CLASSB_SRAM_TEST_BUFFER_SIZE (512U) // Do not modify
+#define CLASSB_SRAM_TEST_BUFFER_SIZE (512U)
 ```
 
 ### CLASSB_SRAM_APP_AREA_START
@@ -524,18 +524,18 @@ This value must not be modified.
 
 **Summary**
 
-Defines the start address of the SRAM for the application.  
+Defines the start address of the SRAM for the application.
 
 **Description**
 
-This constant defines the start address of the SRAM for the application. First 1kB of the SRAM is reserved for the Class B library.  
+This constant defines the start address of the SRAM for the application. First 1kB of the SRAM is reserved for the Class B library.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
-#define CLASSB_SRAM_APP_AREA_START (0x20000400U) // Do not modify
+#define CLASSB_SRAM_APP_AREA_START (0x20000400U)
 ```
 
 ### CLASSB_SRAM_FINAL_WORD_ADDRESS
@@ -543,15 +543,15 @@ This value must not be modified.
 
 **Summary**
 
-Final word address in the SRAM.  
+Final word address in the SRAM.
 
 **Description**
 
-This constant defines the final word address in the SRAM.  
+This constant defines the final word address in the SRAM.
 
 **Remarks**
 
-This value must not be modified. Varies depending on the device. 
+This value must not be modified. Varies depending on the device.
 
 ```c
 #define CLASSB_SRAM_FINAL_WORD_ADDRESS (0x2003fffcU)
@@ -562,15 +562,15 @@ This value must not be modified. Varies depending on the device.
 
 **Summary**
 
-SRAM test buffer start address.  
+SRAM test buffer start address.
 
 **Description**
 
-This constant defines the SRAM test buffer start address. This is used by the self-test for the SRAM.  
+This constant defines the SRAM test buffer start address. This is used by the self-test for the SRAM.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_SRAM_BUFF_START_ADDRESS (0x20000200U)
@@ -581,15 +581,15 @@ This value must not be modified.
 
 **Summary**
 
-Address of the temporary stack.  
+Address of the temporary stack.
 
 **Description**
 
-This constant defines the address of the temporary stack used during SRAM self-test.  
+This constant defines the address of the temporary stack used during SRAM self-test.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_SRAM_TEMP_STACK_ADDRESS (0x20000100U)
@@ -600,15 +600,15 @@ This value must not be modified.
 
 **Summary**
 
-Defines name for max 32-bit unsigned value.  
+Defines name for max 32-bit unsigned value.
 
 **Description**
 
-This constant defines a name for max 32-bit unsigned value.  
+This constant defines a name for max 32-bit unsigned value.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_SRAM_ALL_32BITS_HIGH (0xFFFFFFFFU)
@@ -619,15 +619,15 @@ This value must not be modified.
 
 **Summary**
 
-Defines the offset for first device specific interrupt.  
+Defines the offset for first device specific interrupt.
 
 **Description**
 
-This constant defines the offset for first device specific interrupt.  
+This constant defines the offset for first device specific interrupt.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_INTR_DEVICE_VECT_OFFSET (16U)
@@ -638,15 +638,15 @@ This value must not be modified.
 
 **Summary**
 
-Defines the size of the vector table.  
+Defines the size of the vector table.
 
 **Description**
 
-This constant defines the size of the vector table.  
+This constant defines the size of the vector table.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_INTR_VECTOR_TABLE_SIZE (CLASSB_INTR_DEVICE_VECT_OFFSET + PERIPH_MAX_IRQn)
@@ -657,15 +657,15 @@ This value must not be modified.
 
 **Summary**
 
-Defines the upper limit for interrupt count.  
+Defines the upper limit for interrupt count.
 
 **Description**
 
-This constant defines the upper limit for interrupt count for the interrupt self-test.  
+This constant defines the upper limit for interrupt count for the interrupt self-test.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_INTR_MAX_INT_COUNT (30U)
@@ -676,15 +676,15 @@ This value must not be modified.
 
 **Summary**
 
-Defines the counter value for RTC peripheral.  
+Defines the counter value for RTC peripheral.
 
 **Description**
 
-This constant defines the counter value for RTC peripheral, for the interrupt self-test.  
+This constant defines the counter value for RTC peripheral, for the interrupt self-test.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_INTR_TEST_RTC_COUNT (50U)
@@ -695,15 +695,15 @@ This value must not be modified.
 
 **Summary**
 
-Defines the counter value for TC0 peripheral.  
+Defines the counter value for TC0 peripheral.
 
 **Description**
 
-This constant defines the counter value for TC0 peripheral, for the interrupt self-test.  
+This constant defines the counter value for TC0 peripheral, for the interrupt self-test.
 
 **Remarks**
 
-This value must not be modified. 
+This value must not be modified.
 
 ```c
 #define CLASSB_INTR_TEST_TC_COUNT (100U)
@@ -716,16 +716,16 @@ This value must not be modified.
 
 **Summary**
 
-Identifies Class B library tests  
+Identifies Class B library tests.
 
 **Description**
 
 This enumeration can be used to read the self-test status and update it. Test ID corresponds to the bit position
-at which the 2-bit test result is stored.  
+at which the 2-bit test result is stored.
 
 **Remarks**
 
-None. 
+None.
 
 ```c
 typedef enum
@@ -745,15 +745,15 @@ CLASSB_TEST_IO = 12
 
 **Summary**
 
-Identifies result from Class B library test  
+Identifies result from Class B library test.
 
 **Description**
 
-This is return type for self-tests.  
+This is return type for self-tests.
 
 **Remarks**
 
-None. 
+None.
 
 ```c
 typedef enum
@@ -770,15 +770,15 @@ CLASSB_TEST_INPROGRESS = 3
 
 **Summary**
 
-Identifies Class B library test state  
+Identifies Class B library test state.
 
 **Description**
 
-This data type is used to update flags which indicates whether a test has started or not.  
+This data type is used to update flags which indicates whether a test has started or not.
 
 **Remarks**
 
-None. 
+None.
 
 ```c
 typedef enum
@@ -793,16 +793,16 @@ CLASSB_TEST_STARTED = 1
 
 **Summary**
 
-Identifies Class B initialization status  
+Identifies Class B initialization status.
 
 **Description**
 
 This is return type for the function which initializes the Class B library during startup.
-This indicates whether the SSTs are executed or not.  
+This indicates whether the SSTs are executed or not.
 
 **Remarks**
 
-None. 
+None.
 
 ```c
 typedef enum
@@ -817,15 +817,15 @@ CLASSB_SST_NOT_DONE = 2
 
 **Summary**
 
-Identifies startup test status  
+Identifies startup test status.
 
 **Description**
 
-This is return type for the function which calls all self-tests during startup.  
+This is return type for the function which calls all self-tests during startup.
 
 **Remarks**
 
-None. 
+None.
 
 ```c
 typedef enum
@@ -840,16 +840,16 @@ CLASSB_STARTUP_TEST_FAILED = 2
 
 **Summary**
 
-Identifies type of the Class B library test  
+Identifies type of the Class B library test.
 
 **Description**
 
 There are two categories of test. They are startup tests (SSTs) and run-time tests (RSTs).
-Test results for SSTs and RSTs are stored at separate locations in the SRAM.  
+Test results for SSTs and RSTs are stored at separate locations in the SRAM.
 
 **Remarks**
 
-None. 
+None.
 
 ```c
 typedef enum
@@ -864,15 +864,15 @@ CLASSB_TEST_TYPE_RST = 1
 
 **Summary**
 
-Structure for Class B library startup self-test result  
+Pointer to the structure for the Class B library startup self-test result.
 
 **Description**
 
-For bit-field representation of Class B library test results.  
+For bit-field representation of Class B library test results.
 
 **Remarks**
 
-None. 
+None.
 
 ```c
 typedef struct
@@ -891,15 +891,15 @@ CLASSB_TEST_STATUS INTERRUPT_STATUS:2;
 
 **Summary**
 
-Structure for Class B library run-time self-test result  
+Pointer to the structure for the Class B library run-time self-test result.
 
 **Description**
 
-For bit-field representation of Class B library test results.  
+For bit-field representation of Class B library test results.
 
 **Remarks**
 
-None. 
+None.
 
 ```c
 typedef struct
@@ -919,16 +919,16 @@ CLASSB_TEST_STATUS IO_STATUS:2;
 
 **Summary**
 
-Data type for enabling FPU register test.  
+Data type for enabling FPU register test.
 
 **Description**
 
 The CPU register test covers the processor core registers and FPU registers. Testing FPU registers can
-be optional since it may not be used by every application.  
+be optional since it may not be used by every application.
 
 **Remarks**
 
-None. 
+None.
 
 ```c
 typedef enum
@@ -943,15 +943,15 @@ CLASSB_FPU_TEST_ENABLE = 1
 
 **Summary**
 
-Selects the RAM March algorithm to run.  
+Selects the RAM March algorithm to run.
 
 **Description**
 
-Selects the RAM March algorithm to be used for the SRAM self-test.  
+Selects the RAM March algorithm to be used for the SRAM self-test.
 
 **Remarks**
 
-None. 
+None.
 
 ```c
 typedef enum
@@ -967,15 +967,15 @@ CLASSB_SRAM_MARCH_B = 2
 
 **Summary**
 
-PORT index definitions for Class B library I/O pin test  
+PORT index definitions for Class B library I/O pin test.
 
 **Description**
 
-This can be used in the I/O pin test.  
+This can be used in the I/O pin test.
 
 **Remarks**
 
-None. 
+None.
 
 ```c
 typedef enum
@@ -992,15 +992,15 @@ PORTD = 3
 
 **Summary**
 
-PIN definitions for Class B library I/O pin test  
+PIN definitions for Class B library I/O pin test.
 
 **Description**
 
-This can be used in the I/O pin test.  
+This can be used in the I/O pin test.
 
 **Remarks**
 
-None. 
+None.
 
 ```c
 typedef enum
@@ -1045,15 +1045,15 @@ PIN31 = 31
 
 **Summary**
 
-PORT pin state  
+PORT pin state.
 
 **Description**
 
-This can be used in the I/O pin test.  
+This can be used in the I/O pin test.
 
 **Remarks**
 
-None. 
+None.
 
 ```c
 typedef enum
@@ -1069,15 +1069,15 @@ PORT_PIN_INVALID = 2
 
 **Summary**
 
-Data type for PC Test input and output values.  
+Data type for PC Test input and output values.
 
 **Description**
 
-The PC tests performs logical left-shift of the input value and returns it. Values from this enum can be used as arguments.  
+The PC tests performs logical left-shift of the input value and returns it. Values from this enum can be used as arguments.
 
 **Remarks**
 
-None. 
+None.
 
 ```c
 typedef enum classb_pc_test_val
@@ -1103,34 +1103,34 @@ void CLASSB_ClearTestResults(CLASSB_TEST_TYPE test_type);
 
 **Summary**
 
-Clears the results of SSTs or RSTs.  
+Clears the results of SSTs or RSTs.
 
 **Description**
 
-This function clears all the test results of a given type of test.  
+This function clears all the test results of a given type of test.
 
 **Precondition**
 
-None.  
+None.
 
 **Parameters**
 
-*test_type* - Can be CLASSB_TEST_TYPE_SST or CLASSB_TEST_TYPE_RST.  
+*test_type* - Can be CLASSB_TEST_TYPE_SST or CLASSB_TEST_TYPE_RST.
 
 **Returns**
 
-None.  
+None.
 
 **Example**
 
 ```c
-CLASSB_TEST_STATUS classb_test_status = CLASSB_TEST_NOT_EXECUTED;
-classb_test_status = CLASSB_GetTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_CPU);
+CLASSB_ClearTestResults(CLASSB_TEST_TYPE_SST);
+CLASSB_ClearTestResults(CLASSB_TEST_TYPE_RST);
 ```
 
 **Remarks**
 
-This function is called from CLASSB_Init(). 
+This function is called from CLASSB_Init().
 
 ### CLASSB_GetTestResult
 
@@ -1142,26 +1142,26 @@ CLASSB_TEST_STATUS CLASSB_GetTestResult(CLASSB_TEST_TYPE test_type, CLASSB_TEST_
 
 **Summary**
 
-Returns the result of the specified self-test.  
+Returns the result of the specified self-test.
 
 **Description**
 
 This function reads the test results from the reserved SRAM and extracts the result of the self-test
-specified by the input arguments.  
+specified by the input arguments.
 
 **Precondition**
 
-None.  
+None.
 
 **Parameters**
 
-*test_type* - Can be CLASSB_TEST_TYPE_SST or CLASSB_TEST_TYPE_RST. 
+*test_type* - Can be CLASSB_TEST_TYPE_SST or CLASSB_TEST_TYPE_RST.
 
-*test_id* - Identifier for a Class B library test.  
+*test_id* - Identifier for a Class B library test.
 
 **Returns**
 
-None.  
+None.
 
 **Example**
 
@@ -1172,7 +1172,7 @@ classb_test_status = CLASSB_GetTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_CPU)
 
 **Remarks**
 
-None. 
+None.
 
 ### CLASSB_TestWDT
 
@@ -1184,25 +1184,25 @@ void CLASSB_TestWDT(void);
 
 **Summary**
 
-This function tests the WatchDog Timer (WDT).  
+This function tests the WatchDog Timer (WDT).
 
 **Description**
 
 This function is called from CLASSB_Init(). It tests whether the WDT can reset the device. After the WDT resets
 the device, the Class B library clears the test flag and proceeds to the rest of the initialization routines.
-Since the test flag is kept in reserved SRAM area, it is not touched by the general startup code.  
+Since the test flag is kept in reserved SRAM area, it is not touched by the general startup code.
 
 **Precondition**
 
-None.  
+None.
 
 **Parameters**
 
-None.  
+None.
 
 **Returns**
 
-None.  
+None.
 
 **Example**
 
@@ -1212,7 +1212,7 @@ CLASSB_TestWDT(void);
 
 **Remarks**
 
-Calling this function results in device reset by the WDT. 
+Calling this function results in device reset by the WDT.
 
 ### CLASSB_Init
 
@@ -1225,7 +1225,7 @@ CLASSB_INIT_STATUS CLASSB_Init(void);
 **Summary**
 
 This function is executed on every device reset. This shall be called right after the reset, before any other
-initialization is performed.  
+initialization is performed.
 
 **Description**
 
@@ -1236,19 +1236,19 @@ a. It initializes the global variables used by the Class B library.
 b. Checks the reset cause and decides next course of action.
 
 c. If the reset is not caused by the Class B library, it tests the reserved SRAM area,
- clears all self-test results and performs a WDT test.  
+ clears all self-test results and performs a WDT test.
 
 **Precondition**
 
-None.  
+None.
 
 **Parameters**
 
-None.  
+None.
 
 **Returns**
 
-CLASSB_SST_DONE if all SSTs are successfully executed. CLASSB_SST_NOT_DONE if SSTs are yet to be executed.  
+CLASSB_SST_DONE if all SSTs are successfully executed. CLASSB_SST_NOT_DONE if SSTs are yet to be executed.
 
 **Example**
 
@@ -1258,7 +1258,7 @@ CLASSB_INIT_STATUS init_status = CLASSB_Init();
 
 **Remarks**
 
-None. 
+None.
 
 ### CLASSB_Startup_Tests
 
@@ -1270,7 +1270,7 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void);
 
 **Summary**
 
-This function executes all startup self-tests inserted into classb.c file by the MHC.  
+This function executes all startup self-tests inserted into classb.c file by the MHC.
 
 **Description**
 
@@ -1280,19 +1280,19 @@ If any of the startup self-tests are failed, this function will not return. The 
 Clock and Interrupt are considered non-critical since it may be possible to execute a fail-safe function
 after detecting a failure. In such case, the CLASSB_SelfTest_FailSafe() function is called when a failure
 is detected. In the case of critical failures (CPU registers or internal flash), the corresponding self-test
-remains in an infinite loop to avoid unsafe execution of code.  
+remains in an infinite loop to avoid unsafe execution of code.
 
 **Precondition**
 
-None.  
+None.
 
 **Parameters**
 
-None.  
+None.
 
 **Returns**
 
-Pass or Fail.  
+Pass or Fail.
 
 **Example**
 
@@ -1303,7 +1303,7 @@ startup_tests_status = CLASSB_Startup_Tests();
 
 **Remarks**
 
-This function does not return if any of the self-tests detects a failure. 
+This function does not return if any of the self-tests detects a failure.
 
 ### CLASSB_SST_WDT_Recovery
 
@@ -1315,42 +1315,42 @@ void CLASSB_SST_WDT_Recovery(void);
 
 **Summary**
 
-This function is called if a WDT reset is caused while a startup self-test is running.  
+This function is called if a WDT reset is caused while a startup self-test is running.
 
 **Description**
 
 This function is used inside the CLASSB_Init() function. When the device comes back from a WDT reset,
 if there has been a startup self-test running, it is assumed that the WDT reset has happened because
 a Class B self-test has taken more time that the WDT timeout period. In this case, the
-CLASSB_SST_WDT_Recovery() function is called from CLASSB_Init().  
+CLASSB_SST_WDT_Recovery() function is called from CLASSB_Init().
 
 **Precondition**
 
-None.  
+None.
 
 **Parameters**
 
-None.  
+None.
 
 **Returns**
 
-None.  
+None.
 
 **Example**
 
 ```c
 if ((RSTC_REGS->RSTC_RCAUSE & RSTC_RCAUSE_WDT_Msk) == RSTC_RCAUSE_WDT_Msk)
 {
-if (*classb_test_in_progress == CLASSB_TEST_STARTED)
-{
-CLASSB_SST_WDT_Recovery();
-}
+    if (*classb_test_in_progress == CLASSB_TEST_STARTED)
+    {
+        CLASSB_SST_WDT_Recovery();
+    }
 }
 ```
 
 **Remarks**
 
-This function is for the internal use of the Class B library. 
+This function is for the internal use of the Class B library.
 
 ### CLASSB_App_WDT_Recovery
 
@@ -1362,42 +1362,42 @@ void CLASSB_App_WDT_Recovery(void);
 
 **Summary**
 
-This function is called if a WDT reset is caused during run-time.  
+This function is called if a WDT reset is caused during run-time.
 
 **Description**
 
 This function is used inside the CLASSB_Init() function. When the device comes back from a WDT reset,
 if a WDT test by the Class B library has not been in progress, it is assumed that the WDT reset has
 happened since the application failed to clear the WDT during regular intervals.
-In this case, the CLASSB_App_WDT_Recovery() function is called from CLASSB_Init().  
+In this case, the CLASSB_App_WDT_Recovery() function is called from CLASSB_Init().
 
 **Precondition**
 
-None.  
+None.
 
 **Parameters**
 
-None.  
+None.
 
 **Returns**
 
-None.  
+None.
 
 **Example**
 
 ```c
 if ((RSTC_REGS->RSTC_RCAUSE & RSTC_RCAUSE_WDT_Msk) == RSTC_RCAUSE_WDT_Msk)
 {
-if (!(*wdt_test_in_progress == CLASSB_TEST_STARTED))
-{
-CLASSB_SST_WDT_Recovery();
-}
+    if (!(*wdt_test_in_progress == CLASSB_TEST_STARTED))
+    {
+        CLASSB_SST_WDT_Recovery();
+    }
 }
 ```
 
 **Remarks**
 
-This function is for the internal use of the Class B library. 
+This function is for the internal use of the Class B library.
 
 ### CLASSB_SelfTest_FailSafe
 
@@ -1409,33 +1409,33 @@ void CLASSB_SelfTest_FailSafe(CLASSB_TEST_ID test_id);
 
 **Summary**
 
-This function is called if any of the non-critical tests are failed.  
+This function is called if any of the non-critical tests are failed.
 
 **Description**
 
 The self-tests for SRAM, Clock and Interrupt are considered non-critical since it may be possible
 to execute a fail-safe function after detecting a failure, if the fail-safe routine does not use
 the failed element on the microcontroller. Default implementation of this function is available
-in classb.c file. The function contains an infinite loop. Further code shall be added as per the application need.  
+in classb.c file. The function contains an infinite loop. Further code shall be added as per the application need.
 
 **Precondition**
 
-None.  
+None.
 
 **Parameters**
 
-*test_id* - Identification number of the failed test.  
+*test_id* - Identification number of the failed test.
 
 **Returns**
 
-None.  
+None.
 
 **Example**
 
 ```c
 if (classb_sram_status == CLASSB_TEST_FAILED)
 {
-CLASSB_SelfTest_FailSafe(CLASSB_TEST_RAM);
+    CLASSB_SelfTest_FailSafe(CLASSB_TEST_RAM);
 }
 ```
 
@@ -1445,7 +1445,7 @@ This function must not return to the Class B library since it is called due to a
 Avoid using features which depend on the failed component. For example, if self-test for clock is failed,
 it is not advisable to use UART for error reporting since BAUD rate may not be accurate. In the case of
 SRAM failure, avoid the use of function calls or variables in SRAM. The error reporting mechanism in this
-case can be an IO pin. 
+case can be an IO pin.
 
 ### CLASSB_CPU_RegistersTest
 
@@ -1457,28 +1457,28 @@ CLASSB_TEST_STATUS CLASSB_CPU_RegistersTest(CLASSB_FPU_CONFIG test_fpu, bool run
 
 **Summary**
 
-This self-test checks the processor core registers and FPU registers of the CPU, to detect stuck-at faults.  
+This self-test checks the processor core registers and FPU registers of the CPU, to detect stuck-at faults.
 
 **Description**
 
 This self-test writes test patterns into the processor core registers, special function registers
 and FPU registers, and read them back to detect stuck-at faults. Special function register bits
 which are reserved or should not be modified during the test are not written.
-Testing FPU registers is optional as it may not be used in every application.  
+Testing FPU registers is optional as it may not be used in every application.
 
 **Precondition**
 
-None.  
+None.
 
 **Parameters**
 
-*test_fpu* - Decides whether to check FPU registers or not. 
+*test_fpu* - Decides whether to check FPU registers or not.
 
-*running_context* - False for startup test. True for run-time test.  
+*running_context* - False for startup test. True for run-time test.
 
 **Returns**
 
-*CLASSB_TEST_STATUS* - Status of the test.  
+*CLASSB_TEST_STATUS* - Status of the test.
 
 **Example**
 
@@ -1491,7 +1491,7 @@ classb_test_status = CLASSB_CPU_RegistersTest(CLASSB_FPU_TEST_ENABLE, true);
 **Remarks**
 
 This self-test can be used during startup as well as run-time. If a failure is detected,
-this self-test remains in an infinite loop to avoid unsafe code execution. 
+this self-test remains in an infinite loop to avoid unsafe code execution.
 
 ### CLASSB_CPU_PCTest
 
@@ -1503,25 +1503,25 @@ CLASSB_TEST_STATUS CLASSB_CPU_PCTest(bool running_context);
 
 **Summary**
 
-This self-test checks the Program Counter register (PC) of the CPU, to detect stuck-at faults.  
+This self-test checks the Program Counter register (PC) of the CPU, to detect stuck-at faults.
 
 **Description**
 
 This self-test calls multiple functions in predefined order and verifies that each function is
 executed and returns the expected value. If the return values of all test functions are correct,
-the Program Counter is assumed to be working fine.  
+the Program Counter is assumed to be working fine.
 
 **Precondition**
 
-None.  
+None.
 
 **Parameters**
 
-*running_context* - False for startup test. True for run-time test.  
+*running_context* - False for startup test. True for run-time test.
 
 **Returns**
 
-*CLASSB_TEST_STATUS* - Status of the test.  
+*CLASSB_TEST_STATUS* - Status of the test.
 
 **Example**
 
@@ -1534,7 +1534,7 @@ classb_test_status = CLASSB_CPU_PCTest(true);
 **Remarks**
 
 This self-test can be used during startup as well as run-time. If a failure is detected, this self-test
-remains in an infinite loop to avoid unsafe code execution. 
+remains in an infinite loop to avoid unsafe code execution.
 
 ### CLASSB_FlashCRCGenerate
 
@@ -1546,26 +1546,26 @@ uint32_t CLASSB_FlashCRCGenerate(uint32_t start_addr, uint32_t test_size);
 
 **Summary**
 
-Generates CRC-32 checksum for a given memory area.  
+Generates CRC-32 checksum for a given memory area.
 
 **Description**
 
 This function runs CRC-32 algorithm with the polynomial 0xEDB88320 and returns the generated checksum.
-It uses table based approach where the table is generated during the execution. It uses 0xffffffff as the initial value.  
+It uses table based approach where the table is generated during the execution. It uses 0xffffffff as the initial value.
 
 **Precondition**
 
-None.  
+None.
 
 **Parameters**
 
-*start_addr* - Starting address of the memory block. 
+*start_addr* - Starting address of the memory block.
 
-*test_size* - Size of the memory block.  
+*test_size* - Size of the memory block.
 
 **Returns**
 
-*CLASSB_TEST_STATUS* - Status of the test.  
+*CLASSB_TEST_STATUS* - Status of the test.
 
 **Example**
 
@@ -1578,7 +1578,7 @@ crc_val = CLASSB_FlashCRCGenerate(0, 0xFE000);
 **Remarks**
 
 This function is used inside the Class B library to generate CRC-32 of the internal Flash memory but
-it can be used on any contiguous memory area. 
+it can be used on any contiguous memory area.
 
 ### CLASSB_FlashCRCTest
 
@@ -1590,29 +1590,29 @@ CLASSB_TEST_STATUS CLASSB_FlashCRCTest(uint32_t start_addr, uint32_t test_size, 
 
 **Summary**
 
-This self-test checks the internal Flash program memory to detect single bit faults.  
+This self-test checks the internal Flash program memory to detect single bit faults.
 
 **Description**
 
-This self-test generates CRC-32 checksum for the given memory area and compares it with the expected checksum.  
+This self-test generates CRC-32 checksum for the given memory area and compares it with the expected checksum.
 
 **Precondition**
 
-None.  
+None.
 
 **Parameters**
 
-*start_addr* - Starting address of the memory block. 
+*start_addr* - Starting address of the memory block.
 
-*test_size* - Size of the memory block. 
+*test_size* - Size of the memory block.
 
-*crc_val* - Expected CRC-32 checksum. 
+*crc_val* - Expected CRC-32 checksum.
 
-*running_context* - False for startup test. True for run-time test.  
+*running_context* - False for startup test. True for run-time test.
 
 **Returns**
 
-*CLASSB_TEST_STATUS* - Status of the test.  
+*CLASSB_TEST_STATUS* - Status of the test.
 
 **Example**
 
@@ -1625,7 +1625,7 @@ classb_test_status = CLASSB_FlashCRCTest(0, 0xFE000, *(uint32_t *)FLASH_CRC32_AD
 **Remarks**
 
 This self-test can be used during startup as well as run-time. If a failure is detected, this self-test remains
-in an infinite loop to avoid unsafe code execution. 
+in an infinite loop to avoid unsafe code execution.
 
 ### CLASSB_SRAM_MarchTestInit
 
@@ -1637,29 +1637,29 @@ CLASSB_TEST_STATUS CLASSB_SRAM_MarchTestInit(uint32_t * start_addr, uint32_t tes
 
 **Summary**
 
-This self-test checks the SRAM with the help of RAM March algorithm.  
+This self-test checks the SRAM with the help of RAM March algorithm.
 
 **Description**
 
-This self-test run the selected RAM March algorithm on the SRAM to detect stuck-at fault, DC fault and addressing fault.  
+This self-test run the selected RAM March algorithm on the SRAM to detect stuck-at fault, DC fault and addressing fault.
 
 **Precondition**
 
-None.  
+None.
 
 **Parameters**
 
-*start_addr* - Starting address of the memory block. 
+*start_addr* - Starting address of the memory block.
 
-*test_size* - Size of the memory block. 
+*test_size* - Size of the memory block.
 
-*march_algo* - The selected RAM March algorithm. It can be March C, March C minus or March B. 
+*march_algo* - The selected RAM March algorithm. It can be March C, March C minus or March B.
 
-*running_context* - False for startup test. True for run-time test.  
+*running_context* - False for startup test. True for run-time test.
 
 **Returns**
 
-*CLASSB_TEST_STATUS* - Status of the test.  
+*CLASSB_TEST_STATUS* - Status of the test.
 
 **Example**
 
@@ -1667,12 +1667,12 @@ None.
 CLASSB_TEST_STATUS classb_test_status = CLASSB_TEST_NOT_EXECUTED;
 // Perform run-time test of the internal SRAM
 classb_test_status = CLASSB_SRAM_MarchTestInit((uint32_t *)CLASSB_SRAM_APP_AREA_START,
-1024, CLASSB_SRAM_MARCH_C, true);
+    1024, CLASSB_SRAM_MARCH_C, true);
 ```
 
 **Remarks**
 
-This self-test can be used during startup as well as run-time. Initial 1kB of the SRAM must be reserved for the Class B library. 
+This self-test can be used during startup as well as run-time. Initial 1kB of the SRAM must be reserved for the Class B library.
 
 ### CLASSB_ClockTest
 
@@ -1684,32 +1684,32 @@ CLASSB_TEST_STATUS CLASSB_ClockTest(uint32_t cpu_clock_freq, uint8_t error_limit
 
 **Summary**
 
-This self-test checks whether the CPU clock frequency is within the permissible limit.  
+This self-test checks whether the CPU clock frequency is within the permissible limit.
 
 **Description**
 
 This self-test uses RTC and SysTick to measure the CPU clock frequency. The RTC is clocked at 32768 Hz from
 the XOSC32K and CPU clock can be from any other high frequency oscillator. If the CPU clock frequency is within
 specified error limit, it returns PASS. The test duration is defined by the value of rtc_cycles. The RTC is
-configured to take clock from an external 32.768 kHz accurate crystal.  
+configured to take clock from an external 32.768 kHz accurate crystal.
 
 **Precondition**
 
-None.  
+None.
 
 **Parameters**
 
-*cpu_clock_freq* - Expected CPU clock frequency. 
+*cpu_clock_freq* - Expected CPU clock frequency.
 
-*error_limit* - Permissible error limit (eg; 5 means +-5 percent). 
+*error_limit* - Permissible error limit (eg; 5 means +-5 percent).
 
-*clock_test_rtc_cycles* - The test duration in terms of RTC cycles. 
+*clock_test_rtc_cycles* - The test duration in terms of RTC cycles.
 
-*running_context* - False for startup test. True for run-time test.  
+*running_context* - False for startup test. True for run-time test.
 
 **Returns**
 
-*CLASSB_TEST_STATUS* - Status of the test.  
+*CLASSB_TEST_STATUS* - Status of the test.
 
 **Example**
 
@@ -1722,7 +1722,7 @@ classb_test_status = CLASSB_ClockTest(120000000, 5, 500, true);
 **Remarks**
 
 This self-test can be used during startup as well as run-time. This self-test shall be used only if there is
-an external 32.768 kHz accurate crystal connected to the XOSC32K of the microcontroller. 
+an external 32.768 kHz accurate crystal connected to the XOSC32K of the microcontroller.
 
 ### CLASSB_SST_InterruptTest
 
@@ -1734,28 +1734,28 @@ CLASSB_TEST_STATUS CLASSB_SST_InterruptTest(void);
 
 **Summary**
 
-This self-test checks basic functionality of the interrupt handling mechanism.  
+This self-test checks basic functionality of the interrupt handling mechanism.
 
 **Description**
 
 This self-test configures the Nested Vectored Interrupt Controller (NVIC), the RTC peripheral and the TC0 peripheral
-to test the interrupt handling mechanism of the microcontroller. It verifies that at-least one interrupt is generated
+to test the interrupt handling mechanism of the microcontroller. It verifies that at least one interrupt is generated
 and handled properly. This self-test also checks whether the number of interrupts generated are too many within a given
-time period. It reports a PASS if the RTC has generated at-least one interrupt and the total number of interrupts
+time period. It reports a PASS if the RTC has generated at least one interrupt and the total number of interrupts
 generated by the TC0 is less than the specified upper limit and greater than one. The clock used for RTC is 1kHz
-from the internal OSCULP32K and for TC0, the clock is same as the default CPU clock (48MHz from the DFLL48M).  
+from the internal OSCULP32K and for TC0, the clock is same as the default CPU clock (48MHz from the DFLL48M).
 
 **Precondition**
 
-None.  
+None.
 
 **Parameters**
 
-None.  
+None.
 
 **Returns**
 
-*CLASSB_TEST_STATUS* - Status of the test.  
+*CLASSB_TEST_STATUS* - Status of the test.
 
 **Example**
 
@@ -1767,7 +1767,7 @@ classb_test_status = CLASSB_SST_InterruptTest();
 
 **Remarks**
 
-This self-test can be used only during startup. 
+This self-test can be used only during startup.
 
 ### CLASSB_RST_IOTest
 
@@ -1779,29 +1779,29 @@ CLASSB_TEST_STATUS CLASSB_RST_IOTest(CLASSB_PORT_INDEX port, CLASSB_PORT_PIN pin
 
 **Summary**
 
-This self-test can be used to perform plausibility checks on IO pins.  
+This self-test can be used to perform plausibility checks on IO pins.
 
 **Description**
 
 This self-test checks whether a given IO pin is at the expected logic state. As the exact use of an IO pin is
 decide by the application, it is the responsibility of the caller to configure the IO pin direction and drive
-the pin to the expected state before calling this self-test.  
+the pin to the expected state before calling this self-test.
 
 **Precondition**
 
-Before testing an output pin, call CLASSB_IO_InputSamplingEnable() function to enable input sampling for the IO pin.  
+Before testing an output pin, call CLASSB_IO_InputSamplingEnable() function to enable input sampling for the IO pin.
 
 **Parameters**
 
-*port* - Index of the IO PORT. Defined by enum CLASSB_PORT_INDEX. 
+*port* - Index of the IO PORT. Defined by enum CLASSB_PORT_INDEX.
 
-*pin* - Index of the pin on the given PORT. Defined by enum CLASSB_PORT_PIN. 
+*pin* - Index of the pin on the given PORT. Defined by enum CLASSB_PORT_PIN.
 
-*state* - Expected logic state of the IO pin. It can be PORT_PIN_LOW or PORT_PIN_HIGH. 
+*state* - Expected logic state of the IO pin. It can be PORT_PIN_LOW or PORT_PIN_HIGH.
 
 **Returns**
 
-*CLASSB_TEST_STATUS* - Status of the test.  
+*CLASSB_TEST_STATUS* - Status of the test.
 
 **Example**
 
@@ -1813,7 +1813,7 @@ classb_test_status = CLASSB_RST_IOTest(PORTB, PIN31, PORT_PIN_HIGH);
 
 **Remarks**
 
-This self-test can be used only during run-time. 
+This self-test can be used only during run-time.
 
 ### CLASSB_IO_InputSamplingEnable
 
@@ -1825,28 +1825,28 @@ void CLASSB_IO_InputSamplingEnable(CLASSB_PORT_INDEX port, CLASSB_PORT_PIN pin);
 
 **Summary**
 
-Enable input sampling for an IO pin.  
+Enable input sampling for an IO pin.
 
 **Description**
 
 Before testing an output pin with CLASSB_RST_IOTest() API, call this function to enable input sampling,
-so that the 'IN' register will have the data from the port pin.  
+so that the 'IN' register will have the data from the port pin.
 
 **Precondition**
 
-None.  
+None.
 
 **Parameters**
 
-*port* - Index of the IO PORT. Defined by enum CLASSB_PORT_INDEX. 
+*port* - Index of the IO PORT. Defined by enum CLASSB_PORT_INDEX.
 
-*pin* - Index of the pin on the given PORT. Defined by enum CLASSB_PORT_PIN. 
+*pin* - Index of the pin on the given PORT. Defined by enum CLASSB_PORT_PIN.
 
-*state* - Expected logic state of the IO pin. It can be PORT_PIN_LOW or PORT_PIN_HIGH. 
+*state* - Expected logic state of the IO pin. It can be PORT_PIN_LOW or PORT_PIN_HIGH.
 
 **Returns**
 
-*CLASSB_TEST_STATUS* - Status of the test.  
+*CLASSB_TEST_STATUS* - Status of the test.
 
 **Example**
 
@@ -1858,4 +1858,4 @@ classb_test_status = CLASSB_RST_IOTest(PORTB, PIN31, PORT_PIN_HIGH);
 
 **Remarks**
 
-This self-test can be used only during run-time. 
+This self-test can be used only during run-time.

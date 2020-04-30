@@ -33,6 +33,10 @@ a fail-safe function after detecting a failure. In such case, the `CLASSB_SelfTe
 called when a failure is detected. In the case of critical failures (CPU registers or internal flash),
 the corresponding self-test remains in an infinite loop to avoid unsafe execution of code.
 
+**Note**
+1. The library defines the `_on_reset` function and handles some of the reset causes.
+The application developer shall insert functions to handle the rest of the reset causes.
+
 
 ## WDT Test and Timeout
 

@@ -13,7 +13,7 @@ The Class B Library provides APIs to perform self-tests for the on-board systems
 | **Acronym**   | **Description**                                                 |
 | ---           | ---                                                             |
 | API           | Application Programming Interface. |
-| AAPCS         | The Procedure Call Standard for the ARM Architecture (AAPCS). |
+| AAPCS         | The Procedure Call Standard for the ARM Architecture. |
 | Driver        | Driver is a software which depends on a lower software layer and abstract hardware and Real Time Operating System (RTOS) details for the middleware and applications. |
 | MHC           | MPLAB® Harmony Configurator. |
 | MHCM          | MPLAB® Harmony 3 Content Manager tool. |
@@ -34,13 +34,13 @@ Following table shows the components tested by the Class B library.
 
 | **Component** | **Reference (Table H1 of IEC 60730-1)** | **Fault/Error** | **Acceptable Measures** |
 | --- | --- | --- | --- |
-| CPU Registers         | 1.1                             | Stuck at                                | Static memory test |
-| CPU Program Counter   | 1.3                             | Stuck at                                | Static memory test |
+| CPU Registers         | 1.1                             | Stuck-at                                | Static memory test |
+| CPU Program Counter   | 1.3                             | Stuck-at                                | Static memory test |
 | Interrupts            | 2                               | No interrupt / too frequent interrupt   | Functional test |
 | CPU Clock             | 3                               | Wrong frequency                         | Frequency monitoring  |
 | Flash                 | 4.1                             | All single bit faults                   | Modified checksum |
 | SRAM                  | 4.2                             | DC fault                                | Static memory test |
-| SRAM data path        | 5.1                             | Stuck at                                | Static memory test |
+| SRAM data path        | 5.1                             | Stuck-at                                | Static memory test |
 | SRAM data path        | 5.2                             | Wrong address                           | Static memory test |
 | Digital I/O           | 7.1                             | Abnormal operation                      | Input comparison or output verification |
 

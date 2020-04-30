@@ -51,8 +51,8 @@ Figure - Class B library in MPLAB Harmony 3
 
 The Class B library contains many self-test routines those can be executed at startup and run-time.
 If a self-test is executed at startup, it is called as a Start-up Self-test (SST) and if it is executed
-at run-time, then it is called a Run-time Self-test (RST). There are a few self-test which can be used
-only as an SST or as RST, such self-tests has &#39;SST&#39; or &#39;RST&#39; in the API name
+at run-time, then it is called a Run-time Self-test (RST). There are a few self-tests which can be used
+only as SST or as RST, such self-tests have &#39;SST&#39; or &#39;RST&#39; in the API name
 eg: `CLASSB_RST_IOTest()`, `CLASSB_SST_InterruptTest()`. If a self-test API does not have &#39;SST&#39;
 or &#39;RST&#39; in its name, then it can be used at startup as well as runtime.
 
@@ -71,7 +71,7 @@ to change the size of the tested area.
 
 RSTs can be used by the application during run-time to check safe operation of different components
 in the microcontroller. These tests are non-destructive. In the case of run-time tests, the application
-shall decide &#39;which&#39; test to execute &#39;when&#39;.
+shall decide which test to execute when.
 
 
 ## Components in the Library
@@ -125,7 +125,7 @@ Generic Flow of Non-Critical Tests
 ## CPU Registers
 
 The ARM® Cortex®-M4F is the CPU on the SAM D5x/E5x devices. The Class B library checks the processor
-core registers and FPU registers for &#39;stuck-at&#39; faults. The &#39;stuck at&#39; condition causes
+core registers and FPU registers for stuck-at faults. The stuck-at condition causes
 register bit to remain at logic 0 or logic 1. Code execution should be stopped if this error condition
 is detected in any of the CPU registers.
 
@@ -141,8 +141,8 @@ Flow chart of the self-test for CPU registers
 
 ## Program Counter (PC)
 
-The self-test for PC checks whether a &#39;stuck-at&#39; condition is present in the PC register.
-The &#39;stuck at&#39; condition causes register bit to remain at logic 0 or logic 1.
+The self-test for PC checks whether a stuck-at condition is present in the PC register.
+The stuck-at condition causes register bit to remain at logic 0 or logic 1.
 Code execution should be stopped if this error condition is detected.
 
 The self-test for PC calls multiple functions in predefined order and verifies that each function
@@ -158,9 +158,9 @@ Flow chart of the self-test for Program Counter (PC)
 
 The internal flash memory of the device needs to be checked for proper functionality.
 The self-test for internal flash performs CRC check on the internal flash memory of the device.
-The address range is configurable for this self-test. It runs CRC-32 algorithm with the polynomial 0xEDB88320
-and compares the generated checksum with the expected checksum. It uses table-based approach where the table
-is generated during the execution.
+The address range is configurable for this self-test. It runs CRC-32 algorithm with
+reversed representation of the polynomial 0x04C11DB7 and compares the generated checksum
+with the expected checksum. It uses table-based approach where the table is generated during the execution.
 
 This self-test uses a CRC-32 generation function. This function is used inside the Class B library to generate
 CRC-32 of the internal Flash memory but it can be used on any contiguous memory area.
@@ -200,12 +200,18 @@ Flow chart of the internal routine for SRAM self-test
 
 ## Clock
 
-The self-test for CPU clock checks whether the CPU clock frequency is within the permissible limit.
-It uses RTC and SysTick to measure the CPU clock frequency. The RTC is clocked at 32768 Hz from the XOSC32K
-and CPU clock can be from any other high frequency oscillator. If the CPU clock frequency is within specified
-error limit, it returns PASS. The test duration is defined by one of the input arguments.
-The RTC is configured to take clock from an external 32.768 kHz accurate crystal. The clock self-test can be
-used at startup as well as run-time.
+The self-test for CPU clock checks whether the CPU clock frequency is within the permissible range.
+It uses RTC and SysTick to measure the CPU clock frequency. The RTC is clocked at 32768 Hz from the
+32 kHz External Crystal Oscillator and CPU clock can be from any other high frequency oscillator.
+If the CPU clock frequency is within specified error limit, it returns PASS. The test duration is
+defined by one of the input arguments.
+The clock self-test can be used at startup as well as run-time.
+
+**Note**
+1. This self-test uses the RTC peripheral. Thus, if it is used during run-time, the RTC shall not
+be used by the application for continuous modes such as real time clock or calendar. If the RTC is used
+for some other purpose, it must be reconfigured after running the clock self-test.
+2. Keep the clock test duration lesser than the WDT timeout period, to avoid the WDT resetting the device.
 
 Flow chart of the self-test for CPU clock frequency
 
@@ -215,13 +221,18 @@ Flow chart of the self-test for CPU clock frequency
 ## Interrupt
 
 The self-test for this element checks the interrupts functionality of the microcontroller. It configures the
-Nested Vectored Interrupt Controller (NVIC), the RTC peripheral and the TC0 peripheral to test the interrupt
-handling mechanism. It verifies that at-least one interrupt is generated and handled properly.
+Nested Vectored Interrupt Controller (NVIC), the Real-Time Counter (RTC) and the Timer Counter 0 (TC0)
+peripherals to test the interrupt handling mechanism.
+It verifies that at least one interrupt is generated and handled properly.
 This self-test also checks whether the number of interrupts generated are too many within a given time period.
-It reports a PASS if the RTC has generated at-least one interrupt and the total number of interrupts generated
+It reports a PASS if the RTC has generated at least one interrupt and the total number of interrupts generated
 by the TC0 is greater than one and less than the specified upper limit. The clock used for RTC is 1kHz from the
 internal OSCULP32K and for TC0 the clock is same as the default CPU clock (48MHz from the DFLL48M).
 The interrupt self-test can be used only at startup.
+
+**Note**
+1. This startup self-test utilizes the interrupts generated by RTC and TC0. For run-time testing of interrupts,
+a separate self-test need to be developed.
 
 Flow chart of the self-test for interrupts
 
@@ -230,14 +241,14 @@ Flow chart of the self-test for interrupts
 
 ## IO pin
 
-The self-test for IO pins verifies that a given output pin is able to keep the given logic level on the pin
-and a given input pin is able to read the logic state present on the pin.
+The self-test for IO pins verifies that any output pin is able to keep the configured logic state on the pin
+and any input pin is able to read the logic state present on the pin.
 
 As the exact use of an IO pin is decide by the application, it is the responsibility of the application to
 configure the IO pin direction and drive the pin to the expected state before calling this self-test.
 Before testing an output pin, call `CLASSB_IO_InputSamplingEnable()` function to enable input sampling for the IO pin.
 When testing an input pin, ensure that the IO pin is externally kept at a defined logic state.
-The IO pin self-test can be used at only at run-time.
+The IO pin self-test can be used only at run-time.
 
 Flow chart of the self-test for IO pins
 
