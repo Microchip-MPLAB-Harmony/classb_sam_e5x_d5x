@@ -81,6 +81,7 @@ nav_order: 5
 | CLASSB_ClearTestResults | Clears the results of SSTs or RSTs. |
 | CLASSB_GetTestResult | Returns the result of the specified self-test. |
 | CLASSB_TestWDT | This function tests the WatchDog Timer (WDT). |
+| CLASSB_GlobalsInit | This function initializes the global variables for the classb library. |
 | CLASSB_Init | This function is executed on every device reset. This shall be called right after the reset, before any other initialization is performed. |
 | CLASSB_Startup_Tests | This function executes all startup self-tests inserted into classb.c file. |
 | CLASSB_SST_WDT_Recovery | This function is called if a WDT reset has happened during the execution of an SST. |
@@ -1179,7 +1180,7 @@ None.
 **Function**
 
 ```c
-void CLASSB_TestWDT(void);
+static void CLASSB_TestWDT(void);
 ```
 
 **Summary**
@@ -1214,12 +1215,51 @@ CLASSB_TestWDT(void);
 
 Calling this function results in device reset by the WDT.
 
+### CLASSB_GlobalsInit
+
+**Function**
+
+```c
+static void CLASSB_GlobalsInit(void);
+```
+
+**Summary**
+
+This function initializes the global variables for the classb library.
+
+**Description**
+
+The parameters used by the Class B library are access with the help of pointer variables.
+These variables are initialized by this function. 
+
+**Precondition**
+
+None.
+
+**Parameters**
+
+None.
+
+**Returns**
+
+None.
+
+**Example**
+
+```c
+CLASSB_GlobalsInit();
+```
+
+**Remarks**
+
+None.
+
 ### CLASSB_Init
 
 **Function**
 
 ```c
-CLASSB_INIT_STATUS CLASSB_Init(void);
+static CLASSB_INIT_STATUS CLASSB_Init(void);
 ```
 
 **Summary**
@@ -1265,7 +1305,7 @@ None.
 **Function**
 
 ```c
-CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void);
+static CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void);
 ```
 
 **Summary**
@@ -1310,7 +1350,7 @@ This function does not return if any of the self-tests detects a failure.
 **Function**
 
 ```c
-void CLASSB_SST_WDT_Recovery(void);
+static void CLASSB_SST_WDT_Recovery(void);
 ```
 
 **Summary**
@@ -1357,7 +1397,7 @@ This function is for the internal use of the Class B library.
 **Function**
 
 ```c
-void CLASSB_App_WDT_Recovery(void);
+static void CLASSB_App_WDT_Recovery(void);
 ```
 
 **Summary**

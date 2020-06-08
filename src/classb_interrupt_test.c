@@ -70,14 +70,14 @@ extern void _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE test_type,
     CLASSB_TEST_ID test_id, CLASSB_TEST_STATUS value);
 
 /*============================================================================
-void _CLASSB_RTC_handler(void)
+static void _CLASSB_RTC_handler(void)
 ------------------------------------------------------------------------------
 Purpose: Custom handler used for RTC Interrupt test
 Input  : None.
 Output : None.
 Notes  : The RTC is reset after successfully performing the test.
 ============================================================================*/
-void _CLASSB_RTC_Handler(void)
+static void _CLASSB_RTC_Handler(void)
 {
     // Clear the checked interrupt flag
     RTC_REGS->MODE0.RTC_INTFLAG = RTC_MODE0_INTFLAG_CMP0_Msk;
@@ -92,14 +92,15 @@ void _CLASSB_RTC_Handler(void)
 }
 
 /*============================================================================
-void _CLASSB_TC0_Handler(void)
+static void _CLASSB_TC0_Handler(void)
 ------------------------------------------------------------------------------
-Purpose: Custom handler used for TC Interrupt test
+Purpose: Custom handler used for TC Interrupt test. It clears the interrupt
+         flag and updates the interrupt count variable.
 Input  : None.
 Output : None.
-Notes  : The TC0 is reset after successfully performing the test.
+Notes  : None.
 ============================================================================*/
-void _CLASSB_TC0_Handler(void)
+static void _CLASSB_TC0_Handler(void)
 {
     // Clear the checked interrupt flag
     TC0_REGS->COUNT16.TC_INTFLAG = TC_INTFLAG_OVF_Msk;
@@ -107,14 +108,14 @@ void _CLASSB_TC0_Handler(void)
 }
 
 /*============================================================================
-void _CLASSB_BuildVectorTable(void)
+static void _CLASSB_BuildVectorTable(void)
 ------------------------------------------------------------------------------
 Purpose: Build the vector table for Interrupt self-test
 Input  : None.
 Output : None.
 Notes  : The vector table used by this test is placed in SRAM.
 ============================================================================*/
-void _CLASSB_BuildVectorTable(void)
+static void _CLASSB_BuildVectorTable(void)
 {
     uint32_t i = 0;
     uint32_t vector_start = (uint32_t)&__svectors;
@@ -133,7 +134,7 @@ void _CLASSB_BuildVectorTable(void)
 }
 
 /*============================================================================
-void _CLASSB_RTC_Init(void)
+static void _CLASSB_RTC_Init(void)
 ------------------------------------------------------------------------------
 Purpose: Configure RTC peripheral for Interrupt self-test
 Input  : None.
@@ -141,7 +142,7 @@ Output : None.
 Notes  : The clocks required for RTC are enabled after reset. This function
          does not modify the default clocks.
 ============================================================================*/
-void _CLASSB_RTC_Init(void)
+static void _CLASSB_RTC_Init(void)
 {
     // Select the RTC clock
     OSC32KCTRL_REGS->OSC32KCTRL_RTCCTRL = OSC32KCTRL_RTCCTRL_RTCSEL_ULP1K;
@@ -170,14 +171,14 @@ void _CLASSB_RTC_Init(void)
 }
 
 /*============================================================================
-void _CLASSB_TC0_CompareInit(void)
+static void _CLASSB_TC0_CompareInit(void)
 ------------------------------------------------------------------------------
 Purpose: Configure TC peripheral for Interrupt self-test
 Input  : None.
 Output : None.
 Notes  : The TC0 is reset after successfully performing the test.
 ============================================================================*/
-void _CLASSB_TC0_CompareInit( void )
+static void _CLASSB_TC0_CompareInit( void )
 {
     // Enable APB clock for TC0
     MCLK_REGS->MCLK_APBAMASK |= MCLK_APBAMASK_TC0_Msk;
@@ -213,14 +214,14 @@ void _CLASSB_TC0_CompareInit( void )
 }
 
 /*============================================================================
-void _CLASSB_NVIC_Init(void)
+static void _CLASSB_NVIC_Init(void)
 ------------------------------------------------------------------------------
 Purpose: Initializes the NVIC
 Input  : None.
 Output : None.
 Notes  : None.
 ============================================================================*/
-void _CLASSB_NVIC_Init(void)
+static void _CLASSB_NVIC_Init(void)
 {
     /* Enable NVIC Controller */
     __DMB();

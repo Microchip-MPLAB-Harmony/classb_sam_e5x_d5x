@@ -66,20 +66,20 @@ extern void _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE test_type,
     CLASSB_TEST_ID test_id, CLASSB_TEST_STATUS value);
 
 /*============================================================================
-void _CLASSB_Clock_SysTickGetVal(void)
+static uint32_t _CLASSB_Clock_SysTickGetVal(void)
 ------------------------------------------------------------------------------
 Purpose: Reads the VAL register of the SysTick
 Input  : None.
 Output : None.
 Notes  : None.
 ============================================================================*/
-uint32_t _CLASSB_Clock_SysTickGetVal ( void )
+static uint32_t _CLASSB_Clock_SysTickGetVal ( void )
 {
 	return (SysTick->VAL);
 }
 
 /*============================================================================
-void _CLASSB_Clock_SysTickStart(void)
+static void _CLASSB_Clock_SysTickStart(void)
 ------------------------------------------------------------------------------
 Purpose: Configure the SysTick for clock self-test
 Input  : None.
@@ -87,7 +87,7 @@ Output : None.
 Notes  : If SysTick is used by the application, ensure that it
          is reconfigured after the clock self test.
 ============================================================================*/
-void _CLASSB_Clock_SysTickStart ( void )
+static void _CLASSB_Clock_SysTickStart ( void )
 {
 	SysTick->LOAD = CLASSB_CLOCK_MAX_SYSTICK_VAL;
     SysTick->VAL = 0;
@@ -95,14 +95,14 @@ void _CLASSB_Clock_SysTickStart ( void )
 }
 
 /*============================================================================
-void _CLASSB_Clock_RTC_Enable(void)
+static void _CLASSB_Clock_RTC_Enable(void)
 ------------------------------------------------------------------------------
 Purpose: Enables the RTC
 Input  : None.
 Output : None.
 Notes  : None.
 ============================================================================*/
-void _CLASSB_Clock_RTC_Enable ( void )
+static void _CLASSB_Clock_RTC_Enable ( void )
 {
     RTC_REGS->MODE0.RTC_CTRLA |= RTC_MODE0_CTRLA_ENABLE_Msk;
     while((RTC_REGS->MODE0.RTC_SYNCBUSY & RTC_MODE0_SYNCBUSY_ENABLE_Msk) == RTC_MODE0_SYNCBUSY_ENABLE_Msk)
@@ -113,7 +113,7 @@ void _CLASSB_Clock_RTC_Enable ( void )
 }
 
 /*============================================================================
-void _CLASSB_Clock_RTC_ClockInit(void)
+static void _CLASSB_Clock_RTC_ClockInit(void)
 ------------------------------------------------------------------------------
 Purpose: Configure clocks for the RTC peripheral
 Input  : None.
@@ -122,7 +122,7 @@ Notes  : This self-test configures RTC to use an external
          32.768kHz Crystal as reference clock. Do not use this self-test
          if the external crystal is not available.
 ============================================================================*/
-void _CLASSB_Clock_RTC_ClockInit(void)
+static void _CLASSB_Clock_RTC_ClockInit(void)
 {
     // Enable APB clock for RTC
     MCLK_REGS->MCLK_APBAMASK |= MCLK_APBAMASK_RTC_Msk;
@@ -140,14 +140,14 @@ void _CLASSB_Clock_RTC_ClockInit(void)
 }
 
 /*============================================================================
-void _CLASSB_Clock_RTC_Init(void)
+static void _CLASSB_Clock_RTC_Init(void)
 ------------------------------------------------------------------------------
 Purpose: Configure RTC peripheral for CPU clock self-test
 Input  : None.
 Output : None.
 Notes  : The clocks required for RTC are configured in a separate function.
 ============================================================================*/
-void _CLASSB_Clock_RTC_Init(uint32_t test_cycles)
+static void _CLASSB_Clock_RTC_Init(uint32_t test_cycles)
 {
     RTC_REGS->MODE0.RTC_CTRLA = RTC_MODE0_CTRLA_SWRST_Msk;
 

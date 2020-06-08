@@ -76,10 +76,6 @@ void CLASSB_ClearTestResults(CLASSB_TEST_TYPE test_type);
 CLASSB_TEST_STATUS CLASSB_GetTestResult(CLASSB_TEST_TYPE test_type,
     CLASSB_TEST_ID test_id);
 
-// Functions called after WDT reset
-void CLASSB_SST_WDT_Recovery(void);
-void CLASSB_App_WDT_Recovery(void);
-
 // Function to be called if a non-critical self-test is failed.
 void CLASSB_SelfTest_FailSafe(CLASSB_TEST_ID cb_test_id);
 

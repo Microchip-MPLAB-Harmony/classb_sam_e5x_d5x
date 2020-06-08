@@ -82,14 +82,36 @@ __attribute__((persistent)) volatile uint32_t * interrupt_count;
  *----------------------------------------------------------------------------*/
 
 /*============================================================================
-void CLASSB_GlobalsInit(void)
+void CLASSB_SelfTest_FailSafe(CLASSB_TEST_ID cb_test_id)
+------------------------------------------------------------------------------
+Purpose: Called if a non-critical self-test is failed.
+Input  : The ID of the failed test.
+Output : None
+Notes  : The application decides the contents of this function. This function
+         should perform failsafe operation after checking the 'cb_test_id'.
+         This function must not return.
+============================================================================*/
+void CLASSB_SelfTest_FailSafe(CLASSB_TEST_ID cb_test_id)
+{
+#if (defined(__DEBUG) || defined(__DEBUG_D)) && defined(__XC32)
+    __builtin_software_breakpoint();
+#endif
+    // Infinite loop
+    while (1)
+    {
+        ;
+    }
+}
+
+/*============================================================================
+static void CLASSB_GlobalsInit(void)
 ------------------------------------------------------------------------------
 Purpose: Initialization of global variables for the classb library.
 Input  : None
 Output : None
 Notes  : This function is called before C startup code
 ============================================================================*/
-void CLASSB_GlobalsInit(void)
+static void CLASSB_GlobalsInit(void)
 {
     /* Initialize persistent pointers
      * These variables point to address' in the reserved SRAM for the
@@ -109,14 +131,14 @@ void CLASSB_GlobalsInit(void)
 }
 
 /*============================================================================
-void CLASSB_App_WDT_Recovery(void)
+static void CLASSB_App_WDT_Recovery(void)
 ------------------------------------------------------------------------------
 Purpose: Called if a WDT reset is caused by the application
 Input  : None
 Output : None
 Notes  : The application decides the contents of this function.
 ============================================================================*/
-void CLASSB_App_WDT_Recovery(void)
+static void CLASSB_App_WDT_Recovery(void)
 {
 #if (defined(__DEBUG) || defined(__DEBUG_D)) && defined(__XC32)
     __builtin_software_breakpoint();
@@ -129,7 +151,7 @@ void CLASSB_App_WDT_Recovery(void)
 }
 
 /*============================================================================
-void CLASSB_SST_WDT_Recovery(void)
+static void CLASSB_SST_WDT_Recovery(void)
 ------------------------------------------------------------------------------
 Purpose: Called after WDT reset, to indicate that a Class B function is stuck.
 Input  : None
@@ -149,37 +171,14 @@ void CLASSB_SST_WDT_Recovery(void)
 }
 
 /*============================================================================
-void CLASSB_SelfTest_FailSafe(CLASSB_TEST_ID cb_test_id)
-------------------------------------------------------------------------------
-Purpose: Called if a non-critical self-test is failed.
-Input  : None
-Output : None
-Notes  : The application decides the contents of this function. This function
-         should perform failsafe operation after checking the 'cb_test_id'.
-         This function must not return.
-============================================================================*/
-void CLASSB_SelfTest_FailSafe(CLASSB_TEST_ID cb_test_id)
-{
-#if (defined(__DEBUG) || defined(__DEBUG_D)) && defined(__XC32)
-    __builtin_software_breakpoint();
-#endif
-    // Infinite loop
-    while (1)
-    {
-        ;
-    }
-}
-
-
-/*============================================================================
-void CLASSB_TestWDT(void)
+static void CLASSB_TestWDT(void)
 ------------------------------------------------------------------------------
 Purpose: Function to check WDT after a device reset.
 Input  : None
 Output : None
 Notes  : None
 ============================================================================*/
-void CLASSB_TestWDT(void)
+static void CLASSB_TestWDT(void)
 {
     /* This persistent flag is checked after reset */
     *wdt_test_in_progress = CLASSB_TEST_STARTED;
@@ -219,7 +218,7 @@ void CLASSB_TestWDT(void)
 }
 
 /*============================================================================
-void CLASSB_Init(void)
+static CLASSB_INIT_STATUS CLASSB_Init(void)
 ------------------------------------------------------------------------------
 Purpose: To check reset cause and decide the startup flow.
 Input  : None
@@ -228,8 +227,7 @@ Notes  : This function is executed on every device reset. This shall be
          called right after the reset, before any other initialization is
          performed.
 ============================================================================*/
-
-CLASSB_INIT_STATUS CLASSB_Init(void)
+static CLASSB_INIT_STATUS CLASSB_Init(void)
 {
     /* Initialize persistent pointers
      * These variables point to address' in the reserved SRAM for the
@@ -304,7 +302,7 @@ CLASSB_INIT_STATUS CLASSB_Init(void)
 }
 
 /*============================================================================
-void CLASSB_Startup_Tests(void)
+static CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
 ------------------------------------------------------------------------------
 Purpose: Call all startup self-tests.
 Input  : None
@@ -314,7 +312,7 @@ Notes  : This function calls all the configured self-tests during startup.
          the startup self-tests. If startup tests are not enabled via MHC,
          this function enables the WDT and returns CLASSB_STARTUP_TEST_NOT_EXECUTED.
 ============================================================================*/
-CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
+static CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
 {
     CLASSB_STARTUP_STATUS cb_startup_status = CLASSB_STARTUP_TEST_NOT_EXECUTED;
     <#if (CLASSB_CPU_TEST_OPT?? && CLASSB_CPU_TEST_OPT == true) ||
@@ -476,7 +474,6 @@ CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
     </#if>
     return cb_startup_status;
 }
-
 
 /*============================================================================
 void _on_reset(void)

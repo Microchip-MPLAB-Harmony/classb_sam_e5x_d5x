@@ -65,44 +65,44 @@ extern void _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE test_type,
     CLASSB_TEST_ID test_id, CLASSB_TEST_STATUS value);
 
 /*============================================================================
-uint32_t _CLASSB_GetStackPointer(void)
+static uint32_t _CLASSB_GetStackPointer(void)
 ------------------------------------------------------------------------------
 Purpose: Get the address stored in the Stack Pointer.
 Input  : None
 Output : Address stored in the Stack Pointer register.
 Notes  : This function is used by SRAM tests.
 ============================================================================*/
-uint32_t _CLASSB_GetStackPointer(void)
+static uint32_t _CLASSB_GetStackPointer(void)
 {
-    uint32_t result;
+    uint32_t result = 0;
 
-     __asm__ volatile ("MRS %0, msp\n" : "=r" (result));
+    __ASM volatile ("MRS %0, msp\n" : "=r" (result));
 
-    return(result);
+    return result;
 }
 
 /*============================================================================
-void _CLASSB_SetStackPointer(uint32_t new_stack_address)
+static void _CLASSB_SetStackPointer(uint32_t new_stack_address)
 ------------------------------------------------------------------------------
 Purpose: Store a new address into the Stack Pointer.
 Input  : New address for the Stack.
 Output : None
 Notes  : This function is used by SRAM tests.
 ============================================================================*/
-void _CLASSB_SetStackPointer(uint32_t new_stack_address)
+static void _CLASSB_SetStackPointer(uint32_t new_stack_address)
 {
-    __asm__ volatile ("MSR msp, %0\n" : : "r" (new_stack_address));
+    __ASM volatile ("MSR msp, %0\n" : : "r" (new_stack_address));
 }
 
 /*============================================================================
-void _CLASSB_MemCopy(uint32_t* dest, uint32_t* src, uint32_t size_in_bytes)
+static void _CLASSB_MemCopy(uint32_t* dest, uint32_t* src, uint32_t size_in_bytes)
 ------------------------------------------------------------------------------
 Purpose: Copies given number of bytes, from one SRAM area to the other.
 Input  : Destination address, source address and size
 Output : None
 Notes  : This function is used by SRAM tests.
 ============================================================================*/
-void _CLASSB_MemCopy(uint32_t* dest, uint32_t* src, uint32_t size_in_bytes)
+static void _CLASSB_MemCopy(uint32_t* dest, uint32_t* src, uint32_t size_in_bytes)
 {
     uint32_t i = 0;
     uint32_t size_in_words = size_in_bytes / 4;
@@ -516,7 +516,8 @@ Purpose: Initialize to perform March-tests on SRAM.
 Input  : Start address, size of SRAM area to be tested,
          selected algorithm and the context (startup or run-time)
 Output : Test status.
-Notes  : None.
+Notes  : This function uses register variables since the stack
+         in SRAM also need to be tested.
 ============================================================================*/
 CLASSB_TEST_STATUS CLASSB_SRAM_MarchTestInit(uint32_t * start_addr,
     uint32_t test_size_bytes, CLASSB_SRAM_MARCH_ALGO march_algo,
@@ -561,14 +562,56 @@ CLASSB_TEST_STATUS CLASSB_SRAM_MarchTestInit(uint32_t * start_addr,
             _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_RAM,
                 CLASSB_TEST_INPROGRESS);
         }
+        
         sram_init_retval = CLASSB_SRAM_MarchTest(start_addr, test_size_bytes,
             march_algo, running_context);
+
+        if (sram_init_retval == CLASSB_TEST_PASSED)
+        {
+            if (running_context == true)
+            {
+                _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_RAM,
+                    CLASSB_TEST_PASSED);
+            }
+            else
+            {
+                _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_RAM,
+                    CLASSB_TEST_PASSED);
+            }
+        }
+        else if (sram_init_retval == CLASSB_TEST_FAILED)
+        {
+            if (running_context == true)
+            {
+                _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_RAM,
+                    CLASSB_TEST_FAILED);
+            }
+            else
+            {
+                _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_RAM,
+                    CLASSB_TEST_FAILED);
+            }
+            
+            CLASSB_SelfTest_FailSafe(CLASSB_TEST_RAM);
+        }
+        
         _CLASSB_SetStackPointer(stack_address);
     }
 
     return sram_init_retval;
 }
 
+/*============================================================================
+CLASSB_TEST_STATUS CLASSB_SRAM_MarchTest(uint32_t * start_addr,
+    uint32_t test_size_bytes, CLASSB_SRAM_MARCH_ALGO march_algo,
+    bool running_context)
+------------------------------------------------------------------------------
+Purpose: Perform March-tests on SRAM.
+Input  : Start address, size of SRAM area to be tested,
+         selected algorithm and the context (startup or run-time)
+Output : Test status.
+Notes  : None.
+============================================================================*/
 CLASSB_TEST_STATUS CLASSB_SRAM_MarchTest(uint32_t * start_addr,
     uint32_t test_size_bytes, CLASSB_SRAM_MARCH_ALGO march_algo,
     bool running_context)
@@ -623,7 +666,7 @@ CLASSB_TEST_STATUS CLASSB_SRAM_MarchTest(uint32_t * start_addr,
     }
 
     // If the tested area is not a multiple of 512 bytes
-    if (march_c_short_itr_size > 0)
+    if ((march_c_short_itr_size > 0) && (march_test_retval == true))
     {
         iteration_start_addr = (uint32_t *)mem_start_address + (march_c_iterations * CLASSB_SRAM_TEST_BUFFER_SIZE);
         _CLASSB_MemCopy((uint32_t *)CLASSB_SRAM_BUFF_START_ADDRESS,
@@ -655,35 +698,6 @@ CLASSB_TEST_STATUS CLASSB_SRAM_MarchTest(uint32_t * start_addr,
             _CLASSB_MemCopy(iteration_start_addr,
                 (uint32_t *)CLASSB_SRAM_BUFF_START_ADDRESS, march_c_short_itr_size);
         }
-
-    }
-
-    if (classb_sram_status == CLASSB_TEST_PASSED)
-    {
-        if (running_context == true)
-        {
-            _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_RAM,
-                CLASSB_TEST_PASSED);
-        }
-        else
-        {
-            _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_RAM,
-                CLASSB_TEST_PASSED);
-        }
-    }
-    else if (classb_sram_status == CLASSB_TEST_FAILED)
-    {
-        if (running_context == true)
-        {
-            _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_RAM,
-                CLASSB_TEST_FAILED);
-        }
-        else
-        {
-            _CLASSB_UpdateTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_RAM,
-                CLASSB_TEST_FAILED);
-        }
-        CLASSB_SelfTest_FailSafe(CLASSB_TEST_RAM);
     }
 
     return classb_sram_status;
