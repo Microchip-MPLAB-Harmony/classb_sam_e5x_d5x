@@ -822,7 +822,19 @@
             <User dnOrder="0" value="true"/>
           </Values>
         </Boolean>
-        <Boolean dnOrder="4" id="CLASSB_FPU_OPT">
+        <Hex dnOrder="4" id="CLASSB_FLASHCRC_ADDR">
+          <Attributes dnOrder="0">
+            <Boolean dnOrder="0" id="visible">
+              <Value dnOrder="0">false</Value>
+            </Boolean>
+          </Attributes>
+        </Hex>
+        <Boolean dnOrder="5" id="CLASSB_FLASH_CRC_CONF">
+          <Values dnOrder="0">
+            <User dnOrder="0" value="false"/>
+          </Values>
+        </Boolean>
+        <Boolean dnOrder="6" id="CLASSB_FPU_OPT">
           <Attributes dnOrder="0">
             <Boolean dnOrder="0" id="visible">
               <Value dnOrder="0">true</Value>
@@ -832,26 +844,26 @@
             <User dnOrder="0" value="true"/>
           </Values>
         </Boolean>
-        <Boolean dnOrder="5" id="CLASSB_INTERRUPT_TEST_OPT">
+        <Boolean dnOrder="7" id="CLASSB_INTERRUPT_TEST_OPT">
           <Values dnOrder="0">
             <User dnOrder="0" value="true"/>
           </Values>
         </Boolean>
-        <KeyValueSet dnOrder="6" id="CLASSB_SRAM_MARCH_ALGORITHM">
+        <KeyValueSet dnOrder="8" id="CLASSB_SRAM_MARCH_ALGORITHM">
           <Attributes dnOrder="0">
             <Boolean dnOrder="0" id="visible">
               <Value dnOrder="0">true</Value>
             </Boolean>
           </Attributes>
         </KeyValueSet>
-        <Integer dnOrder="7" id="CLASSB_SRAM_MARCH_SIZE">
+        <Integer dnOrder="9" id="CLASSB_SRAM_MARCH_SIZE">
           <Attributes dnOrder="0">
             <Boolean dnOrder="0" id="visible">
               <Value dnOrder="0">true</Value>
             </Boolean>
           </Attributes>
         </Integer>
-        <Boolean dnOrder="8" id="CLASSB_SRAM_TEST_OPT">
+        <Boolean dnOrder="10" id="CLASSB_SRAM_TEST_OPT">
           <Values dnOrder="0">
             <User dnOrder="0" value="true"/>
           </Values>
@@ -874,85 +886,104 @@
             <Dynamic dnOrder="0" id="sercom2" value="255"/>
           </Values>
         </Hex>
-        <Integer dnOrder="1" id="I2CS_SDASETUP_TIME_REG_VALUE">
+        <Integer dnOrder="1" id="I2CS_SDASETUP_TIME_NS">
+          <Attributes dnOrder="0">
+            <Integer dnOrder="0" id="max">
+              <Value dnOrder="0">2050</Value>
+            </Integer>
+          </Attributes>
+        </Integer>
+        <Integer dnOrder="2" id="I2CS_SDASETUP_TIME_REG_VALUE">
           <Values dnOrder="0">
             <Dynamic dnOrder="0" id="sercom2" value="1"/>
           </Values>
         </Integer>
-        <Boolean dnOrder="2" id="I2CS_SDASETUP_TIME_SUPPORT">
+        <Boolean dnOrder="3" id="I2CS_SDASETUP_TIME_SUPPORT">
           <Values dnOrder="0">
             <Dynamic dnOrder="0" id="sercom2" value="true"/>
           </Values>
         </Boolean>
-        <String dnOrder="3" id="RECEIVE_DATA_REGISTER">
+        <String dnOrder="4" id="RECEIVE_DATA_REGISTER">
           <Values dnOrder="0">
             <Dynamic dnOrder="0" id="sercom2" value="&amp;(SERCOM2_REGS-&gt;USART_INT.SERCOM_DATA)"/>
           </Values>
         </String>
-        <Comment dnOrder="4" id="SERCOM_INTERRUPT_ENABLE_COMMENT">
+        <Comment dnOrder="5" id="SERCOM_INTERRUPT_ENABLE_COMMENT">
           <Attributes dnOrder="0">
             <Boolean dnOrder="0" id="visible">
               <Value dnOrder="0">true</Value>
             </Boolean>
           </Attributes>
         </Comment>
-        <KeyValueSet dnOrder="5" id="SERCOM_MODE">
-          <Values dnOrder="0">
+        <KeyValueSet dnOrder="6" id="SERCOM_MODE">
+          <Attributes dnOrder="0">
+            <Boolean dnOrder="0" id="readOnly">
+              <Value dnOrder="0">true</Value>
+            </Boolean>
+          </Attributes>
+          <Values dnOrder="1">
             <Dynamic dnOrder="0" id="sercom2" value="0"/>
           </Values>
         </KeyValueSet>
-        <File dnOrder="6" id="SERCOM_USART_COMMON_HEADER">
+        <File dnOrder="7" id="SERCOM_USART_COMMON_HEADER">
           <Attributes dnOrder="0">
             <Boolean dnOrder="0" id="enabled">
               <Value dnOrder="0">true</Value>
             </Boolean>
           </Attributes>
         </File>
-        <File dnOrder="7" id="SERCOM_USART_HEADER">
+        <File dnOrder="8" id="SERCOM_USART_HEADER">
           <Attributes dnOrder="0">
             <Boolean dnOrder="0" id="enabled">
               <Value dnOrder="0">true</Value>
             </Boolean>
           </Attributes>
         </File>
-        <File dnOrder="8" id="SERCOM_USART_SOURCE">
+        <File dnOrder="9" id="SERCOM_USART_SOURCE">
           <Attributes dnOrder="0">
             <Boolean dnOrder="0" id="enabled">
               <Value dnOrder="0">true</Value>
             </Boolean>
           </Attributes>
         </File>
-        <Integer dnOrder="9" id="SPI_BAUD_REG_VALUE">
+        <Integer dnOrder="10" id="SPI_BAUD_REG_VALUE">
           <Values dnOrder="0">
             <Dynamic dnOrder="0" id="sercom2" value="29"/>
           </Values>
         </Integer>
-        <String dnOrder="10" id="TRANSMIT_DATA_REGISTER">
+        <String dnOrder="11" id="TRANSMIT_DATA_REGISTER">
           <Values dnOrder="0">
             <Dynamic dnOrder="0" id="sercom2" value="&amp;(SERCOM2_REGS-&gt;USART_INT.SERCOM_DATA)"/>
           </Values>
         </String>
-        <Integer dnOrder="11" id="USART_BAUD_VALUE">
+        <Integer dnOrder="12" id="USART_BAUD_VALUE">
           <Values dnOrder="0">
             <Dynamic dnOrder="0" id="sercom2" value="63522"/>
           </Values>
         </Integer>
-        <Boolean dnOrder="12" id="USART_INTERRUPT_MODE">
+        <Boolean dnOrder="13" id="USART_INTERRUPT_MODE">
           <Values dnOrder="0">
             <Dynamic dnOrder="0" id="stdio" value="false"/>
           </Values>
         </Boolean>
-        <KeyValueSet dnOrder="13" id="USART_RXPO">
+        <Boolean dnOrder="14" id="USART_RING_BUFFER_ENABLE">
+          <Attributes dnOrder="0">
+            <Boolean dnOrder="0" id="visible">
+              <Value dnOrder="0">false</Value>
+            </Boolean>
+          </Attributes>
+        </Boolean>
+        <KeyValueSet dnOrder="15" id="USART_RXPO">
           <Values dnOrder="0">
             <User dnOrder="0" value="1"/>
           </Values>
         </KeyValueSet>
-        <Integer dnOrder="14" id="USART_SAMPLE_COUNT">
+        <Integer dnOrder="16" id="USART_SAMPLE_COUNT">
           <Values dnOrder="0">
             <Dynamic dnOrder="0" id="sercom2" value="16"/>
           </Values>
         </Integer>
-        <Integer dnOrder="15" id="USART_SAMPLE_RATE">
+        <Integer dnOrder="17" id="USART_SAMPLE_RATE">
           <Values dnOrder="0">
             <Dynamic dnOrder="0" id="sercom2" value="0"/>
           </Values>
@@ -1015,7 +1046,7 @@
         <ElementPosition dnOrder="1" id="core" x="560" y="20"/>
         <ElementPosition dnOrder="2" id="dfp" x="340" y="20"/>
         <ElementPosition dnOrder="3" id="evsys" x="180" y="20"/>
-        <ElementPosition dnOrder="4" id="lib_classb" x="25" y="114"/>
+        <ElementPosition dnOrder="4" id="lib_classb" x="18" y="115"/>
         <ElementPosition dnOrder="5" id="nvmctrl" x="20" y="20"/>
         <ElementPosition dnOrder="6" id="sercom2" x="180" y="68"/>
         <ElementPosition dnOrder="7" id="stdio" x="330" y="60"/>

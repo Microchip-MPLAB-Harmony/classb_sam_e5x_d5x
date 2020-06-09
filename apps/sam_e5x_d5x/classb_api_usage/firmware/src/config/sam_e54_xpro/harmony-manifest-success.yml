@@ -4,7 +4,7 @@
 
 
 project: classb_api_usage
-creation_date: 2020-05-28T15:04:27.747+05:30[Asia/Calcutta]	# ISO 8601 format: https://www.w3.org/TR/NOTE-datetime
+creation_date: 2020-06-10T21:27:27.449+05:30[Asia/Calcutta]	# ISO 8601 format: https://www.w3.org/TR/NOTE-datetime
 operating_system: Windows 10
 mhc_mode: IDE				# [IDE|Standalone|Headless]
 mplabx_version: v5.40		# if MPLAB X plugin only
@@ -26,5 +26,4 @@ modules:
     - {name: "mplabx_plugin", version: "v3.5.0-rc.1"}
     - {name: "touch", version: "unknown"}
     - {name: "usb", version: "v3.3.0"}
-    - {name: "validation", version: "unknown"}
 

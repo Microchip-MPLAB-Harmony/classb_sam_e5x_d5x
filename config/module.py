@@ -1,5 +1,6 @@
+# coding: utf-8
 """*****************************************************************************
-* Copyright (C) 2018 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2020 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -28,4 +29,6 @@ def loadModule():
     for x in supportedDevices:
         if x in Variables.get("__PROCESSOR"):
             if Variables.get("__PROCESSOR") not in notSupportedVariants:
-                classBComponent = Module.CreateComponent("lib_classb", "Class B Library", "/ClassB/", "config/classb.py")
+                if any(x in Variables.get("__PROCESSOR") for x in ["SAME51","SAME53","SAME54","SAMD51"]):
+                    classBComponent = Module.CreateComponent("lib_classb", "Class B Library", "/ClassB/", "config/classb_sam_e5x_d5x.py")
+
