@@ -5,7 +5,8 @@
     <Processor dnOrder="1" value="ATSAME54P20A"/>
     <Harmony dnOrder="2" path="../../.."/>
     <Project_Name dnOrder="3" value="classb_api_usage"/>
-    <Manifest dnOrder="4">
+    <Folder_Name dnOrder="4" value=""/>
+    <Manifest dnOrder="5">
       <Files dnOrder="0">
         <File dnOrder="0">
           <Type dnOrder="0">SOURCE</Type>
@@ -454,8 +455,8 @@
           <Security dnOrder="2">NON_SECURE</Security>
           <LogicalPath dnOrder="3">config/sam_e54_xpro/</LogicalPath>
           <PhysicalPath dnOrder="4">/</PhysicalPath>
-          <GeneratedChecksum dnOrder="5">0482C1668305F66D0B1CDBF78FDC6BF6</GeneratedChecksum>
-          <UserChecksum dnOrder="6">0482C1668305F66D0B1CDBF78FDC6BF6</UserChecksum>
+          <GeneratedChecksum dnOrder="5">E9D006C4908FDB0852FF22653F166458</GeneratedChecksum>
+          <UserChecksum dnOrder="6">E9D006C4908FDB0852FF22653F166458</UserChecksum>
         </File>
         <File dnOrder="50">
           <Type dnOrder="0">HEADER</Type>
@@ -652,8 +653,8 @@
           <Security dnOrder="2">NON_SECURE</Security>
           <LogicalPath dnOrder="3">config/sam_e54_xpro/peripheral/cmcc/</LogicalPath>
           <PhysicalPath dnOrder="4">/peripheral/cmcc/</PhysicalPath>
-          <GeneratedChecksum dnOrder="5">4209AA8D29CCA5F4F705D4A6C8722DDB</GeneratedChecksum>
-          <UserChecksum dnOrder="6">4209AA8D29CCA5F4F705D4A6C8722DDB</UserChecksum>
+          <GeneratedChecksum dnOrder="5">95A89CFFC2B67EA718036EF9B8805872</GeneratedChecksum>
+          <UserChecksum dnOrder="6">95A89CFFC2B67EA718036EF9B8805872</UserChecksum>
         </File>
         <File dnOrder="72">
           <Type dnOrder="0">HEADER</Type>
@@ -883,13 +884,13 @@
         <Setting category="C32Global" dnOrder="7" key="mstacktcm" security="NON_SECURE" value="false"/>
       </Settings>
     </Manifest>
-    <Settings dnOrder="5">
+    <Settings dnOrder="6">
       <Setting dnOrder="0" key="CMSISPath" value=".\dev_packs\arm\CMSIS\5.6.0"/>
       <Setting dnOrder="1" key="DFPPath" value=".\dev_packs\Microchip\SAME54_DFP\3.3.64\atdf\ATSAME54P20A.atdf"/>
       <Setting dnOrder="2" key="FORCE_OPTIMIZATION" value="false"/>
       <Setting dnOrder="3" key="GENERATE_BACKUP" value="true"/>
       <Setting dnOrder="4" key="MERGE_STRATEGY" value="USER_ALL"/>
-      <Setting dnOrder="5" key="PackageFilter" value="aerospace;bsp;classb;core;csp;touch;zigbee;"/>
+      <Setting dnOrder="5" key="PackageFilter" value="aerospace;bsp;classb;core;csp;touch;validation;zigbee;"/>
     </Settings>
   </Configurator>
 </Configuration>
