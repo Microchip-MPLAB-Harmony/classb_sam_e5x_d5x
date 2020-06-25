@@ -7,6 +7,12 @@
 
 1. Initial version of the Class B Library
 
+### Device Support and UL/VDE Certification Status
+
+| **Device Family**   | **Certification Status**|
+| ---                 | ---                           |
+| SAM E5x/D5x         | Planned |
+
 ### Known issues
 
 There are no known issues
