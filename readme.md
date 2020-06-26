@@ -4,6 +4,8 @@ nav_order: 1
 has_children: true
 ---
 
+![Microchip logo](https://raw.githubusercontent.com/wiki/Microchip-MPLAB-Harmony/Microchip-MPLAB-Harmony.github.io/images/microchip_logo.png)
+
 # MPLAB® Harmony 3 Class B Library
 
 MPLAB® Harmony 3 is an extension of the MPLAB® ecosystem for creating embedded firmware solutions for Microchip 32-bit SAM and PIC® microcontroller and microprocessor devices.  Refer to the following links for more information.
@@ -20,10 +22,13 @@ It uses various measures to detect and respond to failures inside the microcontr
 
 - [Release Notes](release_notes.md)
 - [MPLAB® Harmony License](mplab_harmony_license.md)
-- [MPLAB® Harmony 3 Class B Library Wiki](https://github.com/Microchip-MPLAB-Harmony/Class B Library/wiki)
-- [MPLAB® Harmony 3 Class B Library API Help](https://microchip-mplab-harmony.github.io/Class B Library)
 
-# Contents Summary
+To download or clone these application from Github, go to the [top level of the repository](https://github.com/Microchip-MPLAB-Harmony/classb_sam_e5x_d5x) page and click:
+
+![clone](./docs/images/clone.png)
+
+
+## Contents Summary
 
 | Folder     | Description                                               |
 | ---        | ---                                                       |
@@ -55,11 +60,11 @@ The following applications are provided to demonstrate the typical or interestin
 
 ____
 
-[![License](https://img.shields.io/badge/license-Harmony%20license-orange.svg)](https://github.com/Microchip-MPLAB-Harmony/Class B Library/blob/master/mplab_harmony_license.md)
-[![Latest release](https://img.shields.io/github/release/Microchip-MPLAB-Harmony/Class B Library.svg)](https://github.com/Microchip-MPLAB-Harmony/Class B Library/releases/latest)
-[![Latest release date](https://img.shields.io/github/release-date/Microchip-MPLAB-Harmony/Class B Library.svg)](https://github.com/Microchip-MPLAB-Harmony/Class B Library/releases/latest)
-[![Commit activity](https://img.shields.io/github/commit-activity/y/Microchip-MPLAB-Harmony/Class B Library.svg)](https://github.com/Microchip-MPLAB-Harmony/Class B Library/graphs/commit-activity)
-[![Contributors](https://img.shields.io/github/contributors-anon/Microchip-MPLAB-Harmony/Class B Library.svg)]()
+[![License](https://img.shields.io/badge/license-Harmony%20license-orange.svg)](https://github.com/Microchip-MPLAB-Harmony/classb_sam_e5x_d5x/blob/master/mplab_harmony_license.md)
+[![Latest release](https://img.shields.io/github/release/Microchip-MPLAB-Harmony/classb_sam_e5x_d5x.svg)](https://github.com/Microchip-MPLAB-Harmony/classb_sam_e5x_d5x/releases/latest)
+[![Latest release date](https://img.shields.io/github/release-date/Microchip-MPLAB-Harmony/classb_sam_e5x_d5x.svg)](https://github.com/Microchip-MPLAB-Harmony/classb_sam_e5x_d5x/releases/latest)
+[![Commit activity](https://img.shields.io/github/commit-activity/y/Microchip-MPLAB-Harmony/classb_sam_e5x_d5x.svg)](https://github.com/Microchip-MPLAB-Harmony/classb_sam_e5x_d5x/graphs/commit-activity)
+[![Contributors](https://img.shields.io/github/contributors-anon/Microchip-MPLAB-Harmony/classb_sam_e5x_d5x.svg)]()
 
 ____
 
@@ -68,5 +73,5 @@ ____
 [![Follow us on Facebook](https://img.shields.io/badge/Facebook-Follow%20us%20on%20Facebook-blue.svg)](https://www.facebook.com/microchiptechnology/)
 [![Follow us on Twitter](https://img.shields.io/twitter/follow/MicrochipTech.svg?style=social)](https://twitter.com/MicrochipTech)
 
-[![](https://img.shields.io/github/stars/Microchip-MPLAB-Harmony/Class B Library.svg?style=social)]()
-[![](https://img.shields.io/github/watchers/Microchip-MPLAB-Harmony/Class B Library.svg?style=social)]()
+[![](https://img.shields.io/github/stars/Microchip-MPLAB-Harmony/classb_sam_e5x_d5x.svg?style=social)]()
+[![](https://img.shields.io/github/watchers/Microchip-MPLAB-Harmony/classb_sam_e5x_d5x.svg?style=social)]()
