@@ -41,6 +41,7 @@
 .thumb
 .syntax unified
 .global CLASSB_CPU_RegistersTest
+.global CLASSB_FPU_RegistersTest
 .extern _CLASSB_UpdateTestResult
 
 ; /* Test bit patterns for R0 */
@@ -74,6 +75,7 @@
 
 ; /* CLASSB_TEST_ID defined in classb_common.h */
 .equ CLASSB_TEST_CPU, 0x00
+.equ CLASSB_TEST_FPU, 0x0E
 
 ; /* CLASSB_TEST_STATUS defined in classb_common.h */
 .equ CLASSB_TEST_PASSED, 0x1
@@ -82,16 +84,14 @@
 
 ;/* Refer AAPCS at https://developer.arm.com/docs/ihi0042/latest*/
 
-; /* Function Protoype
-; CLASSB_TEST_STATUS CLASSB_CPU_RegistersTest(
-;     CLASSB_FPU_CONFIG test_fpu, bool running_context) */
+; /* Function Prototype
+; CLASSB_TEST_STATUS CLASSB_CPU_RegistersTest(bool running_context) */
 
 CLASSB_CPU_RegistersTest:
     push    {r14}
     push    {r2-r7}
     ; /* Copy input arguments */
-    mov	    r7, r0
-    mov	    r6, r1
+    mov	    r6, r0
     ; /* Call _CLASSB_UpdateTestResult after loading arguments into registers */
     ldr	    r0, =CLASSB_TEST_TYPE_SST
     cbz     r6, progress_test_type_sst
@@ -101,9 +101,6 @@ progress_test_type_sst:
     ldr	    r2, =CLASSB_TEST_INPROGRESS
     bl	    _CLASSB_UpdateTestResult
     bl	    CLASSB_CPU_GPR_Test
-    ; /*If R7 is 1, then test FPU regs */
-    cbz     r7, update_result_return
-    bl	    CLASSB_CPU_FPU_Test
 update_result_return:
     ; /* Code reaches here if none of the above tests are failed */
     bl	    cpu_test_passed
@@ -385,10 +382,22 @@ cpu_test_special_regs:
     pop     {r4-r7}
     pop	    {r15}
 
-CLASSB_CPU_FPU_Test:
+CLASSB_FPU_RegistersTest:
     push    {r14}
-    push    {r4-r7}
+    push    {r2-r7}
+    ; /* Copy input arguments */
+    mov	    r6, r0
+    ; /* Call _CLASSB_UpdateTestResult after loading arguments into registers */
+    ldr	    r0, =CLASSB_TEST_TYPE_SST
+    cbz     r6, progress_fpu_test_type_sst
+    ldr	    r0, =CLASSB_TEST_TYPE_RST
+progress_fpu_test_type_sst:
+    ldr	    r1, =CLASSB_TEST_FPU
+    ldr	    r2, =CLASSB_TEST_INPROGRESS
+    bl	    _CLASSB_UpdateTestResult
+
     vpush.32 {s16-s31}
+    vmrs    r3, fpscr
     /* Reserve space in stack to use during test */
     sub	    sp, #16
     add	    r7, sp, #0
@@ -594,10 +603,29 @@ CLASSB_CPU_FPU_Test:
     vmrs    r5, fpscr
     cmp	    r4, r5
     bne	    asm_fpu_reg_fail
-
+    vmsr    fpscr, r3
     vpop.32 {s16-s31}
-    pop     {r4-r7}
+    
+update_fpu_result_return:
+    ; /* Code reaches here if none of the above tests are failed */
+    bl	    fpu_test_passed
+    ; /* Return CLASSB_TEST_PASSED */
+    ldr	    r0, =CLASSB_TEST_PASSED
+    pop	    {r2-r7}
+    ; /* return by POP-ing LR into PC */
     pop	    {r15}
+    
     ; /* Remain in infinite loop if a register test is failed. */
 asm_fpu_reg_fail:
     b       asm_fpu_reg_fail
+
+fpu_test_passed:
+    push    {lr}
+    ldr	    r0, =CLASSB_TEST_TYPE_SST
+    cbz     r6, pass_fpu_test_type_sst
+    ldr	    r0, =CLASSB_TEST_TYPE_RST
+pass_fpu_test_type_sst:
+    ldr	    r1, =CLASSB_TEST_FPU
+    ldr	    r2, =CLASSB_TEST_PASSED
+    bl	    _CLASSB_UpdateTestResult
+    pop	    {r15}

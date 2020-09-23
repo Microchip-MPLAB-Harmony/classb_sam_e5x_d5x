@@ -65,16 +65,15 @@ def instantiateComponent(classBComponent):
     
     # Insert CPU test
     classB_UseCPUTest = classBComponent.createBooleanSymbol("CLASSB_CPU_TEST_OPT", classBMenu)
-    classB_UseCPUTest.setLabel("Test CPU?")
+    classB_UseCPUTest.setLabel("Test CPU Registers?")
     classB_UseCPUTest.setVisible(True)
     classB_UseCPUTest.setDefaultValue(False)
     
     # Enable FPU register test
-    classB_FPU_Option = classBComponent.createBooleanSymbol("CLASSB_FPU_OPT", classB_UseCPUTest)
-    classB_FPU_Option.setLabel("Enable FPU test")
-    classB_FPU_Option.setVisible(False)
+    classB_FPU_Option = classBComponent.createBooleanSymbol("CLASSB_FPU_OPT", classBMenu)
+    classB_FPU_Option.setLabel("Test FPU Registers?")
+    classB_FPU_Option.setVisible(True)
     classB_FPU_Option.setDefaultValue(False)
-    classB_FPU_Option.setDependencies(setClassB_SymbolVisibility, ["CLASSB_CPU_TEST_OPT"])
     
     # Insert SRAM test
     classB_UseSRAMTest = classBComponent.createBooleanSymbol("CLASSB_SRAM_TEST_OPT", classBMenu)
@@ -397,6 +396,5 @@ def instantiateComponent(classBComponent):
     classB_xc32ld_reserve_sram.setCategory("C32-LD")
     classB_xc32ld_reserve_sram.setKey("appendMe")
     classB_xc32ld_reserve_sram.setValue("-DRAM_ORIGIN=0x20000400"+",-DRAM_LENGTH=" + hex(classB_SRAM_SIZE.getValue() - 1024))
-    classB_xc32ld_reserve_sram.setAppend(True, ";")
-    
+   
     

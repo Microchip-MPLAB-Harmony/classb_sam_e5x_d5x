@@ -338,20 +338,10 @@ static CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
         WDT_REGS->WDT_CTRLA |= WDT_CTRLA_ENABLE_Msk;
     }
     <#if CLASSB_CPU_TEST_OPT?? && CLASSB_CPU_TEST_OPT == true>
-        <#if CLASSB_FPU_OPT??>
-            <#if CLASSB_FPU_OPT == true && CLASSB_CPU_TEST_OPT == true>
-                <#lt>    // Enable FPU
-                <#lt>    SCB->CPACR |= (0xFu << 20);
-                <#lt>    __DSB();
-                <#lt>    __ISB();
-                <#lt>    // Test processor core registers and FPU registers
-                <#lt>    *ongoing_sst_id = CLASSB_TEST_CPU;
-                <#lt>    cb_test_status = CLASSB_CPU_RegistersTest(CLASSB_FPU_TEST_ENABLE, false);
-            <#else>
-                <#lt>    // Test processor core registers
-                <#lt>    cb_test_status = CLASSB_CPU_RegistersTest(CLASSB_FPU_TEST_DISABLE, false);
-            </#if>
-        </#if>
+        *ongoing_sst_id = CLASSB_TEST_CPU;
+        // Test processor core registers
+        cb_test_status = CLASSB_CPU_RegistersTest(false);
+
         if (cb_test_status == CLASSB_TEST_PASSED)
         {
             cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;
@@ -365,6 +355,24 @@ static CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
         *ongoing_sst_id = CLASSB_TEST_PC;
         cb_test_status = CLASSB_CPU_PCTest(false);
 
+        if (cb_test_status == CLASSB_TEST_PASSED)
+        {
+            cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;
+        }
+        else if (cb_test_status == CLASSB_TEST_FAILED)
+        {
+            cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
+        }
+    </#if>
+    <#if CLASSB_FPU_OPT?? && CLASSB_FPU_OPT == true>
+        // Enable FPU
+        SCB->CPACR |= (0xFu << 20);
+        __DSB();
+        __ISB();
+        // Test FPU registers
+        *ongoing_sst_id = CLASSB_TEST_FPU;
+        cb_test_status = CLASSB_FPU_RegistersTest(false);
+        
         if (cb_test_status == CLASSB_TEST_PASSED)
         {
             cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;
