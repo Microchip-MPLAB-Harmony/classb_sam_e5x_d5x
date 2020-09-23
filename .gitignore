@@ -2,6 +2,7 @@
 *.elf
 *.map
 *.d
+*.flag
 **/nbproject/private
 **/nbproject/Makefile-*
 **/nbproject/Package-*

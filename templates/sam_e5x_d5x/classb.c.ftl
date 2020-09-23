@@ -71,11 +71,11 @@
 /*----------------------------------------------------------------------------
  *     Global Variables
  *----------------------------------------------------------------------------*/
-__attribute__((persistent)) volatile uint8_t * ongoing_sst_id;
-__attribute__((persistent)) volatile uint8_t * classb_test_in_progress;
-__attribute__((persistent)) volatile uint8_t * wdt_test_in_progress;
-__attribute__((persistent)) volatile uint8_t * interrupt_tests_status;
-__attribute__((persistent)) volatile uint32_t * interrupt_count;
+volatile uint8_t * ongoing_sst_id;
+volatile uint8_t * classb_test_in_progress;
+volatile uint8_t * wdt_test_in_progress;
+volatile uint8_t * interrupt_tests_status;
+volatile uint32_t * interrupt_count;
 
 /*----------------------------------------------------------------------------
  *     Functions
@@ -281,7 +281,7 @@ static CLASSB_INIT_STATUS CLASSB_Init(void)
                 CLASSB_SRAM_TEST_BUFFER_SIZE);
             if ((result_area_test_ok == true) && (ram_buffer_test_ok == true))
             {
-                // Initialize all Class B variables
+                // Initialize all Class B variables after the March test
                 CLASSB_GlobalsInit();
                 CLASSB_ClearTestResults(CLASSB_TEST_TYPE_SST);
                 CLASSB_ClearTestResults(CLASSB_TEST_TYPE_RST);

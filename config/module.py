@@ -26,9 +26,9 @@ notSupportedVariants = []
 
 def loadModule():
     print("Load Module: Harmony Class B Library")
+    device_name = Variables.get("__PROCESSOR")
     for x in supportedDevices:
-        if x in Variables.get("__PROCESSOR"):
-            if Variables.get("__PROCESSOR") not in notSupportedVariants:
-                if any(x in Variables.get("__PROCESSOR") for x in ["SAME51","SAME53","SAME54","SAMD51"]):
-                    classBComponent = Module.CreateComponent("lib_classb", "Class B Library", "/ClassB/", "config/classb_sam_e5x_d5x.py")
+        if x in device_name:
+            if device_name not in notSupportedVariants:
+                classBComponent = Module.CreateComponent("lib_classb_sam_e5x", "Class B Library", "/ClassB/", "config/classb_sam_e5x_d5x.py")
 
