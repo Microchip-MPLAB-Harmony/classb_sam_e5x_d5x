@@ -73,6 +73,12 @@ RSTs can be used by the application during run-time to check safe operation of d
 in the microcontroller. These tests are non-destructive. In the case of run-time tests, the application
 shall decide which test to execute when.
 
+**Note**
+Disable IRQs before running self-test for SRAM or CPU clock.
+Interrupting SRAM test can result in unexpected variable values if the test has been running on the
+SRAM area used by the application. Interrupting clock test can result in incorrect test results since
+the test is timing dependent.
+
 
 ## Components in the Library
 
@@ -125,11 +131,10 @@ Generic Flow of Non-Critical Tests
 ## CPU Registers
 
 The ARM® Cortex®-M4F is the CPU on the SAM D5x/E5x devices. The Class B library checks the processor
-core registers and FPU registers for stuck-at faults. The stuck-at condition causes
+core registers for stuck-at faults. The stuck-at condition causes
 register bit to remain at logic 0 or logic 1. Code execution should be stopped if this error condition
 is detected in any of the CPU registers.
 
-Testing FPU registers is optional as it is needed only if the FPU is used in the application.
 This self-test follows the register save/restore convention specified by AAPCS.
 It can be used at startup as well as run-time. The Program Counter (PC) self-test is designed
 as a separate test since this register cannot be checked with usual test data patterns.
@@ -152,6 +157,21 @@ the Program Counter is assumed to be working fine. This self-test can be used at
 Flow chart of the self-test for Program Counter (PC)
 
 ![](./images/DD_PC_TEST.png)
+
+
+## FPU Registers
+
+The Class B library checks the FPU registers for stuck-at faults. The stuck-at condition causes
+register bit to remain at logic 0 or logic 1. Code execution should be stopped if this error condition
+is detected in any of the FPU registers.
+
+Testing FPU registers is optional as it is needed only if the FPU is used in the application.
+This self-test follows the register save/restore convention specified by AAPCS.
+It can be used at startup as well as run-time.
+
+Flow chart of the self-test for CPU registers
+
+![](./images/DD_Test_FPU.png)
 
 
 ## Flash
@@ -211,7 +231,9 @@ The clock self-test can be used at startup as well as run-time.
 1. This self-test uses the RTC peripheral. Thus, if it is used during run-time, the RTC shall not
 be used by the application for continuous modes such as real time clock or calendar. If the RTC is used
 for some other purpose, it must be reconfigured after running the clock self-test.
-2. Keep the clock test duration lesser than the WDT timeout period, to avoid the WDT resetting the device.
+2. This self-test configures XOSC32K to clock the RTC. If the application cannot afford to reconfigure
+the XOSC32K, this self-test cannot not be used during run-time.
+3. Keep the clock test duration lesser than the WDT timeout period, to avoid the WDT resetting the device.
 
 Flow chart of the self-test for CPU clock frequency
 

@@ -46,6 +46,10 @@ In `CLASSB_Startup_Tests`, before performing startup self-tests, the WDT timeout
 This timing can be adjusted based on the number of self-tests run during startup.
 If any of these self-tests takes more time than the WDT timeout period, it results in a WDT reset.
 Thus, properly configuring the WDT period is essential during startup.
+If all of the self-tests pass during startup, then the Class B library startup resets the device.
+When execution reaches the main() function, the WDT configuration will be same as that in the fuses.
+So the WDT should be configured via fuses, as needed by the application.
+The WDT timeout should be larger than the time taken by any of the self-tests used during run-time.
 
 ![](./images/WDT_STARTUP_A.png)
 ![](./images/WDT_STARTUP_B.png)
