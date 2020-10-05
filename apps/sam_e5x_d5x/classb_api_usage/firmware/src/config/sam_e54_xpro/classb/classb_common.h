@@ -108,7 +108,8 @@ typedef enum classb_test_id
     CLASSB_TEST_FLASH       = 6,
     CLASSB_TEST_CLOCK       = 8,
     CLASSB_TEST_INTERRUPT   = 10,
-    CLASSB_TEST_IO          = 12
+    CLASSB_TEST_IO          = 12,
+    CLASSB_TEST_FPU          = 14
 } CLASSB_TEST_ID;
 
 // *****************************************************************************
@@ -210,6 +211,7 @@ typedef struct classb_sst_result_bf
     CLASSB_TEST_STATUS FLASH_STATUS:2;
     CLASSB_TEST_STATUS CLOCK_STATUS:2;
     CLASSB_TEST_STATUS INTERRUPT_STATUS:2;
+    CLASSB_TEST_STATUS FPU_STATUS:2;
 } *CLASSB_SST_RESULT_BF;
 
 // *****************************************************************************
@@ -233,6 +235,7 @@ typedef struct classb_rst_result_bf
     CLASSB_TEST_STATUS CLOCK_STATUS:2;
     CLASSB_TEST_STATUS UNUSED_STATUS:2;
     CLASSB_TEST_STATUS IO_STATUS:2;
+    CLASSB_TEST_STATUS FPU_STATUS:2;
 } *CLASSB_RST_RESULT_BF;
 
 

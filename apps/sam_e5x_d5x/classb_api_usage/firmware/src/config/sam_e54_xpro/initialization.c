@@ -61,9 +61,9 @@
 #pragma config NVMCTRL_SEESBLK = 0x0
 #pragma config NVMCTRL_SEEPSZ = 0x0
 #pragma config RAMECC_ECCDIS = SET
-#pragma config WDT_ENABLE = CLEAR
+#pragma config WDT_ENABLE = SET
 #pragma config WDT_ALWAYSON = CLEAR
-#pragma config WDT_PER = CYC1024
+#pragma config WDT_PER = CYC512
 #pragma config WDT_WINDOW = CYC8192
 #pragma config WDT_EWOFFSET = CYC8192
 #pragma config WDT_WEN = CLEAR
@@ -106,6 +106,26 @@
 // *****************************************************************************
 // *****************************************************************************
 
+/*******************************************************************************
+  Function:
+    void STDIO_BufferModeSet ( void )
+
+  Summary:
+    Sets the buffering mode for stdin and stdout
+
+  Remarks:
+ ********************************************************************************/
+static void STDIO_BufferModeSet(void)
+{
+
+    /* Make stdin unbuffered */
+    setbuf(stdin, NULL);
+
+    /* Make stdout unbuffered */
+    setbuf(stdout, NULL);
+}
+
+
 
 
 /*******************************************************************************
@@ -121,6 +141,9 @@
 void SYS_Initialize ( void* data )
 {
     NVMCTRL_Initialize( );
+
+    STDIO_BufferModeSet();
+
 
   
     PORT_Initialize();

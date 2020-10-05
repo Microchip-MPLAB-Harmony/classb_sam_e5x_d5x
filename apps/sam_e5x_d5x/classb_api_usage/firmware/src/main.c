@@ -82,7 +82,7 @@ bool runtimeClassBChecks(void)
     CLASSB_TEST_STATUS classb_rst1_status = CLASSB_TEST_NOT_EXECUTED;
     CLASSB_TEST_STATUS classb_rst2_status = CLASSB_TEST_NOT_EXECUTED;
     
-    classb_rst1_status = CLASSB_CPU_RegistersTest(CLASSB_FPU_TEST_ENABLE, true);
+    classb_rst1_status = CLASSB_CPU_RegistersTest(true);
     classb_rst2_status = CLASSB_FlashCRCTest(0, 0xFE000,
             *(uint32_t *)FLASH_CRC32_ADDR, true);
     
@@ -112,6 +112,8 @@ int main ( void )
     CLASSB_TEST_STATUS classb_test_status = CLASSB_TEST_NOT_EXECUTED;
     classb_test_status = CLASSB_GetTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_CPU);
     printf("\r\n Result of CPU SST is %s\r\n", test_status_str[classb_test_status]);
+    classb_test_status = CLASSB_GetTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_FPU);
+    printf("\r\n Result of FPU SST is %s\r\n", test_status_str[classb_test_status]);
     classb_test_status = CLASSB_GetTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_PC);
     printf("\r\n Result of PC SST is %s\r\n", test_status_str[classb_test_status]);
     classb_test_status = CLASSB_GetTestResult(CLASSB_TEST_TYPE_SST, CLASSB_TEST_RAM);
@@ -127,7 +129,7 @@ int main ( void )
 
     printf("\r\n\r\n Class B run-time self-tests \r\n");
     classb_test_status = CLASSB_TEST_FAILED;
-    classb_test_status = CLASSB_CPU_RegistersTest(CLASSB_FPU_TEST_ENABLE, true);
+    classb_test_status = CLASSB_CPU_RegistersTest(true);
     printf("\r\n Result of CPU RST is %s\r\n", test_status_str[classb_test_status]);
     classb_test_status = CLASSB_TEST_FAILED;
     classb_test_status = CLASSB_CPU_PCTest(true);
@@ -138,8 +140,10 @@ int main ( void )
     CMCC_REGS->CMCC_CFG &= ~CMCC_CFG_DCDIS_Msk;
     CMCC_REGS->CMCC_CTRL &= ~CMCC_CTRL_CEN_Msk;
     classb_test_status = CLASSB_TEST_FAILED;
+    __disable_irq();
     classb_test_status = CLASSB_SRAM_MarchTestInit((uint32_t *)0x20000400,
                 SRAM_RST_SIZE, CLASSB_SRAM_MARCH_C, true);
+    __enable_irq();
     CMCC_REGS->CMCC_CFG |= CMCC_CFG_DCDIS_Msk;
     CMCC_REGS->CMCC_CTRL |= CMCC_CTRL_CEN_Msk;
     printf("\r\n Result of SRAM RST is %s\r\n", test_status_str[classb_test_status]);
@@ -164,9 +168,11 @@ int main ( void )
     printf("\r\n Result of Flash RST is %s\r\n", test_status_str[classb_test_status]);
     
     WDT_Clear();
+    __disable_irq();
     classb_test_status = CLASSB_ClockTest(120000000, 5, 500, true);
+    __enable_irq();
     printf("\r\n Result of CPU Clock RST is %s\r\n", test_status_str[classb_test_status]);
-    
+        
     CLASSB_RST_IOTest(PORTC, PIN18, PORT_PIN_LOW);
     classb_test_status = CLASSB_GetTestResult(CLASSB_TEST_TYPE_RST, CLASSB_TEST_IO);
     printf("\r\n Result of PC18 LOW test is %s\r\n", test_status_str[classb_test_status]);

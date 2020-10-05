@@ -4,27 +4,16 @@
 
 
 project: classb_api_usage
-creation_date: 2020-06-24T17:05:29.729+05:30[Asia/Calcutta]    # ISO 8601 format: https://www.w3.org/TR/NOTE-datetime
+creation_date: 2020-10-06T10:20:30.911+05:30[Asia/Calcutta]    # ISO 8601 format: https://www.w3.org/TR/NOTE-datetime
 operating_system: Windows 10
 mhc_mode: IDE            # [IDE|Standalone|Headless]
-mplabx_version: v5.40        # if MPLAB X plugin only
-plugin_version: v3.5.0        # if MPLAB X plugin only
+mplabx_version: v5.45        # if MPLAB X plugin only
+plugin_version: v3.6.0        # if MPLAB X plugin only
+compiler: XC32 (2.50)
 
 modules:
-    - {name: "aerospace", version: "v3.0.2"}
-    - {name: "bootloader", version: "unknown"}
-    - {name: "bsp", version: "unknown"}
-    - {name: "classb", version: "unknown"}
-    - {name: "CMSIS-FreeRTOS", version: "unknown"}
-    - {name: "core", version: "v3.4.0"}
     - {name: "csp", version: "unknown"}
-    - {name: "dev_packs", version: "v3.7.0"}
-    - {name: "doc_o_matic_h3", version: "unknown"}
-    - {name: "h3_doc_generator", version: "unknown"}
-    - {name: "mhc", version: "v3.4.1"}
-    - {name: "motor_control", version: "v3.4.1"}
-    - {name: "mplabx_plugin", version: "v3.5.0"}
-    - {name: "touch", version: "unknown"}
-    - {name: "usb", version: "v3.3.0"}
-    - {name: "validation", version: "harv_v0.8.0"}
+    - {name: "dev_packs", version: "unknown"}
+    - {name: "mhc", version: "unknown"}
+    - {name: "classb_sam_e5x_d5x", version: "unknown"}
 

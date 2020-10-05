@@ -66,11 +66,11 @@
 /*----------------------------------------------------------------------------
  *     Global Variables
  *----------------------------------------------------------------------------*/
-__attribute__((persistent)) volatile uint8_t * ongoing_sst_id;
-__attribute__((persistent)) volatile uint8_t * classb_test_in_progress;
-__attribute__((persistent)) volatile uint8_t * wdt_test_in_progress;
-__attribute__((persistent)) volatile uint8_t * interrupt_tests_status;
-__attribute__((persistent)) volatile uint32_t * interrupt_count;
+volatile uint8_t * ongoing_sst_id;
+volatile uint8_t * classb_test_in_progress;
+volatile uint8_t * wdt_test_in_progress;
+volatile uint8_t * interrupt_tests_status;
+volatile uint32_t * interrupt_count;
 
 /*----------------------------------------------------------------------------
  *     Functions
@@ -276,7 +276,7 @@ static CLASSB_INIT_STATUS CLASSB_Init(void)
                 CLASSB_SRAM_TEST_BUFFER_SIZE);
             if ((result_area_test_ok == true) && (ram_buffer_test_ok == true))
             {
-                // Initialize all Class B variables
+                // Initialize all Class B variables after the March test
                 CLASSB_GlobalsInit();
                 CLASSB_ClearTestResults(CLASSB_TEST_TYPE_SST);
                 CLASSB_ClearTestResults(CLASSB_TEST_TYPE_RST);
@@ -320,13 +320,10 @@ static CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
         WDT_REGS->WDT_CONFIG = WDT_CONFIG_PER_CYC256;
         WDT_REGS->WDT_CTRLA |= WDT_CTRLA_ENABLE_Msk;
     }
-    // Enable FPU
-    SCB->CPACR |= (0xFu << 20);
-    __DSB();
-    __ISB();
-    // Test processor core registers and FPU registers
-    *ongoing_sst_id = CLASSB_TEST_CPU;
-    cb_test_status = CLASSB_CPU_RegistersTest(CLASSB_FPU_TEST_ENABLE, false);
+        *ongoing_sst_id = CLASSB_TEST_CPU;
+        // Test processor core registers
+        cb_test_status = CLASSB_CPU_RegistersTest(false);
+
         if (cb_test_status == CLASSB_TEST_PASSED)
         {
             cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;
@@ -340,6 +337,22 @@ static CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
         *ongoing_sst_id = CLASSB_TEST_PC;
         cb_test_status = CLASSB_CPU_PCTest(false);
 
+        if (cb_test_status == CLASSB_TEST_PASSED)
+        {
+            cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;
+        }
+        else if (cb_test_status == CLASSB_TEST_FAILED)
+        {
+            cb_temp_startup_status = CLASSB_STARTUP_TEST_FAILED;
+        }
+        // Enable FPU
+        SCB->CPACR |= (0xFu << 20);
+        __DSB();
+        __ISB();
+        // Test FPU registers
+        *ongoing_sst_id = CLASSB_TEST_FPU;
+        cb_test_status = CLASSB_FPU_RegistersTest(false);
+        
         if (cb_test_status == CLASSB_TEST_PASSED)
         {
             cb_temp_startup_status = CLASSB_STARTUP_TEST_PASSED;

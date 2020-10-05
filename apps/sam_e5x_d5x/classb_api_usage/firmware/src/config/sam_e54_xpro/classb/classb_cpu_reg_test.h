@@ -63,32 +63,13 @@ SUBSTITUTE  GOODS,  TECHNOLOGY,  SERVICES,  OR  ANY  CLAIMS  BY  THIRD   PARTIES
  *     Data types
  *----------------------------------------------------------------------------*/
 
-// *****************************************************************************
-/* Class B library CPU register test configuration
-
-  Summary:
-    Data type for enabling FPU register test.
-
-  Description:
-    The CPU register test covers the processor core registers and FPU registers.
-    Testing FPU registers can be optional since it may not be used by every
-    application.
-
-  Remarks:
-    None.
-*/
-typedef enum classb_fpu_config
-{
-    CLASSB_FPU_TEST_DISABLE  = 0,
-    CLASSB_FPU_TEST_ENABLE   = 1
-} CLASSB_FPU_CONFIG;
-
 /*----------------------------------------------------------------------------
  *     Functions
  *----------------------------------------------------------------------------*/
 
-CLASSB_TEST_STATUS CLASSB_CPU_RegistersTest(CLASSB_FPU_CONFIG test_fpu, bool running_context);
+CLASSB_TEST_STATUS CLASSB_CPU_RegistersTest(bool running_context);
 CLASSB_TEST_STATUS __attribute__((optimize("-O0"))) CLASSB_CPU_PCTest(bool running_context);
+CLASSB_TEST_STATUS CLASSB_FPU_RegistersTest(bool running_context);
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
