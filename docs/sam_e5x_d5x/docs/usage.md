@@ -158,6 +158,18 @@ Flow chart of the self-test for Program Counter (PC)
 
 ![](./images/DD_PC_TEST.png)
 
+The optimization level for the source file classb_cpu_pc_test.c must be kept as -O1.
+If compiler optimization level for the MPLAB Harmony 3 project is set to something other than -O0 or -O1,
+the file level optimization need to be configured. To do this, open file properties by
+right clicking on the source file. Modify the settings as shown in the below screen shots
+after generating the project.
+
+Select the check box 'override build options'
+![](./images/FileOptimization_1.png)
+
+In xc32-gcc options, set optimization to -O1 using the highlighted drop-down menus,
+![](./images/FileOptimization_2.png)
+ 
 
 ## FPU Registers
 
