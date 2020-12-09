@@ -22,7 +22,7 @@
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *****************************************************************************"""
 #Essential changes for each release
-releaseVersion = "v1.0.0"
+releaseVersion = "v2.0.0"
 releaseYear    = "2020"
 
 

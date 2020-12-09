@@ -23,9 +23,8 @@ It uses various measures to detect and respond to failures inside the microcontr
 - [Release Notes](release_notes.md)
 - [MPLAB® Harmony License](mplab_harmony_license.md)
 
-To download or clone these application from Github, go to the [top level of the repository](https://github.com/Microchip-MPLAB-Harmony/classb_sam_e5x_d5x) page and click:
-
-![clone](./docs/images/clone.png)
+To download or clone these application from Github, go to the [top level of the repository]
+(https://github.com/Microchip-MPLAB-Harmony/classb_sam_e5x_d5x) page.
 
 
 ## Contents Summary
