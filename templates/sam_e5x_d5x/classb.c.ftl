@@ -316,6 +316,7 @@ static CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
 {
     CLASSB_STARTUP_STATUS cb_startup_status = CLASSB_STARTUP_TEST_NOT_EXECUTED;
     <#if (CLASSB_CPU_TEST_OPT?? && CLASSB_CPU_TEST_OPT == true) ||
+         (CLASSB_FPU_OPT?? && CLASSB_FPU_OPT == true) ||
          (CLASSB_SRAM_TEST_OPT?? && CLASSB_SRAM_TEST_OPT == true) ||
          (CLASSB_FLASH_CRC_CONF?? && CLASSB_FLASH_CRC_CONF == true) ||
          (CLASSB_CLOCK_TEST_OPT?? && CLASSB_CLOCK_TEST_OPT == true) ||
@@ -467,6 +468,7 @@ static CLASSB_STARTUP_STATUS CLASSB_Startup_Tests(void)
         </#if>
     </#if>
     <#if (CLASSB_CPU_TEST_OPT?? && CLASSB_CPU_TEST_OPT == true) ||
+         (CLASSB_FPU_OPT?? && CLASSB_FPU_OPT == true) ||
          (CLASSB_SRAM_TEST_OPT?? && CLASSB_SRAM_TEST_OPT == true) ||
          (CLASSB_FLASH_CRC_CONF?? && CLASSB_FLASH_CRC_CONF == true) ||
          (CLASSB_CLOCK_TEST_OPT?? && CLASSB_CLOCK_TEST_OPT == true) ||
