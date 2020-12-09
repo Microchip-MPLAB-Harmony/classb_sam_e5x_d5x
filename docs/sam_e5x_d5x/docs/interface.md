@@ -67,7 +67,6 @@ nav_order: 5
 | CLASSB_TEST_TYPE | Identifies type of the Class B library test. |
 | *CLASSB_SST_RESULT_BF | Pointer to the structure for the Class B library startup self-test result. |
 | *CLASSB_RST_RESULT_BF | Pointer to the structure for the Class B library run-time self-test result. |
-| CLASSB_FPU_CONFIG | Data type for enabling FPU register test. |
 | CLASSB_SRAM_MARCH_ALGO | Selects the RAM March algorithm to run. |
 | CLASSB_PORT_INDEX | PORT index definitions for Class B library I/O pin test. |
 | CLASSB_PORT_PIN | PIN definitions for Class B library I/O pin test. |
@@ -87,7 +86,8 @@ nav_order: 5
 | CLASSB_SST_WDT_Recovery | This function is called if a WDT reset has happened during the execution of an SST. |
 | CLASSB_App_WDT_Recovery | This function is called if a WDT reset has happened during run-time. |
 | CLASSB_SelfTest_FailSafe | This function is called if any of the non-critical tests detects a failure. |
-| CLASSB_CPU_RegistersTest | This self-test checks the processor core registers and FPU registers. |
+| CLASSB_CPU_RegistersTest | This self-test checks the processor core registers. |
+| CLASSB_FPU_RegistersTest | This self-test checks the FPU registers. |
 | CLASSB_CPU_PCTest | This self-test checks the Program Counter register (PC). |
 | CLASSB_FlashCRCGenerate | Generates CRC-32 checksum for a given memory area. |
 | CLASSB_FlashCRCTest | This self-test checks the internal Flash program memory to detect single bit faults. |
@@ -915,30 +915,6 @@ CLASSB_TEST_STATUS IO_STATUS:2;
 } *CLASSB_RST_RESULT_BF;
 ```
 
-### CLASSB_FPU_CONFIG
-
-
-**Summary**
-
-Data type for enabling FPU register test.
-
-**Description**
-
-The CPU register test covers the processor core registers and FPU registers. Testing FPU registers can
-be optional since it may not be used by every application.
-
-**Remarks**
-
-None.
-
-```c
-typedef enum
-{
-CLASSB_FPU_TEST_DISABLE = 0,
-CLASSB_FPU_TEST_ENABLE = 1
-} CLASSB_FPU_CONFIG;
-```
-
 ### CLASSB_SRAM_MARCH_ALGO
 
 
@@ -1492,27 +1468,24 @@ case can be an IO pin.
 **Function**
 
 ```c
-CLASSB_TEST_STATUS CLASSB_CPU_RegistersTest(CLASSB_FPU_CONFIG test_fpu, bool running_context);
+CLASSB_TEST_STATUS CLASSB_CPU_RegistersTest(bool running_context);
 ```
 
 **Summary**
 
-This self-test checks the processor core registers and FPU registers of the CPU, to detect stuck-at faults.
+This self-test checks the processor core registers of the CPU, to detect stuck-at faults.
 
 **Description**
 
-This self-test writes test patterns into the processor core registers, special function registers
-and FPU registers, and read them back to detect stuck-at faults. Special function register bits
-which are reserved or should not be modified during the test are not written.
-Testing FPU registers is optional as it may not be used in every application.
+This self-test writes test patterns into the processor core registers and special function registers
+and read them back to detect stuck-at faults. Special function register bits
+which are reserved and should not be modified during the test, are not written.
 
 **Precondition**
 
 None.
 
 **Parameters**
-
-*test_fpu* - Decides whether to check FPU registers or not.
 
 *running_context* - False for startup test. True for run-time test.
 
@@ -1525,7 +1498,52 @@ None.
 ```c
 CLASSB_TEST_STATUS classb_test_status = CLASSB_TEST_NOT_EXECUTED;
 // Perform run-time test of the CPU registers
-classb_test_status = CLASSB_CPU_RegistersTest(CLASSB_FPU_TEST_ENABLE, true);
+classb_test_status = CLASSB_CPU_RegistersTest(true);
+```
+
+**Remarks**
+
+This self-test can be used during startup as well as run-time. If a failure is detected,
+this self-test remains in an infinite loop to avoid unsafe code execution.
+
+### CLASSB_FPU_RegistersTest
+
+**Function**
+
+```c
+CLASSB_TEST_STATUS CLASSB_FPU_RegistersTest(bool running_context);
+```
+
+**Summary**
+
+This self-test checks the FPU registers of the CPU, to detect stuck-at faults.
+
+**Description**
+
+This self-test writes test patterns into the FPU registers, and read them back
+to detect stuck-at faults.
+Special function register bits which are reserved or should not be modified
+during the test, are not written.
+Testing FPU registers is optional as it may not be used in every application.
+
+**Precondition**
+
+None.
+
+**Parameters**
+
+*running_context* - False for startup test. True for run-time test.
+
+**Returns**
+
+*CLASSB_TEST_STATUS* - Status of the test.
+
+**Example**
+
+```c
+CLASSB_TEST_STATUS classb_test_status = CLASSB_TEST_NOT_EXECUTED;
+// Perform run-time test of the FPU registers
+classb_test_status = CLASSB_FPU_RegistersTest(true);
 ```
 
 **Remarks**

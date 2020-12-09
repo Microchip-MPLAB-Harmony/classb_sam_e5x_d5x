@@ -179,9 +179,18 @@ is detected in any of the FPU registers.
 
 Testing FPU registers is optional as it is needed only if the FPU is used in the application.
 This self-test follows the register save/restore convention specified by AAPCS.
-It can be used at startup as well as run-time.
+It can be used at startup as well as run-time. If this self-test is used during run-time,
+ensure that the FPU is enabled before running the self-test. The following lines of code
+need to be present either in the startup code or in the application code,
 
-Flow chart of the self-test for CPU registers
+```c
+// Enable FPU
+SCB->CPACR |= (0xFu << 20);
+__DSB();
+__ISB();
+```
+
+Flow chart of the self-test for FPU registers
 
 ![](./images/DD_Test_FPU.png)
 
