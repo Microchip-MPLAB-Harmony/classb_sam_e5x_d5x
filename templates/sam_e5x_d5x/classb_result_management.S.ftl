@@ -111,13 +111,13 @@ UpdateResTestTypeSST:
     mov     r7, r2
     lsl	    r7, r7, r1
     orr	    r5, r5, r7
-    str	    r5, [r4]
+    strh    r5, [r4]
     ; /* Load the 1s complement of the result */
     ; /* For SSTs, this address is 0x20000004 */
     ; /* For RSTs, this address is 0x20000006 */
     ; /* Take 1s complement of the value */
     mvn	    r2, r5
-    str	    r2, [r4, #4]
+    strh    r2, [r4, #4]
 
     pop     {r4-r7}
     bx	    r14
