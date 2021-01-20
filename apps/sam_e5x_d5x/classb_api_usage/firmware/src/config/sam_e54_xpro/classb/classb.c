@@ -1,5 +1,5 @@
 /*******************************************************************************
-  Class B Library v1.0.0 Release
+  Class B Library v2.0.0 Release
 
   Company:
     Microchip Technology Inc.

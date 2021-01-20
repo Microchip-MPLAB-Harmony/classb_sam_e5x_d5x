@@ -1,0 +1,13 @@
+configName: sam_e54_xpro
+folderName: ''
+format_version: v1.0
+frameworkPath: ../../..
+processor: ATSAME54P20A
+projectName: classb_api_usage
+settings:
+  PackageFilter: classb_l11_test;classb_pic32cm_mc;classb_sam_e5x_d5x;classb_sam_l22;core_apps_sam_c20_c21;csp;csp_apps_pic32cm_mc00;csp_apps_sam_l10_l11;
+  FORCE_OPTIMIZATION: 'false'
+  GENERATE_BACKUP: 'true'
+  CMSISPath: .\dev_packs\arm\CMSIS\5.7.0
+  MERGE_STRATEGY: USER_ALL
+  DFPPath: .\dev_packs\Microchip\SAME54_DFP\3.4.70\atdf\ATSAME54P20A.atdf
