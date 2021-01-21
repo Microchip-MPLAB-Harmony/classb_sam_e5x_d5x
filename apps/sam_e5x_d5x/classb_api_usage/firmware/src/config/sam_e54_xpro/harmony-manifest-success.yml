@@ -15,5 +15,5 @@ modules:
     - {name: "csp", version: "v3.8.2"}
     - {name: "dev_packs", version: "v3.8.0"}
     - {name: "mhc", version: "v3.6.1"}
-    - {name: "classb_sam_e5x_d5x", version: "v2.0.0-rc.2"}
+    - {name: "classb_sam_e5x_d5x", version: "v2.0.0"}
 

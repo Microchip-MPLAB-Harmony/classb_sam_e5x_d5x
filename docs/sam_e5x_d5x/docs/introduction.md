@@ -1,5 +1,5 @@
 ﻿---
-grand_parent: Harmony 3 Class B Library
+grand_parent: Harmony 3 Class B Library for SAM E5x/D5x
 parent: SAM E5x D5x Class B Library
 title: Class B Peripheral Library Introduction
 nav_order: 2

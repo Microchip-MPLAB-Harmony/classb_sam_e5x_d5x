@@ -1,5 +1,5 @@
 ---
-grand_parent: Harmony 3 Class B Library
+grand_parent: Harmony 3 Class B Library for SAM E5x/D5x
 parent: SAM E5x D5x Class B Library
 title: Class B Library Interface
 has_toc: true

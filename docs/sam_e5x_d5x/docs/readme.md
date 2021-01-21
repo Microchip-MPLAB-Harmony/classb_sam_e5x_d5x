@@ -1,5 +1,5 @@
 ---
-parent: Harmony 3 Class B Library
+parent: Harmony 3 Class B Library for SAM E5x/D5x
 title: SAM E5x D5x Class B Library
 nav_order: 1
 has_children: true

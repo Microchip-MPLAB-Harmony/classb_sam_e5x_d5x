@@ -1,5 +1,5 @@
 ---
-grand_parent: Harmony 3 Class B Library
+grand_parent: Harmony 3 Class B Library for SAM E5x/D5x
 parent: SAM E5x D5x Class B Library Examples
 title: Class B Library API Usage Example
 nav_order: 7

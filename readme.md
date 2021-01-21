@@ -1,12 +1,13 @@
 ---
-title: Harmony 3 Class B Library
+title: Harmony 3 Class B Library for SAM E5x/D5x
 nav_order: 1
 has_children: true
 ---
 
 ![Microchip logo](https://raw.githubusercontent.com/wiki/Microchip-MPLAB-Harmony/Microchip-MPLAB-Harmony.github.io/images/microchip_logo.png)
+![Harmony logo small](https://raw.githubusercontent.com/wiki/Microchip-MPLAB-Harmony/Microchip-MPLAB-Harmony.github.io/images/microchip_mplab_harmony_logo_small.png)
 
-# MPLAB® Harmony 3 Class B Library
+# MPLAB® Harmony 3 Class B Library for SAM E5x/D5x Devices
 
 MPLAB® Harmony 3 is an extension of the MPLAB® ecosystem for creating embedded firmware solutions for Microchip 32-bit SAM and PIC® microcontroller and microprocessor devices.  Refer to the following links for more information.
 
@@ -23,8 +24,7 @@ It uses various measures to detect and respond to failures inside the microcontr
 - [Release Notes](release_notes.md)
 - [MPLAB® Harmony License](mplab_harmony_license.md)
 
-To download or clone these application from Github, go to the [top level of the repository]
-(https://github.com/Microchip-MPLAB-Harmony/classb_sam_e5x_d5x) page.
+To download or clone these application from Github, go to the [top level of the repository](https://github.com/Microchip-MPLAB-Harmony/classb_sam_e5x_d5x) page.
 
 
 ## Contents Summary
