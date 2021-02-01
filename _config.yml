@@ -21,7 +21,7 @@ timezone: Asia/Kolkata
 
 description: Harmony 3 Class B Library package
 url: "https://microchip-mplab-harmony.github.io"
-baseurl: "/classb"
+baseurl: "/classb_sam_e5x_d5x"
 remote_theme: "Microchip-MPLAB-Harmony/just-the-docs@mchp-harmony"
 
 # Build settings
