@@ -1,4 +1,4 @@
----
+﻿---
 title: Harmony 3 Class B Library for SAM E5x/D5x
 nav_order: 1
 has_children: true
