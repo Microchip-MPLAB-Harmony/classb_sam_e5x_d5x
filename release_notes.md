@@ -3,6 +3,11 @@
 
 # Microchip MPLAB® Harmony 3 Release Notes
 
+## Class B Release v2.0.1
+
+### Bug fixes
+- [Documentation fixes for the Class B Library](https://microchip-mplab-harmony.github.io/classb_sam_e5x_d5x/).
+
 ## Class B Release v2.0.0
 
 ### New features

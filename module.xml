@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Module name="Class B" id="a9667bf2-6acc-428d-951c-c40c5010725e" version="2.0.0">
+<Module name="Class B" id="a9667bf2-6acc-428d-951c-c40c5010725e" version="2.0.1">
     <ConfigRoot path="config/module.py"/>
 </Module>
